@@ -89,13 +89,14 @@ html {
 
 /* Inline code — Mintlify: bg-gray-100/.5, px-2 py-0.5, rounded-md */
 .prose code {
-  background: rgb(238 241 239 / 0.5);
-  color: var(--nv-gray-600);
+  background: var(--nv-bg-elevated);
+  color: var(--nv-brand-primary);
   padding: 0.125rem 0.5rem;
   border-radius: var(--nv-radius-sm);
   font-family: var(--nv-font-mono);
   font-size: 0.875em;
   font-weight: 500;
+  border: 1px solid var(--nv-border-subtle);
 }
 
 .prose pre {
@@ -281,10 +282,10 @@ table tbody tr:hover td {
 
 .nv-sidebar-search {
   width: 100%;
-  background: var(--nv-gray-50);
-  border: 1px solid var(--nv-border-subtle);
-  border-radius: var(--nv-radius-md);
-  padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+  background: var(--nv-bg-elevated);
+  border: 1px solid var(--nv-border-default);
+  border-radius: 0;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
   font-size: 0.8125rem;
   color: var(--nv-text-primary);
   transition: border-color 0.15s ease;
@@ -302,7 +303,7 @@ table tbody tr:hover td {
 
 .nv-sidebar-search-icon {
   position: absolute;
-  left: 0.75rem;
+  right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   width: 0.875rem;
@@ -632,11 +633,11 @@ table tbody tr:hover td {
 }
 
 /* ── Lightbox ──────────────────────────────────────────────────────── */
-#attachment-lightbox {
+[data-attachment-lightbox] {
   animation: nv-fadeIn 0.2s ease;
 }
 
-#attachment-lightbox img {
+[data-attachment-lightbox] img {
   animation: nv-zoomIn 0.3s ease;
 }
 

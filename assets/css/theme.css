@@ -7,17 +7,17 @@
    ========================================================================== */
 
 :root {
-  /* ── Brand (Mintlify teal) ─────────────────────────────────── */
-  --nv-brand-primary: rgb(17 120 102);
-  /* #117866 */
-  --nv-brand-primary-hover: rgb(15 106 90);
-  /* #0f6a5a */
-  --nv-brand-primary-soft: rgb(17 120 102 / 0.08);
-  --nv-brand-primary-muted: rgb(17 120 102 / 0.14);
-  --nv-brand-primary-light: rgb(38 189 108);
-  /* #26bd6c dark-mode */
-  --nv-brand-accent: rgb(74 222 128);
-  /* #4ade80 */
+  /* ── Brand (Diplodocus teal + purple) ──────────────────────── */
+  --nv-brand-primary: rgb(0 185 158);
+  /* #00B99E — logo cyan-teal, light mode */
+  --nv-brand-primary-hover: rgb(0 162 138);
+  /* #00A28A */
+  --nv-brand-primary-soft: rgb(0 185 158 / 0.08);
+  --nv-brand-primary-muted: rgb(0 185 158 / 0.14);
+  --nv-brand-primary-light: rgb(0 232 196);
+  /* #00E8C4 — vivid cyan-teal for dark mode */
+  --nv-brand-accent: rgb(139 92 246);
+  /* #8B5CF6 — logo purple */
 
   /* ── Grayscale (Mintlify warm-neutral) ─────────────────────── */
   --nv-gray-50: rgb(243 246 244);
@@ -50,6 +50,7 @@
   --nv-bg-sidebar: #ffffff;
   --nv-bg-code: var(--nv-gray-900);
   --nv-bg-code-alt: var(--nv-gray-800);
+  --nv-bg-hover: var(--nv-gray-100);
 
   /* ── Text ──────────────────────────────────────────────────── */
   --nv-text-primary: var(--nv-gray-800);
@@ -131,27 +132,43 @@
 }
 
 /* Dark-mode override — same variable names, different values.
-   Flip <html data-theme="dark"> or <body data-theme="dark"> to activate. */
+   <html data-theme="dark"> activates this. Dark is the site default. */
 :root[data-theme="dark"],
+html[data-theme="dark"],
 body[data-theme="dark"] {
-  --nv-bg-base: rgb(10 13 13);
-  --nv-bg-surface: rgb(15 17 23);
-  --nv-bg-elevated: var(--nv-gray-800);
-  --nv-bg-sidebar: rgb(10 13 13);
+  /* ── Backgrounds (Mintlify near-black) ─────────────────────── */
+  --nv-bg-base:    rgb(10 11 11);
+  /* #0a0b0b — page */
+  --nv-bg-surface: rgb(14 16 16);
+  /* #0e1010 — cards, header */
+  --nv-bg-elevated: rgb(20 23 23);
+  /* #141717 — slightly lifted panels */
+  --nv-bg-sidebar: rgb(10 11 11);
+  /* same as base */
+  --nv-bg-hover:   rgb(28 32 32);
+  /* hover state */
 
-  --nv-text-primary: var(--nv-gray-100);
+  /* ── Text ──────────────────────────────────────────────────── */
+  --nv-text-primary:   var(--nv-gray-100);
   --nv-text-secondary: var(--nv-gray-300);
-  --nv-text-muted: var(--nv-gray-400);
-  --nv-text-subtle: var(--nv-gray-500);
+  --nv-text-muted:     var(--nv-gray-400);
+  --nv-text-subtle:    var(--nv-gray-600);
 
-  --nv-border-subtle: rgb(255 255 255 / 0.06);
-  --nv-border-default: rgb(255 255 255 / 0.10);
-  --nv-border-strong: rgb(255 255 255 / 0.16);
+  /* ── Borders ───────────────────────────────────────────────── */
+  --nv-border-subtle:  rgb(255 255 255 / 0.05);
+  --nv-border-default: rgb(255 255 255 / 0.09);
+  --nv-border-strong:  rgb(255 255 255 / 0.15);
 
+  /* ── Tables ────────────────────────────────────────────────── */
   --nv-table-header-bg: var(--nv-gray-800);
-  --nv-table-row-alt: var(--nv-gray-900);
+  --nv-table-row-alt:   var(--nv-gray-900);
   --nv-table-row-hover: var(--nv-gray-800);
 
-  --nv-brand-primary: var(--nv-brand-primary-light);
-  --nv-brand-primary-hover: rgb(74 222 128);
+  /* ── Brand (vivid cyan-teal for dark backgrounds) ───────────── */
+  --nv-brand-primary:       var(--nv-brand-primary-light);
+  /* #00E8C4 */
+  --nv-brand-primary-hover: rgb(0 208 176);
+  /* slightly dimmer on hover */
+  --nv-brand-primary-soft:  rgb(0 232 196 / 0.10);
+  --nv-brand-primary-muted: rgb(0 232 196 / 0.18);
 }
