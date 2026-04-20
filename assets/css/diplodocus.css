@@ -214,6 +214,7 @@ table tbody tr:hover td {
   margin-bottom: 0.75rem;
   flex-shrink: 0;
 }
+
 .nv-card-icon svg {
   width: 1rem;
   height: 1rem;
@@ -532,6 +533,7 @@ table tbody tr:hover td {
 .nv-main-inner article.prose {
   max-width: var(--nv-content-max);
 }
+
 /* ── Attachment Gallery (unchanged structure) ──────────────────────── */
 .attachment-gallery {
   margin: 2rem 0 1rem;
@@ -714,9 +716,24 @@ table tbody tr:hover td {
   grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;
 }
-@media (max-width: 1100px) { .nv-card-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 760px)  { .nv-card-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px)  { .nv-card-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 1100px) {
+  .nv-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .nv-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .nv-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* card overrides for grid layout */
 .nv-card {

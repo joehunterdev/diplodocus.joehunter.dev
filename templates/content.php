@@ -38,7 +38,7 @@ use Diplodocus\TemplateEngine as T;
         <?php if (!empty($pages)): ?>
             <div class="nv-card-grid">
                 <?php foreach ($pages as $i => $page): ?>
-                    <a href="?project=<?= urlencode($currentProject) ?>&page=<?= urlencode($page['slug']) ?>"
+                    <a href="<?= $router->url(['project' => $currentProject, 'page' => $page['slug']]) ?>"
                         class="nv-card">
                         <div class="nv-card-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></div>
                         <div class="nv-card-title"><?= T::e($page['name']) ?></div>
@@ -62,7 +62,7 @@ use Diplodocus\TemplateEngine as T;
         <?php if (!empty($projects)): ?>
             <div class="nv-card-grid">
                 <?php foreach ($projects as $project): ?>
-                    <a href="?project=<?= urlencode($project['slug']) ?>" class="nv-card">
+                    <a href="<?= $router->url(['project' => $project['slug']]) ?>" class="nv-card">
                         <div class="nv-card-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

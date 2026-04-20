@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Router - Handles URL routing and file serving
  */
@@ -17,15 +18,32 @@ class Router
     }
 
     /**
-     * Parse the current request
+     * Parse the current request — clean paths take priority over query params.
+     *
+     * URL patterns:
+     *   /                          → home
+     *   /{space}/                  → space landing
+     *   /{space}/{page}            → page view
+     *
+     * Legacy query-param form still works as fallback:
+     *   /?project={space}&page={page}
      */
     private function parseRequest(): void
     {
+        // Strip query string and leading/trailing slashes
+        $uri  = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $uri  = trim($uri, '/');
+        $segs = ($uri !== '') ? explode('/', $uri) : [];
+
+        // Segment 0 = space, segment 1 = page — fall back to ?project / ?page
+        $project = !empty($segs[0]) ? $segs[0] : ($_GET['project'] ?? null);
+        $page    = !empty($segs[1]) ? $segs[1] : ($_GET['page']    ?? null);
+
         $this->params = [
-            'project' => $_GET['project'] ?? null,
-            'page' => $_GET['page'] ?? null,
-            'file' => $_GET['file'] ?? null,
-            'action' => $_GET['action'] ?? null,
+            'project' => $project,
+            'page'    => $page,
+            'file'    => $_GET['file']   ?? null,
+            'action'  => $_GET['action'] ?? null,
         ];
     }
 
@@ -51,7 +69,7 @@ class Router
             'file'    => null,
         ];
     }
-    
+
     /**
      * Get a request parameter
      */
@@ -59,7 +77,7 @@ class Router
     {
         return $this->params[$key] ?? $default;
     }
-    
+
     /**
      * Check if this is a file request
      */
@@ -67,7 +85,7 @@ class Router
     {
         return isset($this->params['file']) && isset($this->params['project']);
     }
-    
+
     /**
      * Handle file serving (images, attachments)
      */
@@ -76,14 +94,14 @@ class Router
         if (!$this->isFileRequest()) {
             return false;
         }
-        
+
         $requestedFile = $this->params['file'];
         $projectSlug = $this->params['project'];
 
         // Security: only allow files from within project directories
         $projectPath = $this->spacesPath . DIRECTORY_SEPARATOR . $projectSlug;
         $filePath = realpath($projectPath . DIRECTORY_SEPARATOR . $requestedFile);
-        
+
         // Verify file is within project directory (prevent directory traversal)
         if ($filePath && strpos($filePath, realpath($projectPath)) === 0 && file_exists($filePath)) {
             $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
@@ -98,7 +116,7 @@ class Router
                 'csv' => 'text/csv',
                 'json' => 'application/json',
             ];
-            
+
             if (isset($mimeTypes[$extension])) {
                 header('Content-Type: ' . $mimeTypes[$extension]);
                 header('Content-Length: ' . filesize($filePath));
@@ -107,13 +125,13 @@ class Router
                 return true;
             }
         }
-        
+
         // File not found or not allowed
         http_response_code(404);
         echo 'File not found';
         return true;
     }
-    
+
     /**
      * Redirect to a URL
      */
@@ -122,18 +140,32 @@ class Router
         header("Location: $url");
         exit;
     }
-    
+
     /**
-     * Build a URL with parameters
+     * Build a clean URL.
+     *
+     *   url([])                            → /
+     *   url(['project' => 'foo'])          → /foo/
+     *   url(['project' => 'foo',
+     *        'page'    => 'bar'])          → /foo/bar
+     *
+     * Special actions (validate, download) keep query-param form.
      */
     public function url(array $params = []): string
     {
-        if (empty($params)) {
-            return '?';
+        // Special-case actions that stay as query params
+        if (!empty($params['action']) || isset($params['validate'])) {
+            return '/?' . http_build_query($params);
         }
-        return '?' . http_build_query($params);
+
+        $project = $params['project'] ?? null;
+        $page    = $params['page']    ?? null;
+
+        if (!$project) return '/';
+        if (!$page)    return '/' . rawurlencode($project) . '/';
+        return '/' . rawurlencode($project) . '/' . rawurlencode($page);
     }
-    
+
     /**
      * Get the current project slug
      */
@@ -141,7 +173,7 @@ class Router
     {
         return $this->params['project'];
     }
-    
+
     /**
      * Get the current page slug
      */
