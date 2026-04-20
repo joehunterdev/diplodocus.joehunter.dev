@@ -5,6 +5,9 @@
     # Serve static assets directly
     RewriteRule ^assets/.*$ - [L]
 
+    # Route sitemap.xml and robots.txt through PHP (dynamic generation)
+    RewriteRule ^(sitemap\.xml|robots\.txt)$ index.php [L,QSA]
+
     # Block access to internal folders
     RewriteRule ^(src|lib|templates|spaces|\.spaces|\.backup|\.vscode|\.claude|\.git)/ - [F,L]
 

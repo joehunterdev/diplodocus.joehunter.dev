@@ -18,7 +18,60 @@ use Diplodocus\TemplateEngine as T;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= T::e($title ?? $appName) ?></title>
+
+    <?php
+    // SEO metadata — computed in App::buildSeo() and passed as $seo[]
+    $seo = $seo ?? [];
+    $metaTitle       = $seo['title']       ?? ($title ?? $appName);
+    $metaDescription = $seo['description'] ?? '';
+    $metaCanonical   = $seo['canonical']   ?? '';
+    $metaOgImage     = $seo['ogImage']     ?? '';
+    $metaAuthorUrl   = $seo['authorUrl']   ?? '';
+    $metaRobots      = $seo['robots']      ?? 'index,follow';
+    ?>
+
+    <title><?= T::e($metaTitle) ?></title>
+
+    <?php if ($metaDescription): ?>
+        <meta name="description" content="<?= T::e($metaDescription) ?>">
+    <?php endif; ?>
+
+    <meta name="author" content="Joe Hunter">
+    <meta name="robots" content="<?= T::e($metaRobots) ?>">
+
+    <?php if ($metaCanonical): ?>
+        <link rel="canonical" href="<?= T::e($metaCanonical) ?>">
+    <?php endif; ?>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= T::e($metaTitle) ?>">
+    <?php if ($metaDescription): ?>
+        <meta property="og:description" content="<?= T::e($metaDescription) ?>">
+    <?php endif; ?>
+    <?php if ($metaCanonical): ?>
+        <meta property="og:url" content="<?= T::e($metaCanonical) ?>">
+    <?php endif; ?>
+    <?php if ($metaOgImage): ?>
+        <meta property="og:image" content="<?= T::e($metaOgImage) ?>">
+    <?php endif; ?>
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= T::e($metaTitle) ?>">
+    <?php if ($metaDescription): ?>
+        <meta name="twitter:description" content="<?= T::e($metaDescription) ?>">
+    <?php endif; ?>
+    <?php if ($metaOgImage): ?>
+        <meta name="twitter:image" content="<?= T::e($metaOgImage) ?>">
+    <?php endif; ?>
+
+    <?php if ($metaAuthorUrl): ?>
+        <link rel="author" href="<?= T::e($metaAuthorUrl) ?>">
+    <?php endif; ?>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico">
 
     <!-- Styles (theme.css MUST be first — its vars feed every sheet after) -->
     <?php

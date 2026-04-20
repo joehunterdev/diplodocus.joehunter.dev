@@ -12,7 +12,7 @@ return [
     'app_name' => 'Diplodocus',
 
     // Optional logo. Leave empty for a text-only wordmark.
-    'logo_url' => '',
+    'logo_url' => 'assets/img/logo.png',
 
     // Stylesheets loaded in order. theme.css MUST come first so its CSS
     // variables are available to every stylesheet that follows.
@@ -59,4 +59,13 @@ return [
     // Absolute path to a writable log file, e.g. __DIR__ . '/logs/error.log'
     // Leave empty to disable file logging.
     'error_log' => '',
+
+    // SEO — used for <meta>, Open Graph, sitemap, and robots.txt
+    'site_url'         => 'https://diplodocus.joehunter.dev',
+    'site_description' => 'Diplodocus — a markdown-first documentation site by Joe Hunter.',
+    'og_image'         => '/example.png',   // 1200×630 image at root
+    'author_url'       => 'https://joehunter.es',
+    'github_url'       => 'https://github.com/joehunterdev',
+    // Spaces listed here will be noindexed and excluded from sitemap
+    'private_spaces'   => ['esa.clublacosta.com'],
 ];

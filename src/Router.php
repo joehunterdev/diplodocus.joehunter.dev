@@ -35,6 +35,16 @@ class Router
         $uri  = trim($uri, '/');
         $segs = ($uri !== '') ? explode('/', $uri) : [];
 
+        // Special system routes
+        if ($uri === 'sitemap.xml') {
+            $this->params = ['type' => 'sitemap', 'project' => null, 'page' => null, 'file' => null, 'action' => null];
+            return;
+        }
+        if ($uri === 'robots.txt') {
+            $this->params = ['type' => 'robots', 'project' => null, 'page' => null, 'file' => null, 'action' => null];
+            return;
+        }
+
         // Segment 0 = space, segment 1 = page — fall back to ?project / ?page
         $project = !empty($segs[0]) ? $segs[0] : ($_GET['project'] ?? null);
         $page    = !empty($segs[1]) ? $segs[1] : ($_GET['page']    ?? null);
@@ -53,6 +63,11 @@ class Router
      */
     public function route(): array
     {
+        // System routes
+        if (isset($this->params['type']) && in_array($this->params['type'], ['sitemap', 'robots'], true)) {
+            return ['type' => $this->params['type'], 'project' => null, 'page' => null, 'file' => null];
+        }
+
         if ($this->isFileRequest()) {
             return [
                 'type'    => 'file',

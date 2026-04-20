@@ -8,3 +8,4 @@
 - [] Clean http routing
     - / Is home or dashboard
     - "project" route really domain wise should be called "spaces" but theres no need to add so getting started should be domainname.dev/getting-started/ and leave ?get params as for usual web navigation
+- [] Seo Review

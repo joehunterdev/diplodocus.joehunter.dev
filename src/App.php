@@ -62,6 +62,18 @@ class App
             return;
         }
 
+        // Handle sitemap.xml
+        if ($route['type'] === 'sitemap') {
+            $this->serveSitemap();
+            return;
+        }
+
+        // Handle robots.txt
+        if ($route['type'] === 'robots') {
+            $this->serveRobots();
+            return;
+        }
+
         // Handle documentation requests
         $project = $route['project'];
         $page = $route['page'];
@@ -71,6 +83,7 @@ class App
         $pages = [];
         $content = null;
         $toc = [];
+        $pageTitle = null;
         $validationResults = null;
 
         // Validate if requested
@@ -92,8 +105,9 @@ class App
             if ($page) {
                 $rendered = $this->renderer->render($project, $page);
                 if ($rendered) {
-                    $content = $rendered['html'];
-                    $toc     = $rendered['toc'];
+                    $content    = $rendered['html'];
+                    $toc        = $rendered['toc'];
+                    $pageTitle  = $rendered['title'];
                 }
             }
         }
@@ -110,6 +124,7 @@ class App
             'validationResults' => $validationResults,
             'hasSecurityIssues' => $validationResults ? !empty($validationResults['security']) : false,
             'hasLintIssues' => $validationResults ? !empty($validationResults['lint']) : false,
+            'seo' => $this->buildSeo($project, $page, $pageTitle, $content),
         ];
 
         // Add global template data
@@ -121,6 +136,133 @@ class App
         // All escaping goes through T::e() in templates/.
         $this->template->setLayout('layout');
         echo $this->template->render('content', $data);
+    }
+
+    // -------------------------------------------------------------------------
+    // SEO helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Build per-request SEO metadata array passed to templates as $seo.
+     */
+    private function buildSeo(?string $project, ?string $page, ?string $pageTitle, ?string $htmlContent): array
+    {
+        $appName     = $this->config->get('app_name', 'Diplodocus');
+        $siteUrl     = rtrim($this->config->get('site_url', ''), '/');
+        $siteDesc    = $this->config->get('site_description', '');
+        $ogImage     = $this->config->get('og_image', '/example.png');
+        $authorUrl   = $this->config->get('author_url', '');
+        $privateSpaces = $this->config->get('private_spaces', []);
+
+        // Build canonical URL
+        $path      = $this->router->url(['project' => $project, 'page' => $page]);
+        $canonical = $siteUrl ? $siteUrl . $path : '';
+
+        // Determine og:image absolute URL
+        $ogImageAbsolute = (strpos($ogImage, 'http') === 0) ? $ogImage : $siteUrl . $ogImage;
+
+        // Build title
+        if ($page && $project) {
+            $resolvedTitle = $pageTitle ?? ucfirst(str_replace(['-', '_'], ' ', $page));
+            $title = $resolvedTitle . ' — ' . ucfirst(str_replace(['-', '_'], ' ', $project)) . ' — ' . $appName;
+        } elseif ($project) {
+            $title = ucfirst(str_replace(['-', '_'], ' ', $project)) . ' — ' . $appName;
+        } else {
+            $title = $appName . ($siteDesc ? ' — ' . $siteDesc : '');
+        }
+
+        // Build description (first 160 chars of page text, or site description)
+        $description = $siteDesc;
+        if ($htmlContent) {
+            $plain = trim(strip_tags($htmlContent));
+            $plain = preg_replace('/\s+/', ' ', $plain);
+            if (strlen($plain) > 0) {
+                $description = substr($plain, 0, 157);
+                if (strlen($plain) > 157) {
+                    $description .= '...';
+                }
+            }
+        }
+
+        // Robots directive
+        $isPrivate = $project && in_array($project, $privateSpaces, true);
+        $robots = $isPrivate ? 'noindex,nofollow' : 'index,follow';
+
+        return [
+            'title'         => $title,
+            'description'   => $description,
+            'canonical'     => $canonical,
+            'ogImage'       => $ogImageAbsolute,
+            'authorUrl'     => $authorUrl,
+            'robots'        => $robots,
+        ];
+    }
+
+    /**
+     * Serve a dynamic sitemap.xml
+     */
+    private function serveSitemap(): void
+    {
+        $siteUrl      = rtrim($this->config->get('site_url', ''), '/');
+        $privateSpaces = $this->config->get('private_spaces', []);
+        $projects     = $this->projectManager->getProjects();
+
+        header('Content-Type: application/xml; charset=utf-8');
+
+        $urls = [];
+
+        // Home
+        $urls[] = [
+            'loc'        => $siteUrl . '/',
+            'changefreq' => 'weekly',
+            'priority'   => '1.0',
+        ];
+
+        foreach ($projects as $proj) {
+            $slug = $proj['slug'];
+            if (in_array($slug, $privateSpaces, true)) {
+                continue;
+            }
+            $pages = $this->projectManager->getPages($slug);
+            foreach ($pages as $p) {
+                $urls[] = [
+                    'loc'        => $siteUrl . $this->router->url(['project' => $slug, 'page' => $p['slug']]),
+                    'changefreq' => 'monthly',
+                    'priority'   => '0.8',
+                ];
+            }
+        }
+
+        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        foreach ($urls as $u) {
+            echo "  <url>\n";
+            echo "    <loc>" . htmlspecialchars($u['loc'], ENT_QUOTES, 'UTF-8') . "</loc>\n";
+            echo "    <changefreq>{$u['changefreq']}</changefreq>\n";
+            echo "    <priority>{$u['priority']}</priority>\n";
+            echo "  </url>\n";
+        }
+        echo '</urlset>';
+    }
+
+    /**
+     * Serve a dynamic robots.txt
+     */
+    private function serveRobots(): void
+    {
+        $siteUrl      = rtrim($this->config->get('site_url', ''), '/');
+        $privateSpaces = $this->config->get('private_spaces', []);
+
+        header('Content-Type: text/plain; charset=utf-8');
+
+        echo "User-agent: *\n";
+        echo "Allow: /\n";
+        foreach ($privateSpaces as $space) {
+            echo 'Disallow: /' . rawurlencode($space) . "/\n";
+        }
+        if ($siteUrl) {
+            echo "\nSitemap: {$siteUrl}/sitemap.xml\n";
+        }
     }
 
     /**
