@@ -1,6 +1,6 @@
 # Local configuration (user-specific, should not be committed)
-config.php
-config.local.php
+/config.php
+/config.local.php
 
 # Backups + caches
 .backup/
