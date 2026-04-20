@@ -7,13 +7,13 @@ use Diplodocus\TemplateEngine as T;
 ?>
 <header class="nv-header">
     <nav class="nv-breadcrumb">
-        <a href="?">Home</a>
+        <a href="/">Home</a>
 
         <?php if (!empty($currentProject)): ?>
         <svg class="nv-breadcrumb-sep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
-        <a href="?project=<?= urlencode($currentProject) ?>">
+        <a href="<?= $router->url(['project' => $currentProject]) ?>">
             <?= T::e(ucwords(str_replace(['-', '_'], ' ', $currentProject))) ?>
         </a>
         <?php endif; ?>

@@ -26,7 +26,9 @@ use Diplodocus\TemplateEngine as T;
         'assets/css/highlight-dark.min.css',
         'assets/css/diplodocus.css',
     ]);
-    foreach ($styles as $sheet): ?>
+    foreach ($styles as $sheet):
+        $sheet = (strpos($sheet, 'http') === 0 || $sheet[0] === '/') ? $sheet : '/' . $sheet;
+    ?>
         <link rel="stylesheet" href="<?= T::e($sheet) ?>">
     <?php endforeach; ?>
 
@@ -61,7 +63,9 @@ use Diplodocus\TemplateEngine as T;
     <!-- Scripts -->
     <?php
     $scripts = $config->get('scripts', ['assets/js/highlight.min.js', 'assets/js/app.js']);
-    foreach ($scripts as $s): ?>
+    foreach ($scripts as $s):
+        $s = (strpos($s, 'http') === 0 || $s[0] === '/') ? $s : '/' . $s;
+    ?>
         <script src="<?= T::e($s) ?>"></script>
     <?php endforeach; ?>
 </body>

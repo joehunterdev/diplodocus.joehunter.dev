@@ -12,9 +12,10 @@ use Diplodocus\TemplateEngine as T;
 <aside id="sidebar" class="nv-sidebar">
 
     <!-- Brand -->
-    <a href="?" class="nv-sidebar-brand">
+    <a href="/" class="nv-sidebar-brand">
         <?php if (!empty($logoUrl)): ?>
-            <img src="<?= T::e($logoUrl) ?>" alt="" style="height:1.5rem;width:auto;">
+            <?php $logo = ($logoUrl[0] === '/' || strpos($logoUrl, 'http') === 0) ? $logoUrl : '/' . $logoUrl; ?>
+            <img src="<?= T::e($logo) ?>" alt="" style="height:1.5rem;width:auto;">
         <?php else: ?>
             <span class="nv-sidebar-brand-mark">D</span>
         <?php endif; ?>
@@ -37,7 +38,7 @@ use Diplodocus\TemplateEngine as T;
             <!-- ── HOME: list all spaces ── -->
             <p class="nv-sidebar-section-label">Spaces</p>
             <?php foreach ($projects as $project): ?>
-                <a href="?project=<?= urlencode($project['slug']) ?>"
+                <a href="<?= $router->url(['project' => $project['slug']]) ?>"
                     class="nv-sidebar-link">
                     <?= T::e($project['name']) ?>
                     <span class="nv-sidebar-badge"><?= (int)$project['fileCount'] ?></span>
@@ -68,7 +69,7 @@ use Diplodocus\TemplateEngine as T;
 
             <?php foreach ($pages as $page): ?>
                 <?php $isActive = $page['slug'] === ($currentPage ?? ''); ?>
-                <a href="?project=<?= urlencode($currentProject) ?>&page=<?= urlencode($page['slug']) ?>"
+                <a href="<?= $router->url(['project' => $currentProject, 'page' => $page['slug']]) ?>"
                     class="nv-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
                     <?= T::e($page['name']) ?>
                 </a>
@@ -80,14 +81,14 @@ use Diplodocus\TemplateEngine as T;
     <!-- Footer -->
     <div class="nv-sidebar-footer">
         <?php if (!empty($currentProject)): ?>
-            <a href="?action=download-project&project=<?= urlencode($currentProject) ?>" class="nv-sidebar-link">
+            <a href="<?= $router->url(['action' => 'download-project', 'project' => $currentProject]) ?>" class="nv-sidebar-link">
                 <svg style="width:.85rem;height:.85rem;margin-right:.4rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 Download Space
             </a>
         <?php endif; ?>
-        <a href="?validate=1" class="nv-sidebar-link">Validate Documentation</a>
+        <a href="/?validate=1" class="nv-sidebar-link">Validate Documentation</a>
     </div>
 
 </aside>
