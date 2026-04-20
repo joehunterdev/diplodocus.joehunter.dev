@@ -1,0 +1,56 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Serve static assets directly - don't route through PHP
+    RewriteRule ^assets/.*$ - [L]
+
+    # Block access to internal folders
+    RewriteRule ^(src|lib|templates|\.spaces|\.backup|\.vscode|\.claude|\.git)/ - [F,L]
+    
+    # Hide index.php from URL
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+    
+    # Remove .php extension
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^([^\.]+)$ $1.php [NC,L]
+</IfModule>
+
+# Proper MIME types for assets
+<IfModule mod_mime.c>
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType image/svg+xml .svg
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access 1 hour"
+    ExpiresByType text/css "access 1 week"
+    ExpiresByType application/javascript "access 1 week"
+    ExpiresByType image/jpeg "access 1 month"
+    ExpiresByType image/gif "access 1 month"
+    ExpiresByType image/png "access 1 month"
+</IfModule>
+
+# Gzip compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>

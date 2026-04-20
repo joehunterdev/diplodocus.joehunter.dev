@@ -1,0 +1,29 @@
+# Local configuration (user-specific, should not be committed)
+config.php
+config.local.php
+
+# Backups + caches
+.backup/
+.spaces/
+.cache/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependency folders (not used today, but reserved)
+vendor/
+node_modules/
+
+# Claude Code workspace
+.claude/
+
+# Gernal documentation (if generated)
+.docs
