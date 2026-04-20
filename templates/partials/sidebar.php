@@ -9,7 +9,7 @@
 
 use Diplodocus\TemplateEngine as T;
 ?>
-<aside id="sidebar" class="nv-sidebar">
+<aside data-sidebar class="nv-sidebar">
 
     <!-- Brand -->
     <a href="/" class="nv-sidebar-brand">
@@ -28,7 +28,7 @@ use Diplodocus\TemplateEngine as T;
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <input type="text" id="sidebar-search" class="nv-sidebar-search"
+        <input type="text" data-sidebar-search class="nv-sidebar-search"
             placeholder="Search documentation…">
     </div>
 
@@ -39,7 +39,7 @@ use Diplodocus\TemplateEngine as T;
             <p class="nv-sidebar-section-label">Spaces</p>
             <?php foreach ($projects as $project): ?>
                 <a href="<?= $router->url(['project' => $project['slug']]) ?>"
-                    class="nv-sidebar-link">
+                    data-nav-link class="nv-sidebar-link">
                     <?= T::e($project['name']) ?>
                     <span class="nv-sidebar-badge"><?= (int)$project['fileCount'] ?></span>
                 </a>
@@ -47,7 +47,7 @@ use Diplodocus\TemplateEngine as T;
 
         <?php else: ?>
             <!-- ── SPACE: back link + pages ── -->
-            <a href="?" class="nv-sidebar-back">
+            <a href="?" data-nav-link class="nv-sidebar-back">
                 <svg style="width:.8rem;height:.8rem;margin-right:.4rem;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
@@ -70,7 +70,7 @@ use Diplodocus\TemplateEngine as T;
             <?php foreach ($pages as $page): ?>
                 <?php $isActive = $page['slug'] === ($currentPage ?? ''); ?>
                 <a href="<?= $router->url(['project' => $currentProject, 'page' => $page['slug']]) ?>"
-                    class="nv-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
+                    data-nav-link class="nv-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
                     <?= T::e($page['name']) ?>
                 </a>
             <?php endforeach; ?>

@@ -29,7 +29,7 @@ use Diplodocus\TemplateEngine as T;
         <?php endif; ?>
     </nav>
 
-    <button id="sidebar-toggle" class="nv-header-toggle" title="Toggle Sidebar">
+    <button data-sidebar-toggle class="nv-header-toggle" title="Toggle Sidebar">
         <svg style="width:1rem;height:1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>

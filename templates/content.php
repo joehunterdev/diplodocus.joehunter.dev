@@ -14,7 +14,7 @@ use Diplodocus\TemplateEngine as T;
 
 <?php if ($content): ?>
     <!-- ── PAGE VIEW ── -->
-    <article class="prose">
+    <article data-content-article class="prose">
         <?= $content ?>
     </article>
 

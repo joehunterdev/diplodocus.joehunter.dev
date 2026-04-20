@@ -12,7 +12,7 @@
 			"**/.DS_Store": true,
 			"**/Thumbs.db": true,
 			".backup": true,
-			".claude": true,
+			".claude": false,
 			".playwright-mcp": true,
 			".vscode": true,
 			".docs": false

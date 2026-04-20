@@ -322,7 +322,7 @@ class AttachmentGallery
             return '<div class="text-gray-500 dark:text-gray-400 text-center py-8">No attachments found.</div>';
         }
         
-        $html = '<div class="attachment-gallery" data-project="' . htmlspecialchars($project) . '">';
+        $html = '<div data-attachment-gallery class="attachment-gallery" data-project="' . htmlspecialchars($project) . '">';
         
         // Tabs
         $html .= '<div class="attachment-tabs flex border-b border-gray-200 dark:border-gray-700 mb-4">';
@@ -338,7 +338,7 @@ class AttachmentGallery
         foreach ($tabs as $key => $tab) {
             if ($tab['count'] === 0 && $key !== 'all') continue;
             $active = $key === 'all' ? 'active border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-gray-400';
-            $html .= '<button class="attachment-tab px-4 py-2 text-sm font-medium border-b-2 ' . $active . ' hover:text-blue-600 dark:hover:text-blue-400 transition-colors" data-tab="' . $key . '">';
+            $html .= '<button data-attachment-tab class="attachment-tab px-4 py-2 text-sm font-medium border-b-2 ' . $active . ' hover:text-blue-600 dark:hover:text-blue-400 transition-colors" data-tab="' . $key . '">';
             $html .= htmlspecialchars($tab['label']);
             $html .= '<span class="ml-1 px-1.5 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded-full">' . $tab['count'] . '</span>';
             $html .= '</button>';
@@ -350,7 +350,7 @@ class AttachmentGallery
         
         // Images grid
         if (!empty($attachments['images'])) {
-            $html .= '<div class="attachment-section" data-type="images">';
+            $html .= '<div data-attachment-section class="attachment-section" data-type="images">';
             $html .= '<div class="image-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">';
             foreach ($attachments['images'] as $img) {
                 $html .= $this->renderImageCard($img);
@@ -360,7 +360,7 @@ class AttachmentGallery
         
         // Videos
         if (!empty($attachments['videos'])) {
-            $html .= '<div class="attachment-section" data-type="videos">';
+            $html .= '<div data-attachment-section class="attachment-section" data-type="videos">';
             $html .= '<div class="space-y-4">';
             foreach ($attachments['videos'] as $video) {
                 $html .= $this->renderVideoCard($video);
@@ -370,7 +370,7 @@ class AttachmentGallery
         
         // Data files (CSV, JSON)
         if (!empty($attachments['data'])) {
-            $html .= '<div class="attachment-section" data-type="data">';
+            $html .= '<div data-attachment-section class="attachment-section" data-type="data">';
             foreach ($attachments['data'] as $file) {
                 $html .= $this->renderDataCard($file, $project);
             }
@@ -379,7 +379,7 @@ class AttachmentGallery
         
         // Documents
         if (!empty($attachments['documents'])) {
-            $html .= '<div class="attachment-section" data-type="documents">';
+            $html .= '<div data-attachment-section class="attachment-section" data-type="documents">';
             $html .= '<div class="space-y-2">';
             foreach ($attachments['documents'] as $doc) {
                 $html .= $this->renderDocumentCard($doc);
@@ -389,7 +389,7 @@ class AttachmentGallery
         
         // Web files (HTML)
         if (!empty($attachments['web'])) {
-            $html .= '<div class="attachment-section" data-type="web">';
+            $html .= '<div data-attachment-section class="attachment-section" data-type="web">';
             foreach ($attachments['web'] as $file) {
                 $html .= $this->renderWebCard($file, $project);
             }
@@ -410,7 +410,7 @@ class AttachmentGallery
      */
     private function renderImageCard(array $img): string
     {
-        return '<div class="attachment-card image-card group relative bg-white dark:bg-gray-800 cursor-pointer" data-src="' . htmlspecialchars($img['url']) . '" data-name="' . htmlspecialchars($img['name']) . '">
+        return '<div data-image-card class="attachment-card image-card group relative bg-white dark:bg-gray-800 cursor-pointer" data-src="' . htmlspecialchars($img['url']) . '" data-name="' . htmlspecialchars($img['name']) . '">
             <div class="aspect-square relative overflow-hidden rounded-lg">
                 <img src="' . htmlspecialchars($img['url']) . '" alt="' . htmlspecialchars($img['name']) . '" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -419,7 +419,7 @@ class AttachmentGallery
                     <p class="text-white/80 text-xs">' . htmlspecialchars($img['sizeFormatted']) . '</p>
                 </div>
             </div>
-            <button class="tag-attachment" title="Tag this attachment" data-attachment="' . htmlspecialchars($img['name']) . '">
+            <button data-tag-attachment class="tag-attachment" title="Tag this attachment" data-attachment="' . htmlspecialchars($img['name']) . '">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
             </button>
         </div>';
@@ -446,7 +446,7 @@ class AttachmentGallery
         $html .= '<h4 class="font-medium text-gray-900 dark:text-white">' . htmlspecialchars($video['name']) . '</h4>';
         $html .= '<span class="text-sm text-gray-500 dark:text-gray-400">' . strtoupper($video['extension']) . ' • ' . $video['sizeFormatted'] . '</span>';
         $html .= '</div></div>';
-        $html .= '<button class="tag-attachment bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-700 rounded-full p-1.5 shadow transition-all" title="Tag this attachment" data-attachment="' . htmlspecialchars($video['name']) . '">';
+        $html .= '<button data-tag-attachment class="tag-attachment bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-700 rounded-full p-1.5 shadow transition-all" title="Tag this attachment" data-attachment="' . htmlspecialchars($video['name']) . '">';
         $html .= '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>';
         $html .= '</button>';
         $html .= '</div>';
@@ -469,7 +469,7 @@ class AttachmentGallery
         // Use just the filename, not the full path
         $filename = basename($file['path']);
         
-        $html = '<div class="attachment-card data-card bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mb-4">';
+        $html = '<div data-file-card class="attachment-card data-card bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mb-4">';
         $html .= '<div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">';
         $html .= '<div class="flex items-center">';
         $html .= '<span class="text-2xl mr-3">' . $file['icon'] . '</span>';
@@ -478,13 +478,13 @@ class AttachmentGallery
         $html .= '<span class="text-sm text-gray-500 dark:text-gray-400">' . strtoupper($file['extension']) . ' • ' . $file['sizeFormatted'] . '</span>';
         $html .= '</div></div>';
         $html .= '<div class="flex items-center gap-2">';
-        $html .= '<button class="data-toggle px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" data-file="' . htmlspecialchars($filename) . '" data-type="' . $file['extension'] . '" data-project="' . htmlspecialchars($project) . '">View</button>';
-        $html .= '<button class="tag-attachment bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-700 rounded-full p-1.5 shadow transition-all" title="Double-click to tag" data-attachment="' . htmlspecialchars($file['name']) . '">
+        $html .= '<button data-file-toggle class="data-toggle px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" data-file="' . htmlspecialchars($filename) . '" data-type="' . $file['extension'] . '" data-project="' . htmlspecialchars($project) . '">View</button>';
+        $html .= '<button data-tag-attachment class="tag-attachment bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-700 rounded-full p-1.5 shadow transition-all" title="Tag this attachment" data-attachment="' . htmlspecialchars($file['name']) . '">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
         </button>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="data-preview hidden p-4 max-h-96 overflow-auto"></div>';
+        $html .= '<div data-file-preview class="data-preview hidden p-4 max-h-96 overflow-auto"></div>';
         $html .= '</div>';
         
         return $html;
@@ -512,7 +512,7 @@ class AttachmentGallery
      */
     private function renderWebCard(array $file, string $project): string
     {
-        $html = '<div class="attachment-card web-card bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mb-4">';
+        $html = '<div data-web-card class="attachment-card web-card bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 mb-4">';
         $html .= '<div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">';
         $html .= '<div class="flex items-center">';
         $html .= '<span class="text-2xl mr-3">' . $file['icon'] . '</span>';
@@ -521,10 +521,10 @@ class AttachmentGallery
         $html .= '<span class="text-sm text-gray-500 dark:text-gray-400">HTML Document • ' . $file['sizeFormatted'] . '</span>';
         $html .= '</div></div>';
         $html .= '<div class="flex gap-2">';
-        $html .= '<button class="iframe-toggle px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" data-src="' . htmlspecialchars($file['url']) . '">Preview</button>';
+        $html .= '<button data-iframe-toggle class="iframe-toggle px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" data-src="' . htmlspecialchars($file['url']) . '">Preview</button>';
         $html .= '<a href="' . htmlspecialchars($file['url']) . '" target="_blank" class="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">Open</a>';
         $html .= '</div></div>';
-        $html .= '<div class="iframe-preview hidden">';
+        $html .= '<div data-iframe-preview class="iframe-preview hidden">';
         $html .= '<iframe class="w-full border-0" style="height: 600px;"></iframe>';
         $html .= '</div>';
         $html .= '</div>';
@@ -537,26 +537,26 @@ class AttachmentGallery
      */
     private function renderLightbox(): string
     {
-        return '<div id="attachment-lightbox" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center">
-            <button class="lightbox-close absolute top-4 right-4 text-white hover:text-gray-300 p-2">
+        return '<div data-attachment-lightbox class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center">
+            <button data-lightbox-close class="lightbox-close absolute top-4 right-4 text-white hover:text-gray-300 p-2">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
-            <button class="lightbox-prev absolute left-4 text-white hover:text-gray-300 p-2">
+            <button data-lightbox-prev class="lightbox-prev absolute left-4 text-white hover:text-gray-300 p-2">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </button>
-            <button class="lightbox-next absolute right-16 text-white hover:text-gray-300 p-2">
+            <button data-lightbox-next class="lightbox-next absolute right-16 text-white hover:text-gray-300 p-2">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </button>
-            <div class="lightbox-content max-w-6xl max-h-[90vh] overflow-auto">
+            <div data-lightbox-content class="lightbox-content max-w-6xl max-h-[90vh] overflow-auto">
                 <img src="" alt="" class="max-w-full max-h-[85vh] object-contain" />
             </div>
-            <div class="lightbox-caption absolute bottom-4 left-0 right-0 text-center text-white text-sm"></div>
+            <div data-lightbox-caption class="lightbox-caption absolute bottom-4 left-0 right-0 text-center text-white text-sm"></div>
         </div>';
     }
 }

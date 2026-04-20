@@ -10,7 +10,8 @@ use Diplodocus\TemplateEngine as T;
     <nav class="nv-toc-list">
         <?php foreach ($toc as $item): ?>
             <a href="#<?= T::e($item['id']) ?>"
-               class="nv-toc-link toc-link"
+               data-toc-link
+               class="nv-toc-link"
                data-level="<?= (int)$item['level'] ?>"
                data-target="<?= T::e($item['id']) ?>">
                 <?= T::e($item['text']) ?>
