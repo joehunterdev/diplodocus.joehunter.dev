@@ -10,10 +10,7 @@
 		"files.exclude": {
 			"**/.git": true,
 			"**/.DS_Store": true,
-			"**/Thumbs.db": true,
-			".docs": true,
-			".backup": true,
-			".claude": true
+			"**/Thumbs.db": true
 		},
 		"search.exclude": {
 			"**/*.min.css": true,
