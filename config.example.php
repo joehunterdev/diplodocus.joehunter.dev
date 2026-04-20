@@ -51,4 +51,12 @@ return [
     // Validation gates
     'block_on_security_issues' => true,
     'block_on_lint_issues'     => false,
+
+    // Error handling
+    // true  = show full exception details (never use in production)
+    // false = show a generic 500 page
+    'debug'     => false,
+    // Absolute path to a writable log file, e.g. __DIR__ . '/logs/error.log'
+    // Leave empty to disable file logging.
+    'error_log' => '',
 ];
