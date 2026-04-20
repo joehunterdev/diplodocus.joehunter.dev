@@ -10,22 +10,22 @@
 		"files.exclude": {
 			"**/.git": true,
 			"**/.DS_Store": true,
-			"**/Thumbs.db": true
+			"**/Thumbs.db": true,
+			".backup": true,
+			".claude": true,
+			".playwright-mcp": true,
+			".vscode": true,
+			".docs": false
 		},
 		"search.exclude": {
 			"**/*.min.css": true,
 			"**/*.min.js": true,
 			"**/*.map": true,
-			".docs/**": true,
 			".backup/**": true,
 			".claude/**": true,
 			"spaces/.gitignore": false
 		},
-		"files.watcherExclude": {
-			".docs/**": true,
-			".backup/**": true,
-			".claude/**": true
-		},
+		"files.watcherExclude": {},
 		"editor.formatOnSave": true,
 		"editor.tabSize": 4,
 		"editor.rulers": [
