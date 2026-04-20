@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Diplodocus — User configuration
  *
@@ -34,9 +35,17 @@ return [
 
     // Folders to hide from project listing
     'excluded_dirs' => [
-        'src', 'lib', 'assets', 'templates',
-        '.spaces', '.vscode', '.backup', '.git', '.claude',
-        'vendor', 'node_modules',
+        'src',
+        'lib',
+        'assets',
+        'templates',
+        '.spaces',
+        '.vscode',
+        '.backup',
+        '.git',
+        '.claude',
+        'vendor',
+        'node_modules',
     ],
 
     // Validation gates

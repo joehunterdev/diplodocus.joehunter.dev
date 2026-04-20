@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Diplodocus — Markdown-first documentation site
  *
@@ -8,7 +9,7 @@
 
 declare(strict_types=1);
 
-define('NOTIVA_ROOT', __DIR__);
+define('DIPLODOCUS_ROOT', __DIR__);
 
 require_once __DIR__ . '/src/App.php';
 

@@ -1,0 +1,64 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"todo-tree.tree.showBadges": true,
+		"todo-tree.tree.scanMode": "workspace only",
+		"files.exclude": {
+			"**/.git": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			".docs": true,
+			".backup": true,
+			".claude": true
+		},
+		"search.exclude": {
+			"**/*.min.css": true,
+			"**/*.min.js": true,
+			"**/*.map": true,
+			".docs/**": true,
+			".backup/**": true,
+			".claude/**": true,
+			"spaces/.gitignore": false
+		},
+		"files.watcherExclude": {
+			".docs/**": true,
+			".backup/**": true,
+			".claude/**": true
+		},
+		"editor.formatOnSave": true,
+		"editor.tabSize": 4,
+		"editor.rulers": [
+			120
+		],
+		"[php]": {
+			"editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+			"editor.tabSize": 4
+		},
+		"[css]": {
+			"editor.defaultFormatter": "vscode.css-language-features"
+		},
+		"[markdown]": {
+			"editor.defaultFormatter": "vscode.markdown-language-features",
+			"editor.wordWrap": "on"
+		},
+		"intelephense.environment.phpVersion": "8.5.0",
+		"files.associations": {
+			"*.php": "php"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"bmewburn.vscode-intelephense-client",
+			"neilbrayfield.php-docblocker",
+			"Gruntfuggly.todo-tree",
+			"DavidAnson.vscode-markdownlint",
+			"esbenp.prettier-vscode",
+			"vscode.git",
+			"vscode.github"
+		]
+	}
+}
