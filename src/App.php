@@ -82,8 +82,13 @@ class App
         if ($project) {
             $pages = $this->projectManager->getPages($project);
 
-            // Render content for current page (no auto-default to first page;
-            // let the space landing show its own page cards)
+            // Auto-load first page when landing on a space with no page selected
+            if (!$page && !empty($pages)) {
+                $firstSlug = $pages[0]['slug'];
+                $this->router->redirect($this->router->url(['project' => $project, 'page' => $firstSlug]));
+                return;
+            }
+
             if ($page) {
                 $rendered = $this->renderer->render($project, $page);
                 if ($rendered) {
@@ -110,6 +115,7 @@ class App
         // Add global template data
         $this->template->addGlobal('appName', $this->config->get('app_name'));
         $this->template->addGlobal('logoUrl', $this->config->get('logo_url'));
+        $this->template->addGlobal('router', $this->router);
 
         // Render through the template engine — single rendering path.
         // All escaping goes through T::e() in templates/.
