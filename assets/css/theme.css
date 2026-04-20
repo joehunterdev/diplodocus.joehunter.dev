@@ -94,10 +94,10 @@
   --nv-hl-comment: #8b949e;
 
   /* ── Layout dimensions (Mintlify) ──────────────────────────── */
-  --nv-sidebar-width: 18rem;    /* 288px */
-  --nv-toc-width:     18rem;    /* 288px */
+  --nv-sidebar-width: 16rem;    /* 256px — was 288px */
+  --nv-toc-width:     14rem;    /* 224px — was 288px */
   --nv-header-height: 3rem;     /* 48px  */
-  --nv-content-max:   696px;    /* prose container */
+  --nv-content-max:   860px;    /* prose container — was 696px */
 
   /* ── Table headers (neutral Mintlify-style) ────────────────── */
   --nv-table-header-bg:   var(--nv-gray-50);
