@@ -521,14 +521,17 @@ table tbody tr:hover td {
 .nv-main {
   flex: 1;
   min-width: 0;
-  padding: 2.5rem 2rem 4rem;
+  padding: 2.5rem 3rem 4rem;
 }
 
 .nv-main-inner {
-  max-width: var(--nv-content-max);
-  margin: 0 auto;
+  width: 100%;
 }
 
+/* Prose (page view) gets the narrow reading cap; dashboard fills full width */
+.nv-main-inner article.prose {
+  max-width: var(--nv-content-max);
+}
 /* ── Attachment Gallery (unchanged structure) ──────────────────────── */
 .attachment-gallery {
   margin: 2rem 0 1rem;
