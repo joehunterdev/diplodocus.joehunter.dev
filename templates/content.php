@@ -1,53 +1,84 @@
 <?php
+
 /**
- * Content Template (Mintlify-aligned)
+ * Content Template
+ *
+ * Three views:
+ *   1. Home dashboard  — no project selected
+ *   2. Space landing   — project selected, no page
+ *   3. Page view       — project + page selected
  */
 
 use Diplodocus\TemplateEngine as T;
 ?>
+
 <?php if ($content): ?>
+    <!-- ── PAGE VIEW ── -->
     <article class="prose">
         <?= $content ?>
     </article>
+
+<?php elseif (!empty($currentProject)): ?>
+    <!-- ── SPACE LANDING ── -->
+    <?php
+    $spaceName = '';
+    foreach ($projects as $p) {
+        if ($p['slug'] === $currentProject) {
+            $spaceName = $p['name'];
+            break;
+        }
+    }
+    ?>
+    <div class="nv-dashboard">
+        <div class="nv-dashboard-header">
+            <h1 class="nv-dashboard-title"><?= T::e($spaceName) ?></h1>
+            <p class="nv-dashboard-sub"><?= count($pages) ?> page<?= count($pages) !== 1 ? 's' : '' ?></p>
+        </div>
+
+        <?php if (!empty($pages)): ?>
+            <div class="nv-card-grid">
+                <?php foreach ($pages as $i => $page): ?>
+                    <a href="?project=<?= urlencode($currentProject) ?>&page=<?= urlencode($page['slug']) ?>"
+                        class="nv-card">
+                        <div class="nv-card-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></div>
+                        <div class="nv-card-title"><?= T::e($page['name']) ?></div>
+                        <svg class="nv-card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+
 <?php else: ?>
-    <!-- Welcome / Landing -->
-    <div>
-        <div style="text-align:center; margin-bottom:2.5rem;">
-            <h1 style="font-size:2.5rem; font-weight:700; color:var(--nv-brand-primary); margin-bottom:0.75rem; letter-spacing:-0.02em;">
-                Welcome to <?= T::e($appName ?? 'Documentation') ?>
-            </h1>
-            <p style="font-size:1.125rem; color:var(--nv-text-muted);">
-                Select a project from the sidebar to get started.
-            </p>
+    <!-- ── HOME DASHBOARD ── -->
+    <div class="nv-dashboard">
+        <div class="nv-dashboard-header">
+            <h1 class="nv-dashboard-title">Welcome to <?= T::e($appName ?? 'Diplodocus') ?></h1>
+            <p class="nv-dashboard-sub">Select a space below to get started.</p>
         </div>
 
         <?php if (!empty($projects)): ?>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1rem;">
-            <?php foreach ($projects as $project): ?>
-            <a href="?project=<?= urlencode($project['slug']) ?>" class="nv-card">
-                <div class="nv-card-icon">
-                    <svg style="width:1rem;height:1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                </div>
-                <div class="nv-card-title"><?= T::e($project['name']) ?></div>
-                <div class="nv-card-desc">
-                    View documentation for <?= T::e($project['name']) ?>
-                </div>
-            </a>
-            <?php endforeach; ?>
-        </div>
+            <div class="nv-card-grid">
+                <?php foreach ($projects as $project): ?>
+                    <a href="?project=<?= urlencode($project['slug']) ?>" class="nv-card">
+                        <div class="nv-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+                            </svg>
+                        </div>
+                        <div class="nv-card-title"><?= T::e($project['name']) ?></div>
+                        <div class="nv-card-desc"><?= (int)$project['fileCount'] ?> page<?= $project['fileCount'] !== 1 ? 's' : '' ?></div>
+                        <svg class="nv-card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p style="color:var(--nv-text-muted);">No spaces found. Add folders with <code>.md</code> files inside <code>spaces/</code>.</p>
         <?php endif; ?>
-
-        <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--nv-border-subtle); text-align:center;">
-            <a href="?validate=1" class="nv-header-toggle" style="color:var(--nv-text-secondary);">
-                <svg style="width:1rem;height:1rem;margin-right:0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Validate All Documentation
-            </a>
-        </div>
     </div>
 <?php endif; ?>

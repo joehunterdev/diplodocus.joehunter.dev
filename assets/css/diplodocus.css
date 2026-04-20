@@ -534,3 +534,92 @@ table tbody tr:hover td { background: var(--nv-table-row-hover); }
   box-shadow: var(--nv-shadow-xl);
   border-radius: var(--nv-radius-xl);
 }
+
+/* ── Dashboard (home + space landing) ────────────────────────────── */
+.nv-dashboard {
+  width: 100%;
+}
+.nv-dashboard-header {
+  margin-bottom: 2rem;
+}
+.nv-dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--nv-text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+.nv-dashboard-sub {
+  font-size: 1rem;
+  color: var(--nv-text-muted);
+}
+
+.nv-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* card overrides for grid layout */
+.nv-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.nv-card-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--nv-text-muted);
+  margin-bottom: 0.5rem;
+}
+.nv-card-arrow {
+  width: 1rem;
+  height: 1rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  color: var(--nv-text-muted);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.nv-card:hover .nv-card-arrow {
+  color: var(--nv-brand-primary);
+  transform: translateX(3px);
+}
+
+/* ── Sidebar extras ───────────────────────────────────────────────── */
+.nv-sidebar-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--nv-text-muted);
+  margin: 0.25rem 0 0.5rem 0.25rem;
+}
+.nv-sidebar-back {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--nv-text-muted);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--nv-radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+  margin-bottom: 0.25rem;
+}
+.nv-sidebar-back:hover {
+  color: var(--nv-text-primary);
+  background: var(--nv-bg-hover);
+}
+.nv-sidebar-badge {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: var(--nv-bg-hover);
+  color: var(--nv-text-muted);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+.nv-sidebar-link {
+  display: flex;
+  align-items: center;
+}

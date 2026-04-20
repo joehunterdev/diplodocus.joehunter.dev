@@ -1,4 +1,5 @@
 <?php
+
 /**
  * App - Main application bootstrap and request handler
  */
@@ -20,7 +21,7 @@ class App
     private ContentRenderer $renderer;
     private Validator $validator;
     private TemplateEngine $template;
-    
+
     public function __construct()
     {
         $this->config = Config::getInstance();
@@ -77,21 +78,12 @@ class App
             $validationResults = $this->validator->validateAll();
         }
 
-        // Default landing: first project, first page — so the site works with
-        // zero query params on a fresh install.
-        if (!$project && !empty($projects)) {
-            $project = $projects[0]['slug'];
-        }
-
-        // Get pages for current project
+        // Get pages for current project (no auto-redirect — home = no project)
         if ($project) {
             $pages = $this->projectManager->getPages($project);
 
-            if (!$page && !empty($pages)) {
-                $page = $pages[0]['slug'];
-            }
-
-            // Render content for current page
+            // Render content for current page (no auto-default to first page;
+            // let the space landing show its own page cards)
             if ($page) {
                 $rendered = $this->renderer->render($project, $page);
                 if ($rendered) {
@@ -100,7 +92,7 @@ class App
                 }
             }
         }
-        
+
         // Prepare template data
         $data = [
             'config' => $this->config,
@@ -114,7 +106,7 @@ class App
             'hasSecurityIssues' => $validationResults ? !empty($validationResults['security']) : false,
             'hasLintIssues' => $validationResults ? !empty($validationResults['lint']) : false,
         ];
-        
+
         // Add global template data
         $this->template->addGlobal('appName', $this->config->get('app_name'));
         $this->template->addGlobal('logoUrl', $this->config->get('logo_url'));
@@ -228,7 +220,7 @@ HTML;
     {
         return $this->config;
     }
-    
+
     /**
      * Get validator instance
      */
