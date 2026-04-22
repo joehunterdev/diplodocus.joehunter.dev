@@ -81,10 +81,15 @@ use Diplodocus\TemplateEngine as T;
                 <svg style="width:.85rem;height:.85rem;margin-right:.4rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Download Space
+                Download Docs
             </a>
         <?php endif; ?>
-        <a href="/?validate=1" class="nv-sidebar-link">Validate Documentation</a>
+
+        <!-- Branding -->
+        <a href="https://joehunter.es" target="_blank" rel="noopener" class="nv-sidebar-credit">
+            <img src="/assets/img/jh-logo.png" alt="Joe Hunter" class="nv-sidebar-credit-logo">
+            <span>Diplodocus<?= ($v = $config->get('version')) ? ' v' . T::e($v) : '' ?> &mdash; <span class="nv-sidebar-credit-by">Joe Hunter</span></span>
+        </a>
     </div>
 
 </aside>

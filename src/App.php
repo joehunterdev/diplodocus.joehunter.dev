@@ -166,6 +166,7 @@ class App
     private function buildSeo(?string $project, ?string $page, ?string $pageTitle, ?string $htmlContent): array
     {
         $appName     = $this->config->get('app_name', 'Diplodocus');
+
         $siteUrl     = rtrim($this->config->get('site_url', ''), '/');
         $siteDesc    = $this->config->get('site_description', '');
         $ogImage     = $this->config->get('og_image', '/example.png');
