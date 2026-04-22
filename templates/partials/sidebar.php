@@ -87,8 +87,8 @@ use Diplodocus\TemplateEngine as T;
 
         <!-- Branding -->
         <a href="https://joehunter.es" target="_blank" rel="noopener" class="nv-sidebar-credit">
+            <span><?= ($v = $config->get('version')) ? ' v' . T::e($v) : '' ?> - Joe Hunter</span>
             <img src="/assets/img/jh-logo.png" alt="Joe Hunter" class="nv-sidebar-credit-logo">
-            <span>Diplodocus<?= ($v = $config->get('version')) ? ' v' . T::e($v) : '' ?> &mdash; <span class="nv-sidebar-credit-by">Joe Hunter</span></span>
         </a>
     </div>
 
