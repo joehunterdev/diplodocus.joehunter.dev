@@ -101,6 +101,11 @@ Controlled by two `config.php` keys:
 See `.github/worfklow-instructions.md` for the feature brief → plan → implementation process.
 Feature docs live in `.docs/{feature-name}/`.
 
+## Content authoring
+See `.github/content-authoring-instructions.md` for the full guide on creating
+and editing pages inside `spaces/` — covering file naming, attachment conventions,
+link patterns, callout types, mermaid diagrams, and the new-page checklist.
+
 ---
 
 ## What NOT to do

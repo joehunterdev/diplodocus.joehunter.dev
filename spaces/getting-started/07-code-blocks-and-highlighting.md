@@ -3,7 +3,7 @@
 Diplodocus uses [highlight.js](https://highlightjs.org/) for syntax
 highlighting. 190+ languages ship out of the box.
 
-![Highlight theme in action](attachments/07a-highlight-dark.png)
+![Highlight theme in action](attachments/07a-highlight-dark.svg)
 
 ## Basic usage
 
