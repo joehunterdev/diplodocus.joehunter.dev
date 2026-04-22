@@ -25,6 +25,8 @@ class App
     public function __construct()
     {
         $this->config = Config::getInstance();
+        $this->configureErrorHandling();
+
         $basePath = $this->config->get('base_path');
         $spacesPath = $this->config->get('spaces_path');
         $excludedDirs = $this->config->get('excluded_dirs', []);
@@ -34,6 +36,22 @@ class App
         $this->renderer = new ContentRenderer($spacesPath);
         $this->validator = new Validator($basePath);
         $this->template = new TemplateEngine($this->config->get('templates_path'));
+    }
+
+    /**
+     * Apply PHP error display and logging from config.
+     * Runs immediately after Config is loaded, before anything else.
+     */
+    private function configureErrorHandling(): void
+    {
+        $debug   = $this->config->get('debug', false);
+        $logFile = $this->config->get('error_log', '');
+
+        ini_set('display_errors', $debug ? '1' : '0');
+        ini_set('display_startup_errors', $debug ? '1' : '0');
+        ini_set('log_errors', $logFile ? '1' : '0');
+        if ($logFile) ini_set('error_log', $logFile);
+        error_reporting($debug || $logFile ? E_ALL : 0);
     }
 
     /**
