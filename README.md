@@ -2,7 +2,7 @@
 
 **Markdown-first, zero-build documentation site.**
 
-Drop a folder of `.md` files into `spaces/`, point your browser at
+Drop a folder of `.md` files into `public/`, point your browser at
 `index.php`, and you have a clean, searchable spaces site. No Node, no, composer
 database, no build step. Just PHP and markdown.
 
@@ -31,7 +31,7 @@ diplodocus/
 │   └── diplodocus.css       ← structural CSS (uses var(--nv-*) only)
 ├── templates/           ← PHP templates
 │
-└── spaces/                ← your content lives here
+└── public/                ← your content lives here
     ├── getting-started/
     │   ├── 01-welcome.md
     │   ├── 02-installation.md
@@ -42,7 +42,7 @@ diplodocus/
 
 **Rules:**
 
-1. Each folder inside `spaces/` is a doc site (shown in the project picker).
+1. Each folder inside `public/` is a doc site (shown in the project picker).
 2. Each `NN-slug.md` file inside a project is a page (sorted by `NN`).
 3. Each project can have its own `attachments/` folder for images/PDFs.
 
