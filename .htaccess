@@ -12,7 +12,7 @@ DirectoryIndex index.php
     RewriteRule ^(sitemap\.xml|robots\.txt)$ index.php [L,QSA]
 
     # Block access to internal folders
-    RewriteRule ^(src|lib|templates|spaces|\.spaces|\.backup|\.vscode|\.claude|\.git)/ - [F,L]
+    RewriteRule ^(src|lib|templates|public|\.spaces|\.backup|\.vscode|\.claude|\.git)/ - [F,L]
 
     # Route everything else through index.php, preserving REQUEST_URI
     RewriteCond %{REQUEST_FILENAME} !-f

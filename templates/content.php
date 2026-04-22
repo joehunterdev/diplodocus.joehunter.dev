@@ -78,7 +78,7 @@ use Diplodocus\TemplateEngine as T;
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p style="color:var(--nv-text-muted);">No spaces found. Add folders with <code>.md</code> files inside <code>spaces/</code>.</p>
+            <p style="color:var(--nv-text-muted);">No spaces found. Add folders with <code>.md</code> files inside <code>public/</code>.</p>
         <?php endif; ?>
     </div>
 <?php endif; ?>

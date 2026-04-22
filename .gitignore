@@ -5,6 +5,7 @@
 # Backups + caches
 .backup/
 .spaces/
+.public/
 .cache/
 *.log
 
