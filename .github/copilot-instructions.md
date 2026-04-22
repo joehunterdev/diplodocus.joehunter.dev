@@ -2,7 +2,7 @@
 
 ## Project overview
 Diplodocus is a **PHP 7.4-compatible**, markdown-first documentation site.
-No Node, no npm, no build step. Drop `.md` files into `spaces/`, point a browser at `index.php`.
+No Node, no npm, no build step. Drop `.md` files into `public/`, point a browser at `index.php`.
 
 ---
 
@@ -25,7 +25,7 @@ src/
   App.php               Request lifecycle, error handling
   Router.php            Parses clean URLs + legacy ?project= query params
   Config.php            Singleton config, merges config.php over defaults
-  ProjectManager.php    Scans spaces/ for project folders
+  ProjectManager.php    Scans public/ for project folders
   ContentRenderer.php   Markdown → HTML via Parsedown
   TemplateEngine.php    PHP template renderer (layout + partials)
   Validator.php         Security scanner + markdown linter
@@ -41,7 +41,7 @@ templates/
     header.php          Breadcrumb + toggle
     toc.php             Table of contents (page view only)
     modals.php          Validation results modal
-spaces/                 User content — one subfolder per space
+public/                 User content — one subfolder per space
 assets/                 CSS, JS, images (served directly by .htaccess)
 config.php              Local overrides (gitignored)
 config.example.php      Committed template for config.php
@@ -106,6 +106,6 @@ Feature docs live in `.docs/{feature-name}/`.
 ## What NOT to do
 - Don't add logic to `assets/js/app.js` directly — use modules (see JS instructions)
 - Don't commit `config.php` or `config.local.php` (gitignored)
-- Don't reference `spaces/` paths directly in PHP — always go through `ProjectManager`
+- Don't reference `public/` paths directly in PHP — always go through `ProjectManager`
 - Don't add new PHP files without including them in `App.php` or the relevant class
 - Don't use absolute file paths in CSS/JS `<link>`/`<script>` tags in templates

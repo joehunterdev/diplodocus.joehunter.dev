@@ -23,7 +23,7 @@
 			"**/*.map": true,
 			".backup/**": true,
 			".claude/**": true,
-			"spaces/.gitignore": false
+			"public/.gitignore": false
 		},
 		"files.watcherExclude": {},
 		"editor.formatOnSave": true,

@@ -15,7 +15,7 @@ diplodocus-root/
 ├── assets/                ← CSS + JS (edit theme.css to rebrand)
 ├── templates/             ← HTML shell (don't touch unless you know why)
 │
-├── getting-started/       ← ← YOUR spaces project (this one!)
+├── getting-started/       ← ← YOUR public project (this one!)
 │   ├── 01-welcome.md
 │   ├── 02-installation.md
 │   ├── 03-folder-structure.md
@@ -23,7 +23,7 @@ diplodocus-root/
 │       ├── 01a-hero.png
 │       └── 03a-folder-tree.png
 │
-└── my-other-spaces/         ← ← Another spaces project
+└── my-other-project/         ← ← Another project
     ├── 01-overview.md
     ├── 02-reference.md
     └── attachments/
@@ -32,7 +32,7 @@ diplodocus-root/
 ## Rule 1 — each top-level folder is a project
 
 Any folder at the project root that isn't in the engine's reserved list
-(`src`, `lib`, `assets`, `templates`, `.spaces`, `.backup`, etc.) becomes a
+(`src`, `lib`, `assets`, `templates`, `.backup`, etc.) becomes a
 **project** in the sidebar.
 
 Add a folder, get a project. Delete the folder, the project is gone.
@@ -95,7 +95,7 @@ more top-level folders.
 
 ```
 diplodocus-root/
-├── api-spaces/           ← "API Docs" project
+├── api-docs/           ← "API Docs" project
 ├── user-guide/         ← "User Guide" project
 ├── internal-wiki/      ← "Internal Wiki" project
 └── getting-started/    ← this project
