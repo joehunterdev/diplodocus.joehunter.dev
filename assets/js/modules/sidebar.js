@@ -60,17 +60,36 @@ const Sidebar = (function () {
     }
 
     // -- Private: Core --
+    function isMobile() {
+        return window.innerWidth < 769;
+    }
+
     function toggle() {
-        $sidebar.toggleClass('hidden');
-        setState({ hidden: $sidebar.hasClass('hidden') });
-        saveState();
+        const $ = window.jQuery;
+        if (isMobile()) {
+            // On mobile: sidebar is hidden by CSS; open via .is-open
+            $sidebar.toggleClass('is-open');
+            $('body').toggleClass('is-sidebar-open', $sidebar.hasClass('is-open'));
+            setState({ hidden: !$sidebar.hasClass('is-open') });
+        } else {
+            $sidebar.toggleClass('hidden');
+            setState({ hidden: $sidebar.hasClass('hidden') });
+            saveState();
+        }
         log('Toggled, hidden:', state.hidden);
     }
 
     function close() {
-        $sidebar.addClass('hidden');
-        setState({ hidden: true });
-        saveState();
+        const $ = window.jQuery;
+        if (isMobile()) {
+            $sidebar.removeClass('is-open');
+            $('body').removeClass('is-sidebar-open');
+            setState({ hidden: true });
+        } else {
+            $sidebar.addClass('hidden');
+            setState({ hidden: true });
+            saveState();
+        }
     }
 
     function saveState() {

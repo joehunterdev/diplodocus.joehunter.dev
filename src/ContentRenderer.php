@@ -45,7 +45,10 @@ class ContentRenderer
         
         // Add heading IDs for anchor navigation
         $html = $this->addHeadingIds($html);
-        
+
+        // Tag labelled blockquotes with data-callout="{type}"
+        $html = $this->tagCallouts($html);
+
         return [
             'title' => $title,
             'html' => $html,
@@ -98,6 +101,31 @@ class ContentRenderer
         );
     }
     
+    /**
+     * Tag blockquotes whose first child is <p><strong>{Label}</strong>…
+     * with data-callout="{label-lowercased}". Enables per-type CSS styling.
+     */
+    private function tagCallouts(string $html): string
+    {
+        $labels = ['note', 'tip', 'warning', 'danger', 'example', 'info', 'caution'];
+        return preg_replace_callback(
+            '#<blockquote([^>]*)>(\s*<p>\s*<strong>([^<]+)</strong>)#i',
+            function ($m) use ($labels) {
+                $existingAttrs = $m[1];
+                $label = strtolower(trim($m[3]));
+                if (!in_array($label, $labels, true)) {
+                    return $m[0];
+                }
+                // Don't double-tag
+                if (strpos($existingAttrs, 'data-callout') !== false) {
+                    return $m[0];
+                }
+                return '<blockquote' . $existingAttrs . ' data-callout="' . $label . '">' . $m[2];
+            },
+            $html
+        );
+    }
+
     /**
      * Generate URL-friendly slug
      */

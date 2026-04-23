@@ -3,7 +3,7 @@
 Diplodocus's design is driven by one file: `assets/css/theme.css`. Edit it and
 every page, sidebar, table, button, and code block on your site repaints.
 
-![Theme picker preview](attachments/11a-theme-picker.png)
+![Theme picker preview](attachments/11a-theme-picker.svg)
 
 ## The theme contract
 

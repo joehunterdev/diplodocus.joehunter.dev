@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#0d1117"/>
+  <rect x="40" y="40" width="720" height="320" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <rect x="40" y="40" width="720" height="36" rx="6" fill="#21262d"/>
+  <rect x="40" y="58" width="720" height="18" fill="#21262d"/>
+  <circle cx="64" cy="58" r="6" fill="#ef4444" opacity="0.7"/>
+  <circle cx="84" cy="58" r="6" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="104" cy="58" r="6" fill="#22c55e" opacity="0.7"/>
+  <text x="400" y="63" font-family="monospace" font-size="12" fill="#8b949e" text-anchor="middle">07-code-blocks-and-highlighting.md</text>
+  <g font-family="monospace" font-size="13" fill="#484f58">
+    <text x="68" y="112">1</text>
+    <text x="68" y="136">2</text>
+    <text x="68" y="160">3</text>
+    <text x="68" y="184">4</text>
+    <text x="68" y="208">5</text>
+    <text x="68" y="232">6</text>
+    <text x="68" y="256">7</text>
+  </g>
+  <g font-family="monospace" font-size="13">
+    <text x="100" y="112" fill="#ff7b72">class</text>
+    <text x="148" y="112" fill="#e6edf3"> Config {</text>
+    <text x="116" y="136" fill="#79c0ff">public function</text>
+    <text x="236" y="136" fill="#d2a8ff"> get</text>
+    <text x="268" y="136" fill="#e6edf3">(</text>
+    <text x="276" y="136" fill="#ff7b72">string</text>
+    <text x="324" y="136" fill="#79c0ff"> $key</text>
+    <text x="364" y="136" fill="#e6edf3">) {</text>
+    <text x="100" y="184" fill="#6a9955">    // return value or default</text>
+    <text x="148" y="208" fill="#ff7b72">return</text>
+    <text x="196" y="208" fill="#e6edf3"> $this-&gt;config[</text>
+    <text x="334" y="208" fill="#79c0ff">$key</text>
+    <text x="366" y="208" fill="#e6edf3">] ?? </text>
+    <text x="406" y="208" fill="#79c0ff">$default</text>
+    <text x="462" y="208" fill="#e6edf3">;</text>
+    <text x="100" y="232" fill="#e6edf3">  }</text>
+    <text x="100" y="256" fill="#e6edf3">}</text>
+  </g>
+  <text x="400" y="374" font-family="sans-serif" font-size="11" fill="#484f58" text-anchor="middle">Placeholder — replace with a real screenshot</text>
+</svg>
