@@ -179,6 +179,17 @@ class Router
     }
 
     /**
+     * Build a clean URL for a project attachment.
+     *
+     *   attachmentUrl('getting-started', 'diagram.png')
+     *   → /getting-started/attachments/diagram.png
+     */
+    public function attachmentUrl(string $project, string $filename): string
+    {
+        return '/' . rawurlencode($project) . '/attachments/' . rawurlencode($filename);
+    }
+
+    /**
      * Get the current project slug
      */
     public function getProject(): ?string

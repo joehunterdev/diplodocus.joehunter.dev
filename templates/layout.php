@@ -120,6 +120,7 @@ use Diplodocus\TemplateEngine as T;
             window.pageIndex = <?php echo json_encode($pageIndex); ?>;
             window.pageCount = <?php echo json_encode($pageCount); ?>;
             window.searchIndex = <?php echo json_encode($searchIndex ?? []); ?>;
+            window.attachmentBase = '<?php echo $router->attachmentUrl($project['slug'], ''); ?>';
         </script>
     <?php endif; ?>
 

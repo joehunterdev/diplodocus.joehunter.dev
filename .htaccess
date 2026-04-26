@@ -9,7 +9,10 @@
     RewriteRule ^sitemap\.xml$ sitemap.php [L,QSA]
     RewriteRule ^robots\.txt$ robots.php [L,QSA]
 
-    # File / attachment serving (?project=X&file=Y)
+    # Clean URL for attachments: /{project}/attachments/{file}
+    RewriteRule ^([^/]+)/attachments/(.+)$ serve.php?project=$1&file=attachments/$2 [L,QSA]
+
+    # File / attachment serving (?project=X&file=Y) — legacy query-param form
     RewriteCond %{QUERY_STRING} (?:^|&)file=
     RewriteRule ^.*$ serve.php [L,QSA]
 
