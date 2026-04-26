@@ -15,9 +15,16 @@ use Diplodocus\Config;
 use Diplodocus\ProjectManager;
 use Diplodocus\Router;
 
-$config         = Config::getInstance();
-$projectsPath     = $config->get('projects_path'); // public_md only — private spaces are never indexed
-$siteUrl        = rtrim($config->get('site_url', ''), '/');
+$config       = Config::getInstance();
+$projectsPath = $config->get('projects_path'); // public_md only — private spaces are never indexed
+
+// Use configured site_url, or fall back to the current HTTP origin
+$siteUrl = rtrim($config->get('site_url', ''), '/');
+if ($siteUrl === '') {
+    $scheme  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host    = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $siteUrl = $scheme . '://' . $host;
+}
 
 $projectManager = new ProjectManager($projectsPath);
 $router         = new Router($projectsPath);
