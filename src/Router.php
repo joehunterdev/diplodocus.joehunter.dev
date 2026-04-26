@@ -28,11 +28,11 @@ class Router
      *
      * URL patterns:
      *   /                          → home
-     *   /{space}/                  → space landing
-     *   /{space}/{page}            → page view
+     *   /{project}/                  → space landing
+     *   /{project}/{page}            → page view
      *
      * Legacy query-param form still works as fallback:
-     *   /?project={space}&page={page}
+     *   /?project={project}&page={page}
      */
     private function parseRequest(): void
     {

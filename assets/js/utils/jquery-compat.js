@@ -144,6 +144,12 @@
             },
 
             css: function (prop, val) {
+                if (typeof prop === 'object') {
+                    elements.forEach(function (el) {
+                        Object.keys(prop).forEach(function (k) { el.style[k] = prop[k]; });
+                    });
+                    return api;
+                }
                 if (val === undefined) return elements[0] ? getComputedStyle(elements[0])[prop] : '';
                 elements.forEach(function (el) { el.style[prop] = val; });
                 return api;
@@ -178,6 +184,20 @@
 
             filter: function (sel) {
                 return $(elements.filter(function (el) { return el.matches(sel); }));
+            },
+
+            prepend: function (child) {
+                elements.forEach(function (el) {
+                    if (typeof child === 'string') {
+                        el.insertAdjacentHTML('afterbegin', child);
+                    } else if (child && typeof child.get === 'function') {
+                        var node = child.get(0);
+                        if (node) el.insertBefore(node, el.firstChild);
+                    } else if (child instanceof HTMLElement) {
+                        el.insertBefore(child, el.firstChild);
+                    }
+                });
+                return api;
             },
 
             append: function (child) {

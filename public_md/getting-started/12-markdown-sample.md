@@ -301,8 +301,8 @@ Diplodocus renders fenced ` ```mermaid ` blocks using
 flowchart TD
     A[Browser request] --> B{Router}
     B -->|"/"| C[Home dashboard]
-    B -->|"/{space}/"| D[Space landing]
-    B -->|"/{space}/{page}"| E[Page view]
+    B -->|"/{project}/"| D[Space landing]
+    B -->|"/{project}/{page}"| E[Page view]
     E --> F[ContentRenderer]
     F --> G[Parsedown]
     G --> H[HTML string]
