@@ -129,6 +129,12 @@ const Sidebar = (function () {
         bindEvents();
         clearSavedState();
 
+        // On mobile, show sidebar by default on first load
+        if (isMobile()) {
+            $sidebar.addClass('is-open');
+            $('body').addClass('is-sidebar-open');
+        }
+
         setState({ initialized: true });
         log('Initialized');
     }

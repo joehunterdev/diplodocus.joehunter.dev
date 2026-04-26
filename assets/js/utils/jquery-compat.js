@@ -172,7 +172,9 @@
 
             append: function (child) {
                 elements.forEach(function (el) {
-                    if (child && child.length !== undefined) {
+                    if (typeof child === 'string') {
+                        el.insertAdjacentHTML('beforeend', child);
+                    } else if (child && child.length !== undefined && typeof child.each === 'function') {
                         child.each(function () { el.appendChild(this); });
                     } else if (child instanceof HTMLElement) {
                         el.appendChild(child);

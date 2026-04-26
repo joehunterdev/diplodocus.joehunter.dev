@@ -63,6 +63,7 @@ class App
         $toc = [];
         $pageTitle = null;
         $validationResults = null;
+        $searchIndex = [];
 
         // TODO: validation feature disabled
         // if (isset($_GET['validate'])) {
@@ -89,6 +90,7 @@ class App
                     $projectContext = $rendered['project'] ?? null;
                     $pageIndex  = $rendered['pageIndex'] ?? false;
                     $pageCount  = $rendered['pageCount'] ?? null;
+                    $searchIndex = $rendered['searchIndex'] ?? [];
                 }
             }
         }
@@ -105,6 +107,7 @@ class App
             'project' => $projectContext ?? null,
             'pageIndex' => $pageIndex ?? false,
             'pageCount' => $pageCount ?? null,
+            'searchIndex' => $searchIndex ?? [],
             //TODO: can go
             'validationResults' => $validationResults,
             'hasSecurityIssues' => $validationResults ? !empty($validationResults['security']) : false,

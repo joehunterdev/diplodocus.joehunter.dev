@@ -119,6 +119,7 @@ use Diplodocus\TemplateEngine as T;
             window.projectData = <?php echo json_encode($project); ?>;
             window.pageIndex = <?php echo json_encode($pageIndex); ?>;
             window.pageCount = <?php echo json_encode($pageCount); ?>;
+            window.searchIndex = <?php echo json_encode($searchIndex ?? []); ?>;
         </script>
     <?php endif; ?>
 

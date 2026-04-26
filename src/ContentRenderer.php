@@ -139,6 +139,9 @@ class ContentRenderer
         // Wrap tables in a scroll container for mobile
         $html = $this->wrapTables($html);
 
+        // Build search index from title + headings
+        $searchIndex = $this->buildSearchIndex($title, $toc);
+
         // Find page index in project
         $pageIndex = null;
         foreach ($project['pages'] as $idx => $page) {
@@ -152,6 +155,7 @@ class ContentRenderer
             'title' => $title,
             'html' => $html,
             'toc' => $toc,
+            'searchIndex' => $searchIndex,  // NEW: for search module
             'project' => $project,       // NEW: project metadata
             'pageIndex' => $pageIndex,   // NEW: position in project
             'pageCount' => count($project['pages']),  // NEW: total pages
@@ -178,6 +182,35 @@ class ContentRenderer
         }
 
         return $toc;
+    }
+
+    /**
+     * Build searchable index: page title + all headings
+     * Used by search module to display results
+     */
+    private function buildSearchIndex(string $title, array $toc): array
+    {
+        $index = [];
+
+        // Add page title as first searchable item
+        $index[] = [
+            'type' => 'title',
+            'text' => $title,
+            'headingId' => null,
+            'level' => 1
+        ];
+
+        // Add all headings from table of contents
+        foreach ($toc as $heading) {
+            $index[] = [
+                'type' => 'heading',
+                'text' => $heading['text'],
+                'headingId' => $heading['id'],
+                'level' => $heading['level']
+            ];
+        }
+
+        return $index;
     }
 
     /**
