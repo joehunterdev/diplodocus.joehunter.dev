@@ -9,23 +9,26 @@ require_once __DIR__ . '/lib/SecurityScanner.php';
 require_once __DIR__ . '/lib/MarkdownLinter.php';
 require_once __DIR__ . '/src/Config.php';
 
-class DocsCLI {
+class DocsCLI
+{
     private $basePath;
     private $scanner;
     private $linter;
 
-    public function __construct(string $basePath, ?string $scanPath = null) {
+    public function __construct(string $basePath, ?string $scanPath = null)
+    {
         $this->basePath = rtrim($scanPath ?? $basePath, '/\\');
         $this->scanner = new SecurityScanner();
         $this->linter = new MarkdownLinter();
     }
-    
+
     /**
      * Main entry point
      */
-    public function run(array $args) {
+    public function run(array $args)
+    {
         $command = $args[1] ?? 'help';
-        
+
         switch ($command) {
             case 'scan-security':
                 $this->scanSecurity();
@@ -41,68 +44,72 @@ class DocsCLI {
                 $this->showHelp();
         }
     }
-    
+
     /**
      * Scan all markdown files for security issues
      */
-    private function scanSecurity() {
+    private function scanSecurity()
+    {
         echo "\n🔍 Security Scan Starting...\n";
         echo str_repeat("=", 50) . "\n\n";
-        
+
         $mdFiles = $this->findMarkdownFiles();
         $allIssues = [];
-        
+
         foreach ($mdFiles as $file) {
             $issues = $this->scanner->scanFile($file);
             $allIssues = array_merge($allIssues, $issues);
         }
-        
+
         echo $this->scanner->generateReport($allIssues);
         echo "\n✓ Scan complete. Scanned " . count($mdFiles) . " files.\n";
     }
-    
+
     /**
      * Lint all markdown files
      */
-    private function lintMarkdown() {
+    private function lintMarkdown()
+    {
         echo "\n📝 Markdown Lint Starting...\n";
         echo str_repeat("=", 50) . "\n\n";
-        
+
         $mdFiles = $this->findMarkdownFiles();
         $totalErrors = 0;
         $totalWarnings = 0;
-        
+
         foreach ($mdFiles as $file) {
             $results = $this->linter->lintFile($file);
-            
+
             if (!empty($results['errors']) || !empty($results['warnings'])) {
                 echo basename($file) . ":\n";
                 echo $this->linter->generateReport($results);
-                
+
                 $totalErrors += count($results['errors']);
                 $totalWarnings += count($results['warnings']);
             }
         }
-        
+
         echo "\n✓ Lint complete.\n";
         echo "  Errors: $totalErrors\n";
         echo "  Warnings: $totalWarnings\n";
     }
-    
+
     /**
      * Run all checks
      */
-    private function checkAll() {
+    private function checkAll()
+    {
         $this->scanSecurity();
         echo "\n";
         $this->lintMarkdown();
     }
-    
+
     /**
      * Find all markdown files under the scan path, skipping hidden dirs
      * and common excluded folders (works on Windows and *nix).
      */
-    private function findMarkdownFiles(): array {
+    private function findMarkdownFiles(): array
+    {
         if (!is_dir($this->basePath)) {
             return [];
         }
@@ -129,11 +136,12 @@ class DocsCLI {
 
         return $files;
     }
-    
+
     /**
      * Show help
      */
-    private function showHelp() {
+    private function showHelp()
+    {
         $help = <<<'EOF'
 
 📚 Documentation CLI Tools
@@ -163,7 +171,7 @@ $scanPath = $argv[2] ?? null;
 
 if ($scanPath === null) {
     $config = Diplodocus\Config::getInstance();
-    $scanPath = $config->get('spaces_path', $projectRoot . '/spaces');
+    $scanPath = $config->get('projects_path', $projectRoot . '/spaces');
 }
 
 $cli = new DocsCLI($projectRoot, $scanPath);

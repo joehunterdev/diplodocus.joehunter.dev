@@ -32,7 +32,7 @@ use Diplodocus\TemplateEngine as T;
 
         <?php if (empty($currentProject)): ?>
             <!-- ── HOME: list all spaces ── -->
-            <p class="nv-sidebar-section-label">Spaces</p>
+            <p class="nv-sidebar-section-label">Project</p>
             <?php foreach ($projects as $project): ?>
                 <a href="<?= $router->url(['project' => $project['slug']]) ?>"
                     data-nav-link class="nv-sidebar-link">
@@ -47,7 +47,7 @@ use Diplodocus\TemplateEngine as T;
                 <svg style="width:.8rem;height:.8rem;margin-right:.4rem;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                All Spaces
+                All Project
             </a>
 
             <?php

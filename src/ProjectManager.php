@@ -8,18 +8,18 @@ namespace Diplodocus;
 
 class ProjectManager
 {
-    private array $spacesPaths;
+    private array $projectsPaths;
     private array $excludedDirs;
 
-    public function __construct($spacesPath, array $excludedDirs = [])
+    public function __construct($projectsPath, array $excludedDirs = [])
     {
         // Accept either a single path string or an array of paths
-        if (is_array($spacesPath)) {
-            $this->spacesPaths = array_map(function ($p) {
+        if (is_array($projectsPath)) {
+            $this->projectsPaths = array_map(function ($p) {
                 return rtrim($p, '/\\');
-            }, $spacesPath);
+            }, $projectsPath);
         } else {
-            $this->spacesPaths = [rtrim($spacesPath, '/\\')];
+            $this->projectsPaths = [rtrim($projectsPath, '/\\')];
         }
         $this->excludedDirs = $excludedDirs ?: ['.git', '.backup', '.spaces', 'attachments', 'vendor', 'node_modules'];
     }
@@ -30,13 +30,13 @@ class ProjectManager
     public function getProjects(): array
     {
         $projects = [];
-        foreach ($this->spacesPaths as $spacesPath) {
-            if (!is_dir($spacesPath)) continue;
-            $items = scandir($spacesPath);
+        foreach ($this->projectsPaths as $projectsPath) {
+            if (!is_dir($projectsPath)) continue;
+            $items = scandir($projectsPath);
             foreach ($items as $item) {
                 if ($item[0] === '.') continue;
                 if (in_array($item, $this->excludedDirs)) continue;
-                $path = $spacesPath . DIRECTORY_SEPARATOR . $item;
+                $path = $projectsPath . DIRECTORY_SEPARATOR . $item;
                 if (is_dir($path)) {
                     $mdFiles = glob($path . DIRECTORY_SEPARATOR . '*.md');
                     if (!empty($mdFiles)) {
@@ -134,14 +134,14 @@ class ProjectManager
      */
     public function getProjectPath(string $projectSlug): string
     {
-        foreach ($this->spacesPaths as $spacesPath) {
-            $path = $spacesPath . DIRECTORY_SEPARATOR . $projectSlug;
+        foreach ($this->projectsPaths as $projectsPath) {
+            $path = $projectsPath . DIRECTORY_SEPARATOR . $projectSlug;
             if (is_dir($path)) {
                 return $path;
             }
         }
         // Fall back to first configured path
-        return $this->spacesPaths[0] . DIRECTORY_SEPARATOR . $projectSlug;
+        return $this->projectsPaths[0] . DIRECTORY_SEPARATOR . $projectSlug;
     }
 
     /**

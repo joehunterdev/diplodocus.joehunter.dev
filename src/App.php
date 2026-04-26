@@ -26,14 +26,14 @@ class App
     {
         $this->config = Config::getInstance();
         $basePath = $this->config->get('base_path');
-        $spacesPath = $this->config->get('spaces_paths', $this->config->get('spaces_path'));
+        $projectsPath = $this->config->get('projects_paths', $this->config->get('projects_path'));
         $excludedDirs = $this->config->get('excluded_dirs', []);
 
         // Router and ContentRenderer still need a primary single path for file serving
-        $primaryPath = is_array($spacesPath) ? $spacesPath[0] : $spacesPath;
+        $primaryPath = is_array($projectsPath) ? $projectsPath[0] : $projectsPath;
         $this->router = new Router($primaryPath);
-        $this->projectManager = new ProjectManager($spacesPath, $excludedDirs);
-        $this->renderer = new ContentRenderer($spacesPath);
+        $this->projectManager = new ProjectManager($projectsPath, $excludedDirs);
+        $this->renderer = new ContentRenderer($projectsPath);
         $this->validator = new Validator($basePath);
         $this->template = new TemplateEngine($this->config->get('templates_path'));
     }
@@ -154,7 +154,7 @@ class App
         $siteDesc    = $this->config->get('site_description', '');
         $ogImage     = $this->config->get('og_image', '/example.png');
         $authorUrl   = $this->config->get('author_url', '');
-        $privateSpaces = $this->config->get('private_spaces', []);
+        $privateProject = $this->config->get('private_spaces', []);
 
         // Build canonical URL
         $path      = $this->router->url(['project' => $project, 'page' => $page]);
@@ -187,7 +187,7 @@ class App
         }
 
         // Robots directive
-        $isPrivate = $project && in_array($project, $privateSpaces, true);
+        $isPrivate = $project && in_array($project, $privateProject, true);
         $robots = $isPrivate ? 'noindex,nofollow' : 'index,follow';
 
         return [
@@ -206,7 +206,7 @@ class App
     private function serveSitemap(): void
     {
         $siteUrl      = rtrim($this->config->get('site_url', ''), '/');
-        $privateSpaces = $this->config->get('private_spaces', []);
+        $privateProject = $this->config->get('private_spaces', []);
         $projects     = $this->projectManager->getProjects();
 
         header('Content-Type: application/xml; charset=utf-8');
@@ -222,7 +222,7 @@ class App
 
         foreach ($projects as $proj) {
             $slug = $proj['slug'];
-            if (in_array($slug, $privateSpaces, true)) {
+            if (in_array($slug, $privateProject, true)) {
                 continue;
             }
             $pages = $this->projectManager->getPages($slug);
@@ -253,13 +253,13 @@ class App
     private function serveRobots(): void
     {
         $siteUrl      = rtrim($this->config->get('site_url', ''), '/');
-        $privateSpaces = $this->config->get('private_spaces', []);
+        $privateProject = $this->config->get('private_spaces', []);
 
         header('Content-Type: text/plain; charset=utf-8');
 
         echo "User-agent: *\n";
         echo "Allow: /\n";
-        foreach ($privateSpaces as $space) {
+        foreach ($privateProject as $space) {
             echo 'Disallow: /' . rawurlencode($space) . "/\n";
         }
         if ($siteUrl) {

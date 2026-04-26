@@ -38,7 +38,10 @@ const CodeHighlight = (function () {
     // -- Private: Core --
     function highlight() {
         if (typeof hljs !== 'undefined') {
-            hljs.highlightAll();
+            // Exclude mermaid blocks — they are replaced by mermaid.js as SVG
+            document.querySelectorAll('pre code:not(.language-mermaid)').forEach(function (block) {
+                hljs.highlightElement(block);
+            });
             log('hljs applied');
         }
     }
@@ -46,7 +49,7 @@ const CodeHighlight = (function () {
     function addCopyButtons() {
         const $ = window.jQuery;
 
-        $('pre code').each(function () {
+        $('pre code:not(.language-mermaid)').each(function () {
             var $code = $(this);
             var $pre = $code.parent();
 

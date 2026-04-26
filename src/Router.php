@@ -8,12 +8,12 @@ namespace Diplodocus;
 
 class Router
 {
-    private string $spacesPath;
+    private string $projectsPath;
     private array $params = [];
 
-    public function __construct(string $spacesPath)
+    public function __construct(string $projectsPath)
     {
-        $this->spacesPath = rtrim($spacesPath, '/\\');
+        $this->projectsPath = rtrim($projectsPath, '/\\');
         $this->parseRequest();
     }
 
@@ -114,7 +114,7 @@ class Router
         $projectSlug = $this->params['project'];
 
         // Security: only allow files from within project directories
-        $projectPath = $this->spacesPath . DIRECTORY_SEPARATOR . $projectSlug;
+        $projectPath = $this->projectsPath . DIRECTORY_SEPARATOR . $projectSlug;
         $filePath = realpath($projectPath . DIRECTORY_SEPARATOR . $requestedFile);
 
         // Verify file is within project directory (prevent directory traversal)
