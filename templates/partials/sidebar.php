@@ -103,6 +103,39 @@ use Diplodocus\TemplateEngine as T;
                 </svg>
                 Download Docs
             </a>
+            <div class="dc-ix-controls" data-ix-controls hidden>
+                <button class="dc-ix-controls-summary" data-ix-controls-toggle>
+                    <span data-ix-count class="dc-ix-count-badge">0</span>
+                    <span class="dc-ix-controls-summary-label">Interactions</span>
+                    <svg class="dc-ix-controls-chevron" width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="dc-ix-controls-panel" data-ix-controls-panel hidden>
+                    <div class="dc-ix-controls-breakdown" data-ix-breakdown></div>
+                    <div class="dc-ix-controls-row">
+                        <button class="dc-ix-controls-btn" data-ix-export>
+                            <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Export
+                        </button>
+                        <label class="dc-ix-controls-btn">
+                            <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l4-4m0 0l4 4m-4-4v12" />
+                            </svg>
+                            Import
+                            <input type="file" data-ix-import accept=".json" style="display:none;">
+                        </label>
+                        <button class="dc-ix-controls-btn dc-ix-controls-btn--danger" data-ix-clear>
+                            <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
     </div>
 

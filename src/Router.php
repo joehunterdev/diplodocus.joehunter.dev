@@ -46,11 +46,34 @@ class Router
         $page    = !empty($segs[1]) ? $segs[1] : ($_GET['page']    ?? null);
 
         $this->params = [
-            'project' => $project,
-            'page'    => $page,
+            'project' => $this->sanitizeSlug($project),
+            'page'    => $this->sanitizeSlug($page),
             'file'    => $_GET['file']   ?? null,
             'action'  => $_GET['action'] ?? null,
         ];
+    }
+
+    /**
+     * Sanitize a URL slug to prevent path traversal.
+     * Allows letters, numbers, dots, hyphens, underscores.
+     * Rejects anything with slashes, null bytes, or dot-dot sequences.
+     */
+    private function sanitizeSlug(?string $slug): ?string
+    {
+        if ($slug === null) return null;
+        // Reject null bytes, slashes, or directory traversal attempts
+        if (strpos($slug, "\0") !== false
+            || strpos($slug, '/') !== false
+            || strpos($slug, '\\') !== false
+            || strpos($slug, '..') !== false
+        ) {
+            return null;
+        }
+        // Only allow safe characters: alphanumeric, dot, hyphen, underscore
+        if (!preg_match('/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/', $slug)) {
+            return null;
+        }
+        return $slug;
     }
 
     /**

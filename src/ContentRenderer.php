@@ -42,7 +42,7 @@ class ContentRenderer
 
         $pages = [];
         foreach ($files as $file) {
-            if ($file[0] === '.' || !str_ends_with($file, '.md')) continue;
+            if ($file[0] === '.' || substr($file, -3) !== '.md') continue;
             $filePath = $projectPath . DIRECTORY_SEPARATOR . $file;
             if (!is_file($filePath)) continue;
 
@@ -113,7 +113,9 @@ class ContentRenderer
         }
 
         // Create parser with project-specific base path for image resolution
+        // Safe mode escapes raw HTML in markdown (prevents XSS via .md files)
         $parser = new \DiplodocusMarkdown($project['path']);
+        $parser->setSafeMode(true);
 
         $markdown = file_get_contents($filePath);
         $html = $parser->text($markdown);

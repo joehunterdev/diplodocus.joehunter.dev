@@ -116,11 +116,15 @@ use Diplodocus\TemplateEngine as T;
     <!-- Inject project context into JavaScript -->
     <?php if (isset($project)): ?>
         <script>
-            window.projectData = <?php echo json_encode($project); ?>;
+            window.projectData = <?php
+                $jsProject = $project;
+                unset($jsProject['path']); // Never expose server filesystem paths
+                echo json_encode($jsProject, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+            ?>;
             window.pageIndex = <?php echo json_encode($pageIndex); ?>;
             window.pageCount = <?php echo json_encode($pageCount); ?>;
-            window.searchIndex = <?php echo json_encode($searchIndex ?? []); ?>;
-            window.attachmentBase = '<?php echo $router->attachmentUrl($project['slug'], ''); ?>';
+            window.searchIndex = <?php echo json_encode($searchIndex ?? [], JSON_HEX_TAG | JSON_HEX_AMP); ?>;
+            window.attachmentBase = <?php echo json_encode($router->attachmentUrl($project['slug'], '')); ?>;
         </script>
     <?php endif; ?>
 

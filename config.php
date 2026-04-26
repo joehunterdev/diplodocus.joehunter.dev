@@ -18,6 +18,6 @@ return [
 
     // Error handling
     // true  = show full exception + stack trace (never in production)
-    'debug'     => true,
+    'debug'     => false,
     'error_log' => '',
 ];

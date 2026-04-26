@@ -20,7 +20,7 @@ const Interactions = (function () {
 
     // -- Private: Config --
     const CONFIG = {
-        debug: true,
+        debug: false,
         eventNamespace: '.interactions',
         storageKey: 'dc-interactions',
         debounceMs: 150,
@@ -93,6 +93,51 @@ const Interactions = (function () {
         return CONFIG.imageExts.indexOf(ext) !== -1;
     }
 
+    function isSvgFile(filename) {
+        return (filename || '').split('.').pop().toLowerCase() === 'svg';
+    }
+
+    /**
+     * Strip potentially dangerous content from an SVG string before innerHTML injection:
+     *  - <script> blocks
+     *  - on* event handler attributes (onload, onerror, onclick, etc.)
+     *  - javascript: href/xlink:href values
+     *  - <foreignObject> (can embed arbitrary HTML)
+     */
+    function sanitizeSvg(svgText) {
+        return svgText
+            .replace(/<script[\s\S]*?<\/script>/gi, '')
+            .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
+            .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+            .replace(/\s+(?:xlink:)?href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, '');
+    }
+
+    /**
+     * Fetch an SVG URL and inject its markup into `el`, stripping width/height
+     * so CSS can control the size, and sanitizing event handlers.
+     * Falls back to <img> on error.
+     */
+    function inlineSvgInto(el, url, filename) {
+        fetch(url)
+            .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+            .then(function (svgText) {
+                // Extract just the <svg …>…</svg> block
+                var match = svgText.match(/<svg[\s\S]*<\/svg>/i);
+                if (!match) throw new Error('no svg');
+                var markup = match[0]
+                    // Remove fixed width/height attrs so CSS controls sizing
+                    .replace(/\s(width|height)="[^"]*"/gi, '');
+                // Sanitize before injecting
+                markup = sanitizeSvg(markup);
+                el.innerHTML = markup;
+                el.classList.add('dc-ix-svg-inline');
+            })
+            .catch(function () {
+                // Graceful fallback — <img> does not execute SVG scripts
+                el.innerHTML = '<img src="' + url + '" alt="' + escapeHtml(filename) + '">';
+            });
+    }
+
     // -- Private: Storage --
     function getPageKey() {
         if (!window.projectData || !window.projectData.slug) return null;
@@ -116,6 +161,7 @@ const Interactions = (function () {
             var stored = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '{}');
             stored[key] = interactions;
             localStorage.setItem(CONFIG.storageKey, JSON.stringify(stored));
+            window.dispatchEvent(new CustomEvent('dc:interactions:saved'));
         } catch (e) { log('Storage write failed:', e); }
     }
 
@@ -156,7 +202,7 @@ const Interactions = (function () {
     // -- Private: DOM injection --
     function injectTriggerBtn() {
         $triggerBtn = window.jQuery(
-            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>+ Add note</button>'
+            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>+ Add</button>'
         );
         window.jQuery('body').append($triggerBtn);
     }
@@ -207,13 +253,21 @@ const Interactions = (function () {
 
         attachments.forEach(function (filename) {
             var url = base + encodeURIComponent(filename);
-            var inner = isImageFile(filename)
-                ? '<img src="' + url + '" alt="' + escapeHtml(filename) + '"><span>' + escapeHtml(filename) + '</span>'
-                : '<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div><span>' + escapeHtml(filename) + '</span>';
-            $grid.append(
-                '<button class="dc-ix-attachment-item" data-ix-attachment-item="' + escapeHtml(filename) + '">' +
-                inner + '</button>'
-            );
+            var $btn = $('<button class="dc-ix-attachment-item" data-ix-attachment-item="' + escapeHtml(filename) + '"></button>');
+            var $label = $('<span>' + escapeHtml(filename) + '</span>');
+
+            if (isSvgFile(filename)) {
+                var $preview = $('<div class="dc-ix-attachment-preview"></div>');
+                $btn.append($preview).append($label);
+                $grid.append($btn);
+                inlineSvgInto($preview[0], url, filename);
+            } else if (isImageFile(filename)) {
+                $btn.append('<img src="' + url + '" alt="' + escapeHtml(filename) + '">').append($label);
+                $grid.append($btn);
+            } else {
+                $btn.append('<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div>').append($label);
+                $grid.append($btn);
+            }
         });
     }
 
@@ -321,9 +375,13 @@ const Interactions = (function () {
         var popoverBody;
         if (isAttachment) {
             var url = (window.attachmentBase || '') + encodeURIComponent(interaction.attachmentFilename);
-            popoverBody = isImageFile(interaction.attachmentFilename)
-                ? '<img src="' + url + '" class="dc-ix-thumb" alt="' + escapeHtml(interaction.attachmentFilename) + '">'
-                : '<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div>';
+            if (isSvgFile(interaction.attachmentFilename)) {
+                popoverBody = '<div class="dc-ix-thumb dc-ix-thumb--svg" data-ix-svg-url="' + url + '" data-ix-svg-name="' + escapeHtml(interaction.attachmentFilename) + '"></div>';
+            } else if (isImageFile(interaction.attachmentFilename)) {
+                popoverBody = '<img src="' + url + '" class="dc-ix-thumb" alt="' + escapeHtml(interaction.attachmentFilename) + '">';
+            } else {
+                popoverBody = '<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div>';
+            }
             popoverBody += '<span class="dc-ix-filename">' + escapeHtml(interaction.attachmentFilename) + '</span>';
         } else {
             popoverBody =
@@ -364,7 +422,17 @@ const Interactions = (function () {
     // -- Private: Popovers --
     function openPopover(id) {
         closeAllPopovers();
-        window.jQuery('[data-ix-popover="' + id + '"]').removeAttr('hidden');
+        var $popover = window.jQuery('[data-ix-popover="' + id + '"]');
+        $popover.removeAttr('hidden');
+
+        // Lazy-load inline SVG thumbnails inside this popover
+        $popover.find('[data-ix-svg-url]').each(function () {
+            var el = this;
+            if (el._svgLoaded) return;
+            el._svgLoaded = true;
+            inlineSvgInto(el, el.getAttribute('data-ix-svg-url'), el.getAttribute('data-ix-svg-name') || '');
+        });
+
         setState({ activePopover: id });
     }
 

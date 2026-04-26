@@ -20,10 +20,11 @@ import Sidebar from './modules/sidebar.js';
 import Search from './modules/search.js';
 import TOC from './modules/toc.js';
 import CodeHighlight from './modules/code-highlight.js';
-import AttachmentGallery from './modules/attachment-gallery.js';
+import * as AttachmentGalleryModule from './modules/attachment-gallery.js';
 import MermaidDiagrams from './modules/mermaid-diagrams.js';
 import InteractiveContent from './modules/interactive-content.js';
 import Interactions from './modules/interactions.js';
+import InteractionControls from './modules/interaction-controls.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     // Priority order: layout → navigation → content → features
@@ -31,10 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
     Search.init();
     TOC.init();
     CodeHighlight.init();
-    AttachmentGallery.init();
+    const AttachmentGallery = AttachmentGalleryModule.default || AttachmentGalleryModule.AttachmentGallery || AttachmentGalleryModule;
+    if (typeof AttachmentGallery.init === 'function') {
+        AttachmentGallery.init();
+    }
     MermaidDiagrams.init();
     InteractiveContent.init();
     Interactions.init();
+    InteractionControls.init();
 
     console.log('[App] Initialized');
 });
