@@ -145,22 +145,89 @@ const InteractionControls = (function () {
 
     // -- Import --
 
+    // -- Import validation --
+
+    var IMPORT_MAX_BYTES   = 512 * 1024;              // 512 KB
+    var VALID_TYPES        = ['comment', 'attachment', 'checked'];
+    var SLUG_KEY_RE        = /^[a-zA-Z0-9][a-zA-Z0-9._-]*:[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
+    var ISO_RE             = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+    var MAX_STRING_LEN     = 4000;
+
+    function validateImportPayload(payload) {
+        // Top-level shape
+        if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Root must be an object.');
+        if (typeof payload.project !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(payload.project)) throw new Error('Invalid or missing .project slug.');
+        if (typeof payload.exported !== 'string' || !ISO_RE.test(payload.exported)) throw new Error('Invalid or missing .exported timestamp.');
+        if (!payload.data || typeof payload.data !== 'object' || Array.isArray(payload.data)) throw new Error('Missing or invalid .data object.');
+
+        // Page keys
+        var keys = Object.keys(payload.data);
+        if (keys.length === 0) throw new Error('No page data found.');
+        if (keys.length > 200) throw new Error('Too many page keys (max 200).');
+
+        keys.forEach(function (k) {
+            if (!SLUG_KEY_RE.test(k)) throw new Error('Invalid page key: "' + k + '"');
+            var arr = payload.data[k];
+            if (!Array.isArray(arr)) throw new Error('Page "' + k + '" must be an array.');
+            if (arr.length > 500) throw new Error('Too many interactions on page "' + k + '" (max 500).');
+
+            arr.forEach(function (ix, i) {
+                var ctx = 'Interaction ' + i + ' on "' + k + '"';
+                if (!ix || typeof ix !== 'object') throw new Error(ctx + ': not an object.');
+                if (typeof ix.id !== 'number' || !isFinite(ix.id)) throw new Error(ctx + ': invalid id.');
+                if (VALID_TYPES.indexOf(ix.type) === -1) throw new Error(ctx + ': unknown type "' + ix.type + '".');
+                if (typeof ix.created !== 'string' || !ISO_RE.test(ix.created)) throw new Error(ctx + ': invalid created timestamp.');
+                if (typeof ix.anchorBlockIndex !== 'number') throw new Error(ctx + ': anchorBlockIndex must be a number.');
+
+                // Type-specific required fields
+                if (ix.type === 'comment') {
+                    if (typeof ix.text !== 'string') throw new Error(ctx + ': comment missing text.');
+                    if (ix.text.length > MAX_STRING_LEN) throw new Error(ctx + ': text too long (max ' + MAX_STRING_LEN + ').');
+                }
+                if (ix.type === 'attachment') {
+                    if (typeof ix.attachmentFilename !== 'string' || ix.attachmentFilename.length === 0) throw new Error(ctx + ': attachment missing filename.');
+                    if (ix.attachmentFilename.length > 260) throw new Error(ctx + ': filename too long.');
+                    // No path traversal in filenames
+                    if (ix.attachmentFilename.indexOf('..') !== -1 || ix.attachmentFilename.indexOf('/') !== -1 || ix.attachmentFilename.indexOf('\\') !== -1) throw new Error(ctx + ': invalid filename.');
+                }
+
+                // Optional string fields — just length-check them
+                ['anchorHeadingId', 'anchorSelectedText'].forEach(function (f) {
+                    if (ix[f] !== undefined && ix[f] !== null) {
+                        if (typeof ix[f] !== 'string') throw new Error(ctx + ': ' + f + ' must be a string.');
+                        if (ix[f].length > MAX_STRING_LEN) throw new Error(ctx + ': ' + f + ' too long.');
+                    }
+                });
+            });
+        });
+
+        return true; // valid
+    }
+
     function handleImport(file) {
         if (!file) return;
+
+        // File type guard
+        if (!file.name.match(/\.json$/i)) {
+            alert('Import failed: only .json files are accepted.');
+            return;
+        }
+        if (file.size > IMPORT_MAX_BYTES) {
+            alert('Import failed: file is too large (max 512 KB).');
+            return;
+        }
+
         var reader = new FileReader();
         reader.onload = function (e) {
             try {
                 var payload = JSON.parse(e.target.result);
-                if (!payload.data || typeof payload.data !== 'object') {
-                    throw new Error('Invalid file — missing .data');
-                }
+                validateImportPayload(payload);
+
                 var store = readStore();
                 var count = 0;
                 Object.keys(payload.data).forEach(function (k) {
-                    if (Array.isArray(payload.data[k])) {
-                        store[k] = payload.data[k];
-                        count += payload.data[k].length;
-                    }
+                    store[k] = payload.data[k];
+                    count += payload.data[k].length;
                 });
                 writeStore(store);
                 refresh();
