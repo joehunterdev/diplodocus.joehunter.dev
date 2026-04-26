@@ -8,7 +8,7 @@
  */
 return [
     'app_name' => 'Diplodocus',
-    'version'  => '1.0.0',
+    'version'  => '1.0.1',
 
     // Content folders scanned for projects (in order)
     'projects_paths' => [
