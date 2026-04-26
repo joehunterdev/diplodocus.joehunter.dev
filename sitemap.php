@@ -16,9 +16,8 @@ use Diplodocus\ProjectManager;
 use Diplodocus\Router;
 
 $config         = Config::getInstance();
-$spacesPath     = $config->get('projects_paths', $config->get('projects_path'));
+$spacesPath     = $config->get('projects_path'); // public_md only — private spaces are never indexed
 $siteUrl        = rtrim($config->get('site_url', ''), '/');
-$privateSpaces  = $config->get('private_spaces', []);
 
 $projectManager = new ProjectManager($spacesPath);
 $router         = new Router($spacesPath);
@@ -32,9 +31,6 @@ $urls[] = ['loc' => $siteUrl . '/', 'changefreq' => 'weekly', 'priority' => '1.0
 
 foreach ($projectManager->getProjects() as $proj) {
     $slug = $proj['slug'];
-    if (in_array($slug, $privateSpaces, true)) {
-        continue;
-    }
     foreach ($projectManager->getPages($slug) as $p) {
         $urls[] = [
             'loc'        => $siteUrl . $router->url(['project' => $slug, 'page' => $p['slug']]),
