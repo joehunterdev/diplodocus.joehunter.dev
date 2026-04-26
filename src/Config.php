@@ -86,7 +86,7 @@ class Config
             // Branding (can be overridden via config.php)
             'app_name' => 'Diplodocus',
             'logo_url' => '/assets/img/logo.png',
-            'version'  => '1.0.0',
+            'version'  => date('YmdHi'), // Dynamic version for cache busting
 
             // Stylesheets (theme.css MUST be first — its vars feed the rest)
             'stylesheets' => [

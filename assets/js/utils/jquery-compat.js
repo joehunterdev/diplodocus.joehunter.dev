@@ -123,6 +123,12 @@
                 return api;
             },
 
+            prop: function (p, v) {
+                if (v === undefined) return elements[0] ? elements[0][p] : null;
+                elements.forEach(function (el) { el[p] = v; });
+                return api;
+            },
+
             data: function (key) {
                 return elements[0] ? elements[0].dataset[key] : undefined;
             },
@@ -170,6 +176,28 @@
                         child.each(function () { el.appendChild(this); });
                     } else if (child instanceof HTMLElement) {
                         el.appendChild(child);
+                    }
+                });
+                return api;
+            },
+
+            before: function (html) {
+                elements.forEach(function (el) {
+                    if (typeof html === 'string') {
+                        el.insertAdjacentHTML('beforebegin', html);
+                    } else if (html instanceof HTMLElement) {
+                        el.parentElement.insertBefore(html, el);
+                    }
+                });
+                return api;
+            },
+
+            after: function (html) {
+                elements.forEach(function (el) {
+                    if (typeof html === 'string') {
+                        el.insertAdjacentHTML('afterend', html);
+                    } else if (html instanceof HTMLElement) {
+                        el.parentElement.insertBefore(html, el.nextSibling);
                     }
                 });
                 return api;

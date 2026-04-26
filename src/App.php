@@ -86,6 +86,9 @@ class App
                     $content    = $rendered['html'];
                     $toc        = $rendered['toc'];
                     $pageTitle  = $rendered['title'];
+                    $projectContext = $rendered['project'] ?? null;
+                    $pageIndex  = $rendered['pageIndex'] ?? false;
+                    $pageCount  = $rendered['pageCount'] ?? null;
                 }
             }
         }
@@ -99,6 +102,9 @@ class App
             'currentPage' => $page,
             'content' => $content,
             'toc' => $toc,
+            'project' => $projectContext ?? null,
+            'pageIndex' => $pageIndex ?? false,
+            'pageCount' => $pageCount ?? null,
             //TODO: can go
             'validationResults' => $validationResults,
             'hasSecurityIssues' => $validationResults ? !empty($validationResults['security']) : false,
