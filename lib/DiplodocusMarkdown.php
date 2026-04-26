@@ -54,7 +54,7 @@ class DiplodocusMarkdown extends Parsedown
         $this->processingImage = true;
         $Inline = parent::inlineImage($Excerpt);
         $this->processingImage = false;
-        if (!isset($Inline['element']['attributes']['src'])) {
+        if (!isset($Inline['element']['attributes']['src']) || !$Inline['element']['attributes']['src']) {
             return $Inline;
         }
         $Inline['element']['attributes']['src'] = $this->resolveAssetPath(
@@ -164,6 +164,11 @@ class DiplodocusMarkdown extends Parsedown
      */
     protected function resolveAssetPath($path)
     {
+        // Nothing to rewrite
+        if (!$path) {
+            return $path;
+        }
+
         if (preg_match('#^(https?://|//|data:|/)#i', $path)) {
             return $path;
         }

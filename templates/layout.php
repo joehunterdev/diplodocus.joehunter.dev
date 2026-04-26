@@ -53,11 +53,13 @@ use Diplodocus\TemplateEngine as T;
     <link rel="author" href="https://joehunter.es">
     <link rel="icon" href="/favicon.ico">
 
+    <?php $v = $config ? $config->get('version', '1') : '1'; ?>
+
     <!-- Styles -->
-    <link rel="stylesheet" href="/assets/css/theme.css">
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
-    <link rel="stylesheet" href="/assets/css/highlight-dark.min.css">
-    <link rel="stylesheet" href="/assets/css/diplodocus.css">
+    <link rel="stylesheet" href="/assets/css/theme.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="/assets/css/highlight-dark.min.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="/assets/css/diplodocus.css?v=<?= $v ?>">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,18 +91,18 @@ use Diplodocus\TemplateEngine as T;
     <?= $engine->partial('partials/modals', get_defined_vars()) ?>
 
     <!-- Scripts -->
-    <script src="/assets/js/vendor/highlight.min.js"></script>
-    <script src="/assets/js/utils/jquery-compat.js"></script>
-    <script src="/assets/js/utils/page-logic.js"></script>
-    <script src="/assets/js/vendor/mermaid.min.js"></script>
-    <script src="/assets/js/modules/sidebar.js"></script>
-    <script src="/assets/js/modules/search.js"></script>
-    <script src="/assets/js/modules/toc.js"></script>
-    <script src="/assets/js/modules/code-highlight.js"></script>
-    <script src="/assets/js/modules/attachment-gallery.js"></script>
-    <script src="/assets/js/modules/mermaid-diagrams.js"></script>
-    <script src="/assets/js/modules-init.js"></script>
-    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/vendor/highlight.min.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/utils/jquery-compat.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/utils/page-logic.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/vendor/mermaid.min.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules/sidebar.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules/search.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules/toc.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules/code-highlight.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules/attachment-gallery.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules/mermaid-diagrams.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/modules-init.js?v=<?= $v ?>"></script>
+    <script src="/assets/js/app.js?v=<?= $v ?>"></script>
 </body>
 
 </html>
