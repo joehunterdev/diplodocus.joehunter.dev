@@ -10,11 +10,17 @@ require_once __DIR__ . '/../lib/DiplodocusMarkdown.php';
 
 class ContentRenderer
 {
-    private string $spacesPath;
+    private array $spacesPaths;
 
-    public function __construct(string $spacesPath)
+    public function __construct($spacesPath)
     {
-        $this->spacesPath = rtrim($spacesPath, '/\\');
+        if (is_array($spacesPath)) {
+            $this->spacesPaths = array_map(function ($p) {
+                return rtrim($p, '/\\');
+            }, $spacesPath);
+        } else {
+            $this->spacesPaths = [rtrim($spacesPath, '/\\')];
+        }
     }
 
     /**
@@ -22,7 +28,17 @@ class ContentRenderer
      */
     public function render(string $projectSlug, string $pageSlug): ?array
     {
-        $projectPath = $this->spacesPath . DIRECTORY_SEPARATOR . $projectSlug;
+        // Find the project across all configured paths
+        $projectPath = null;
+        foreach ($this->spacesPaths as $spacesPath) {
+            $candidate = $spacesPath . DIRECTORY_SEPARATOR . $projectSlug;
+            if (is_dir($candidate)) {
+                $projectPath = $candidate;
+                break;
+            }
+        }
+        if ($projectPath === null) return null;
+
         $filePath = $projectPath . DIRECTORY_SEPARATOR . $pageSlug . '.md';
 
         if (!file_exists($filePath)) {
