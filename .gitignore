@@ -1,6 +1,5 @@
 # Local configuration (user-specific, should not be committed)
-/config.php
-/config.local.php
+ /config.local.php
 
 # Private documentation (local only, not committed)
 private_md/
