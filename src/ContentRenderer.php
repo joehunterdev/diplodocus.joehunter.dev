@@ -69,6 +69,9 @@ class ContentRenderer
         // Convert GFM task list items: `[ ]` / `[x]` → checkbox inputs
         $html = $this->tagTaskLists($html);
 
+        // Wrap tables in a scroll container for mobile
+        $html = $this->wrapTables($html);
+
         return [
             'title' => $title,
             'html' => $html,
@@ -161,6 +164,23 @@ class ContentRenderer
                 return '<blockquote' . $existingAttrs . ' data-callout="' . $label . '">' . $m[2];
             },
             $html
+        );
+    }
+
+    /**
+     * Wrap bare <table> elements in a scroll container so wide tables
+     * scroll horizontally on mobile instead of breaking the layout.
+     */
+    private function wrapTables(string $html): string
+    {
+        return preg_replace(
+            '#(?<!<div class="table-wrap">)(<table[\s>])#',
+            '<div class="table-wrap">$1',
+            preg_replace(
+                '#(<\/table>)(?!\s*<\/div>)#',
+                '$1</div>',
+                $html
+            )
         );
     }
 

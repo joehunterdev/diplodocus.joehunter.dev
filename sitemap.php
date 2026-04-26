@@ -16,11 +16,11 @@ use Diplodocus\ProjectManager;
 use Diplodocus\Router;
 
 $config         = Config::getInstance();
-$spacesPath     = $config->get('projects_path'); // public_md only — private spaces are never indexed
+$projectsPath     = $config->get('projects_path'); // public_md only — private spaces are never indexed
 $siteUrl        = rtrim($config->get('site_url', ''), '/');
 
-$projectManager = new ProjectManager($spacesPath);
-$router         = new Router($spacesPath);
+$projectManager = new ProjectManager($projectsPath);
+$router         = new Router($projectsPath);
 
 header('Content-Type: application/xml; charset=utf-8');
 

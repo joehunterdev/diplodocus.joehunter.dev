@@ -26,11 +26,11 @@ class App
     {
         $this->config = Config::getInstance();
         $basePath = $this->config->get('base_path');
-        $spacesPath = $this->config->get('projects_paths', $this->config->get('projects_path'));
+        $projectsPath = $this->config->get('projects_paths', $this->config->get('projects_path'));
 
-        $this->router = new Router($spacesPath);
-        $this->projectManager = new ProjectManager($spacesPath);
-        $this->renderer = new ContentRenderer($spacesPath);
+        $this->router = new Router($projectsPath);
+        $this->projectManager = new ProjectManager($projectsPath);
+        $this->renderer = new ContentRenderer($projectsPath);
         // $this->validator = new Validator($basePath); // TODO: validation feature disabled
         $this->template = new TemplateEngine($this->config->get('templates_path'));
     }

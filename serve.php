@@ -17,8 +17,8 @@ use Diplodocus\Config;
 use Diplodocus\Router;
 
 $config     = Config::getInstance();
-$spacesPath = $config->get('projects_paths', $config->get('projects_path'));
-$router     = new Router($spacesPath);
+$projectsPath = $config->get('projects_paths', $config->get('projects_path'));
+$router     = new Router($projectsPath);
 
 if (!$router->isFileRequest()) {
     http_response_code(400);

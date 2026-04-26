@@ -1059,4 +1059,17 @@ aside.dc-toc.hidden {
 
 .prose .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.5rem 0;
+  border-radius: var(--dc-radius-md);
+  border: 1px solid var(--dc-border-subtle);
+}
+
+/* Remove duplicate margin/border from table when inside wrapper */
+.prose .table-wrap table {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  min-width: 480px;
 }
