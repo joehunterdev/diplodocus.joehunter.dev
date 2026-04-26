@@ -3,7 +3,7 @@
 Diplodocus has exactly one convention. Learn this page and you know the whole
 content model.
 
-![Folder tree](attachments/03a-folder-tree.svg)
+![Folder tree](attachments/03a-folder-tree.png)
 
 ## The convention
 

@@ -182,7 +182,10 @@ class DiplodocusMarkdown extends Parsedown
         if (strpos($path, '/') === false) {
             $path = 'attachments/' . $path;
         }
-        // Build the file-serving URL
-        return '?project=' . urlencode($project) . '&file=' . $path;
+        // Build root-relative clean URL — works from any page regardless of clean URL depth
+        if (preg_match('#^attachments/(.+)$#', $path, $m)) {
+            return '/' . urlencode($project) . '/attachments/' . rawurlencode($m[1]);
+        }
+        return '/' . urlencode($project) . '/' . $path;
     }
 }

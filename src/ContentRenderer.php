@@ -113,9 +113,10 @@ class ContentRenderer
         }
 
         // Create parser with project-specific base path for image resolution
-        // Safe mode escapes raw HTML in markdown (prevents XSS via .md files)
+        // markupEscaped escapes raw HTML in markdown (prevents XSS via .md files)
+        // without triggering Parsedown's URL sanitiser which breaks relative src URLs
         $parser = new \DiplodocusMarkdown($project['path']);
-        $parser->setSafeMode(true);
+        $parser->setMarkupEscaped(true);
 
         $markdown = file_get_contents($filePath);
         $html = $parser->text($markdown);

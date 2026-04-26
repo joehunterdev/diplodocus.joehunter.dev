@@ -455,14 +455,41 @@ const Interactions = (function () {
     // -- Private: Task list checked state --
 
     /**
-     * Restore checkbox visual state from saved interactions on page load.
-     * Interactions of type 'checked' have anchorBlockIndex === task index.
+     * Restore checkbox state from saved interactions.
+     * Once the user has interacted with ANY checkbox on this page,
+     * we take full control of all checkbox states (overriding PHP-rendered).
+     * On first visit (no task interactions saved), leave markdown [x] state as-is.
      */
     function restoreTaskChecks() {
-        state.interactions.forEach(function (ix) {
-            if (ix.type !== 'checked') return;
-            var cb = $article[0] && $article[0].querySelector('[data-task-index="' + ix.anchorBlockIndex + '"]');
-            if (cb) cb.checked = true;
+        var taskInteractions = state.interactions.filter(function (ix) { return ix.type === 'checked'; });
+
+        // Has the user ever interacted with checkboxes on this page?
+        // We track this by checking if there are any 'checked' interactions OR
+        // if any checkbox was explicitly unchecked (interaction removed but page has checkboxes).
+        // Simplest reliable signal: if the store has a record for this page key at all,
+        // we own the state. Use presence of the page key in storage.
+        var pageKey = getPageKey();
+        var store = {};
+        try { store = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '{}'); } catch (e) { }
+        var hasPageRecord = store.hasOwnProperty(pageKey);
+
+        if (!hasPageRecord) {
+            // First visit — respect markdown source, just tick saved ones
+            taskInteractions.forEach(function (ix) {
+                var cb = $article[0] && $article[0].querySelector('[data-task-index="' + ix.anchorBlockIndex + '"]');
+                if (cb) cb.checked = true;
+            });
+            return;
+        }
+
+        // Page has been interacted with — we own all checkbox states
+        var checkedIndices = {};
+        taskInteractions.forEach(function (ix) { checkedIndices[ix.anchorBlockIndex] = true; });
+
+        var checkboxes = $article[0] ? $article[0].querySelectorAll('[data-task-index]') : [];
+        checkboxes.forEach(function (cb) {
+            var idx = parseInt(cb.getAttribute('data-task-index'), 10);
+            cb.checked = !!checkedIndices[idx];
         });
     }
 
@@ -474,29 +501,50 @@ const Interactions = (function () {
         if (isNaN(idx)) return;
 
         var isChecked = checkbox.checked;
-        var interactions;
+
+        // On first-ever interaction with this page's checkboxes, seed the interaction
+        // list from the current DOM so pre-checked markdown items are preserved.
+        var pageKey = getPageKey();
+        var store = {};
+        try { store = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '{}'); } catch (e) { }
+        var isFirstInteraction = !store.hasOwnProperty(pageKey);
+
+        var interactions = state.interactions.slice(); // clone
+
+        if (isFirstInteraction) {
+            // Snapshot all currently-checked boxes (includes markdown [x] items)
+            var allCheckboxes = $article[0] ? $article[0].querySelectorAll('[data-task-index]') : [];
+            allCheckboxes.forEach(function (cb) {
+                var cbIdx = parseInt(cb.getAttribute('data-task-index'), 10);
+                if (cb.checked && cbIdx !== idx) { // exclude the one being toggled (use new state instead)
+                    interactions.push({
+                        id: Date.now() + cbIdx,
+                        type: 'checked',
+                        anchorBlockIndex: cbIdx,
+                        anchorHeadingId: null,
+                        anchorSelectedText: null,
+                        created: new Date().toISOString(),
+                    });
+                }
+            });
+        }
 
         if (isChecked) {
-            // Add a checked interaction if one doesn't already exist for this index
-            var exists = state.interactions.some(function (ix) {
+            var exists = interactions.some(function (ix) {
                 return ix.type === 'checked' && ix.anchorBlockIndex === idx;
             });
             if (!exists) {
-                var interaction = {
+                interactions.push({
                     id: Date.now(),
                     type: 'checked',
                     anchorBlockIndex: idx,
                     anchorHeadingId: null,
                     anchorSelectedText: null,
                     created: new Date().toISOString(),
-                };
-                interactions = state.interactions.concat([interaction]);
-            } else {
-                return; // already saved
+                });
             }
         } else {
-            // Remove the checked interaction for this index
-            interactions = state.interactions.filter(function (ix) {
+            interactions = interactions.filter(function (ix) {
                 return !(ix.type === 'checked' && ix.anchorBlockIndex === idx);
             });
         }

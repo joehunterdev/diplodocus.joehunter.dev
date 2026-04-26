@@ -6,12 +6,12 @@ JSON, and other binary content. This page shows how to use it.
 ## The basic pattern
 
 ```markdown
-![Descriptive alt text](attachments/05a-gallery-demo.svg)
+![Descriptive alt text](attachments/05a-gallery-demo.png)
 ```
 
 Rendered:
 
-![Gallery demo screenshot](attachments/05a-gallery-demo.svg)
+![Gallery demo screenshot](attachments/05a-gallery-demo.png)
 
 > The image above may show a broken-image icon if the placeholder PNG
 > hasn't been filled in yet — that's fine, the path is what matters.
@@ -85,7 +85,7 @@ You can embed images inside table cells:
 
 | Diagram | Description |
 |---|---|
-| ![Context](attachments/05a-gallery-demo.svg) | System context view |
+| ![Context](attachments/05a-gallery-demo.png) | System context view |
 
 ## Best practices
 
