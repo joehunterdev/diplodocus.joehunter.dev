@@ -60,33 +60,39 @@ const Sidebar = (function () {
     }
 
     // -- Private: Core --
+    function isMobile() {
+        return window.innerWidth < 769;
+    }
+
     function toggle() {
-        $sidebar.toggleClass('hidden');
-        setState({ hidden: $sidebar.hasClass('hidden') });
-        saveState();
+        const $ = window.jQuery;
+        if (isMobile()) {
+            // On mobile: sidebar is hidden by CSS; open via .is-open
+            $sidebar.toggleClass('is-open');
+            $('body').toggleClass('is-sidebar-open', $sidebar.hasClass('is-open'));
+            setState({ hidden: !$sidebar.hasClass('is-open') });
+        } else {
+            $sidebar.toggleClass('hidden');
+            setState({ hidden: $sidebar.hasClass('hidden') });
+        }
         log('Toggled, hidden:', state.hidden);
     }
 
     function close() {
-        $sidebar.addClass('hidden');
-        setState({ hidden: true });
-        saveState();
-    }
-
-    function saveState() {
-        try { localStorage.setItem(CONFIG.storageKey, state.hidden); } catch (e) {}
-    }
-
-    function restoreState() {
-        if (window.innerWidth >= CONFIG.breakpoint) {
-            try {
-                var isHidden = localStorage.getItem(CONFIG.storageKey) === 'true';
-                if (isHidden) {
-                    $sidebar.addClass('hidden');
-                    setState({ hidden: true });
-                }
-            } catch (e) {}
+        const $ = window.jQuery;
+        if (isMobile()) {
+            $sidebar.removeClass('is-open');
+            $('body').removeClass('is-sidebar-open');
+            setState({ hidden: true });
+        } else {
+            $sidebar.addClass('hidden');
+            setState({ hidden: true });
         }
+    }
+
+    function clearSavedState() {
+        // Clear any previously persisted hidden state so sidebar always starts visible
+        try { localStorage.removeItem(CONFIG.storageKey); } catch (e) { }
     }
 
     // -- Private: Events --
@@ -121,7 +127,7 @@ const Sidebar = (function () {
         if (state.initialized) return;
 
         bindEvents();
-        restoreState();
+        clearSavedState();
 
         setState({ initialized: true });
         log('Initialized');

@@ -112,13 +112,17 @@ class Parsedown
                 continue;
             }
             
-            // Lists - collect all consecutive list items
+            // Lists - collect all consecutive list items with indent tracking
             if (preg_match('/^(\s*)([*+-]|\d+\.)\s+(.+)/', $line, $m)) {
                 $listItems = array();
-                $isOrdered = is_numeric($m[2][0]);
-                $i++; // advance past the first line already matched
-                $listItems[] = $m[3];
-                
+                $firstIndent = strlen(str_replace("\t", '    ', $m[1]));
+                $firstOrdered = is_numeric($m[2][0]);
+
+                // first line
+                $firstItem = $this->parseListItemLine($m);
+                $listItems[] = $firstItem;
+                $i++;
+
                 while ($i < count($lineArray)) {
                     $currentLine = $lineArray[$i];
                     if (empty(trim($currentLine))) {
@@ -126,19 +130,14 @@ class Parsedown
                         break; // Empty line ends the list
                     }
                     if (preg_match('/^(\s*)([*+-]|\d+\.)\s+(.+)/', $currentLine, $match)) {
-                        $listItems[] = $match[3];
+                        $listItems[] = $this->parseListItemLine($match);
                         $i++;
                     } else {
-                        break; // Non-list line ends the list (don't increment — outer loop handles it)
+                        break;
                     }
                 }
-                
-                $tag = $isOrdered ? 'ol' : 'ul';
-                $html .= '<' . $tag . '>' . "\n";
-                foreach ($listItems as $item) {
-                    $html .= '<li>' . $this->parseInline($item) . '</li>' . "\n";
-                }
-                $html .= '</' . $tag . '>' . "\n";
+
+                $html .= $this->renderListItems($listItems, $firstOrdered, $firstIndent);
                 continue;
             }
             
@@ -240,6 +239,105 @@ class Parsedown
         }
         
         return $html;
+    }
+
+    /**
+     * Normalise a matched list line into an item descriptor.
+     */
+    protected function parseListItemLine($match)
+    {
+        $indent = strlen(str_replace("\t", '    ', $match[1]));
+        $ordered = is_numeric($match[2][0]);
+        $text = $match[3];
+        $task = null;
+        if (preg_match('/^\[([ xX])\]\s+(.*)/', $text, $tm)) {
+            $task = ($tm[1] === 'x' || $tm[1] === 'X');
+            $text = $tm[2];
+        }
+        return array(
+            'indent'  => $indent,
+            'ordered' => $ordered,
+            'text'    => $text,
+            'task'    => $task,
+        );
+    }
+
+    /**
+     * Render a flat array of list items as possibly-nested <ul>/<ol> using
+     * indent levels. Every time an item's indent exceeds the baseline, the
+     * children are collected and rendered recursively.
+     */
+    protected function renderListItems($items, $ordered, $baselineIndent)
+    {
+        if (empty($items)) return '';
+        $tag = $ordered ? 'ol' : 'ul';
+        $html = '<' . $tag . '>' . "\n";
+        $n = count($items);
+        $i = 0;
+        while ($i < $n) {
+            $item = $items[$i];
+            // Items with indent == baseline are siblings at this level.
+            if ($item['indent'] < $baselineIndent) {
+                // Shouldn't happen with well-formed input; skip.
+                $i++;
+                continue;
+            }
+            if ($item['indent'] > $baselineIndent) {
+                // Defensive: collect consecutive deeper items and recurse.
+                $child = array();
+                while ($i < $n && $items[$i]['indent'] > $baselineIndent) {
+                    $child[] = $items[$i];
+                    $i++;
+                }
+                $html .= $this->renderListItems($child, $child[0]['ordered'], $child[0]['indent']);
+                continue;
+            }
+
+            // Build this <li> content, absorbing any deeper-indented children.
+            $liContent = $this->parseInline($item['text']);
+            $liClass = '';
+            if ($item['task'] !== null) {
+                $checked = $item['task'] ? ' checked' : '';
+                $liContent = '<input type="checkbox" disabled' . $checked . '> ' . $liContent;
+                $liClass = ' class="task-list-item"';
+            }
+
+            // Collect children of THIS item (everything after it whose indent is greater, up to the next sibling)
+            $children = array();
+            $j = $i + 1;
+            while ($j < $n && $items[$j]['indent'] > $baselineIndent) {
+                $children[] = $items[$j];
+                $j++;
+            }
+            $childrenHtml = '';
+            if (!empty($children)) {
+                $childrenHtml = $this->renderListItems($children, $children[0]['ordered'], $children[0]['indent']);
+            }
+
+            $html .= '<li' . $liClass . '>' . $liContent . $childrenHtml . '</li>' . "\n";
+            $i = $j;
+        }
+        $html .= '</' . $tag . '>' . "\n";
+        return $html;
+    }
+
+    /**
+     * Parse a table separator row like `|:---|:---:|---:|` into per-column alignment.
+     * Returns array of 'left' | 'center' | 'right' | null per column.
+     */
+    protected function parseTableAlignment($row)
+    {
+        $cells = array_map('trim', explode('|', trim($row, '|')));
+        $out = array();
+        foreach ($cells as $cell) {
+            $l = strlen($cell) > 0 && $cell[0] === ':';
+            $r = strlen($cell) > 0 && substr($cell, -1) === ':';
+            if ($l && $r) $out[] = 'center';
+            elseif ($r)   $out[] = 'right';
+            elseif ($l)   $out[] = 'left';
+            else          $out[] = null;
+        }
+        return $out;
     }
 
     protected function parseInline($text)

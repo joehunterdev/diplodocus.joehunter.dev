@@ -1,22 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
   <rect width="800" height="400" fill="#f3f4f6"/>
   <rect x="40" y="40" width="720" height="320" rx="6" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5"/>
+<<<<<<< HEAD
 
   <!-- Title bar -->
+=======
+>>>>>>> develop
   <rect x="40" y="40" width="720" height="36" rx="6" fill="#1e3a5f"/>
   <rect x="40" y="58" width="720" height="18" fill="#1e3a5f"/>
   <circle cx="64" cy="58" r="6" fill="#ef4444" opacity="0.7"/>
   <circle cx="84" cy="58" r="6" fill="#f59e0b" opacity="0.7"/>
   <circle cx="104" cy="58" r="6" fill="#22c55e" opacity="0.7"/>
   <text x="400" y="63" font-family="sans-serif" font-size="12" fill="#cbd5e1" text-anchor="middle">Attachment Gallery</text>
+<<<<<<< HEAD
 
   <!-- Tab bar -->
+=======
+>>>>>>> develop
   <rect x="56" y="92" width="80" height="28" rx="4" fill="#1e3a5f"/>
   <text x="96" y="110" font-family="sans-serif" font-size="11" fill="#ffffff" text-anchor="middle">Images</text>
   <rect x="144" y="92" width="88" height="28" rx="4" fill="#f3f4f6"/>
   <text x="188" y="110" font-family="sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">Documents</text>
   <rect x="240" y="92" width="64" height="28" rx="4" fill="#f3f4f6"/>
   <text x="272" y="110" font-family="sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">Data</text>
+<<<<<<< HEAD
 
   <!-- Image thumbnails -->
   <rect x="56" y="132" width="148" height="108" rx="4" fill="#e5e7eb"/>
@@ -32,6 +39,16 @@
   <text x="610" y="192" font-family="sans-serif" font-size="11" fill="#9ca3af" text-anchor="middle">07a-highlight-dark.svg</text>
 
   <!-- Download buttons -->
+=======
+  <rect x="56" y="132" width="148" height="108" rx="4" fill="#e5e7eb"/>
+  <text x="130" y="192" font-family="sans-serif" font-size="11" fill="#9ca3af" text-anchor="middle">01a-hero.png</text>
+  <rect x="216" y="132" width="148" height="108" rx="4" fill="#e5e7eb"/>
+  <text x="290" y="192" font-family="sans-serif" font-size="11" fill="#9ca3af" text-anchor="middle">03a-folder-tree.svg</text>
+  <rect x="376" y="132" width="148" height="108" rx="4" fill="#e5e7eb"/>
+  <text x="450" y="192" font-family="sans-serif" font-size="11" fill="#9ca3af" text-anchor="middle">05a-gallery-demo.svg</text>
+  <rect x="536" y="132" width="148" height="108" rx="4" fill="#e5e7eb"/>
+  <text x="610" y="192" font-family="sans-serif" font-size="11" fill="#9ca3af" text-anchor="middle">07a-highlight-dark.svg</text>
+>>>>>>> develop
   <rect x="56" y="252" width="148" height="24" rx="3" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="1"/>
   <text x="130" y="268" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Download</text>
   <rect x="216" y="252" width="148" height="24" rx="3" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="1"/>
@@ -40,6 +57,9 @@
   <text x="450" y="268" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Download</text>
   <rect x="536" y="252" width="148" height="24" rx="3" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="1"/>
   <text x="610" y="268" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Download</text>
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
   <text x="400" y="378" font-family="sans-serif" font-size="11" fill="#9ca3af" text-anchor="middle">Placeholder — replace with a real screenshot</text>
 </svg>

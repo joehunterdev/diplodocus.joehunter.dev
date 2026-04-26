@@ -120,11 +120,72 @@ html {
 
 /* Blockquote (Mintlify callout-ish) */
 .prose blockquote {
-  border-left: 2px solid var(--nv-border-default);
-  padding-left: 1rem;
+  border-left: 3px solid var(--nv-border-default);
+  padding: 0.75rem 1rem;
   margin: 1.5rem 0;
   color: var(--nv-text-muted);
   font-style: normal;
+  background: var(--nv-bg-subtle);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Callout variants — styled by first <strong> child label */
+.prose blockquote:has(> p:first-child > strong:first-child) {
+  position: relative;
+}
+.prose blockquote > p:first-child > strong:first-child {
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  margin-right: 0.25rem;
+}
+/* Note — blue/info */
+.prose blockquote:has(> p:first-child > strong:first-child:is([data-callout="note"])),
+.prose blockquote.callout-note,
+.prose blockquote:has(> p > strong:first-child) > p:first-child:has(strong:first-child) {
+  /* fallback — use attribute selector on the STRONG text content isn't possible in pure CSS,
+     so we rely on a post-processor to add data-callout attrs. See below. */
+}
+.prose blockquote[data-callout="note"] {
+  border-left-color: #3b82f6;
+  background: color-mix(in srgb, #3b82f6 8%, var(--nv-bg-subtle));
+}
+.prose blockquote[data-callout="note"] > p:first-child > strong:first-child { color: #3b82f6; }
+.prose blockquote[data-callout="tip"] {
+  border-left-color: #10b981;
+  background: color-mix(in srgb, #10b981 8%, var(--nv-bg-subtle));
+}
+.prose blockquote[data-callout="tip"] > p:first-child > strong:first-child { color: #10b981; }
+.prose blockquote[data-callout="warning"] {
+  border-left-color: #f59e0b;
+  background: color-mix(in srgb, #f59e0b 8%, var(--nv-bg-subtle));
+}
+.prose blockquote[data-callout="warning"] > p:first-child > strong:first-child { color: #f59e0b; }
+.prose blockquote[data-callout="danger"] {
+  border-left-color: #ef4444;
+  background: color-mix(in srgb, #ef4444 10%, var(--nv-bg-subtle));
+}
+.prose blockquote[data-callout="danger"] > p:first-child > strong:first-child { color: #ef4444; }
+.prose blockquote[data-callout="example"] {
+  border-left-color: #8b5cf6;
+  background: color-mix(in srgb, #8b5cf6 8%, var(--nv-bg-subtle));
+}
+.prose blockquote[data-callout="example"] > p:first-child > strong:first-child { color: #8b5cf6; }
+
+/* Task list items (GFM) */
+.prose ul.task-list,
+.prose ul li.task-list-item {
+  list-style: none;
+}
+.prose ul li.task-list-item {
+  padding-left: 0;
+  margin-left: -1.25rem;
+}
+.prose li.task-list-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+  cursor: default;
+  accent-color: var(--nv-brand-primary);
 }
 
 /* ── Syntax highlighting ──────────────────────────────────────────── */
@@ -837,3 +898,56 @@ table tbody tr:hover td {
   display: flex;
   align-items: center;
 }
+
+/* ── Responsive — collapse sidebar / toc at narrow widths ─────────── */
+/* Tailwind's .hidden has low specificity; our .nv-sidebar rule wins.
+   Add an explicit override so the hamburger toggle actually hides. */
+.nv-sidebar.hidden,
+aside.nv-sidebar.hidden { display: none; }
+.nv-toc.hidden,
+aside.nv-toc.hidden { display: none; }
+
+/* Tablet — hide TOC, keep sidebar */
+@media (max-width: 1024px) {
+  .nv-toc { display: none; }
+}
+
+/* Mobile — hide sidebar by default, overlay when opened */
+@media (max-width: 768px) {
+  .nv-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+  }
+  .nv-sidebar:not(.is-open) { display: none; }
+  .nv-sidebar.hidden { display: none; }
+
+  /* The hamburger is inside the header; make it visible and prominent on mobile */
+  .nv-header-toggle { display: inline-flex; }
+
+  /* Let main content breathe */
+  main[data-main-scroll] { padding-left: 0.5rem; padding-right: 0.5rem; }
+  .prose { padding: 0 0.5rem; }
+
+  /* Backdrop for when sidebar is open */
+  body.is-sidebar-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+  }
+}
+
+/* On desktop, allow sidebar.is-open to be a no-op (sidebar is always visible unless .hidden) */
+@media (min-width: 769px) {
+  .nv-sidebar.is-open { /* no-op */ }
+}
+
+/* ── Utilities ────────────────────────────────────────────────────── */
+.prose pre { overflow-x: auto; }
+.prose img { max-width: 100%; height: auto; }
+.prose table { max-width: 100%; }
+.prose .table-wrap { overflow-x: auto; }
