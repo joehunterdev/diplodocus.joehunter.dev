@@ -102,4 +102,4 @@ Diplodocus doesn't paginate tables. For very wide tables, consider:
 ## Next
 
 - [Configuration](09-configuration.md)
-- [CLI tools](10-cli-tools.md)
+- [Theming & branding](10-theming-and-branding.md)

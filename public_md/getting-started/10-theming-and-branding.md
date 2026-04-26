@@ -180,4 +180,4 @@ respond to theme changes. Move it into `theme.css` as a new variable.
 
 ## Next
 
-- [Deploying](12-deploying.md)
+- [Deploying](11-deploying.md)

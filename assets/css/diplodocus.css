@@ -14,6 +14,7 @@ html {
   background: var(--nv-bg-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ── Prose (Mintlify article spec) ────────────────────────────────── */
@@ -608,6 +609,7 @@ table tbody tr:hover td {
 .nv-main {
   flex: 1;
   min-width: 0;
+  overflow-x: hidden;
   padding: 2.5rem 3rem 4rem;
 }
 
@@ -943,6 +945,10 @@ aside.nv-toc.hidden {
   main[data-main-scroll] {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+  }
+
+  .nv-main {
+    padding: 1.5rem 1rem 3rem;
   }
 
   .prose {

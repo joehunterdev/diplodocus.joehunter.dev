@@ -62,7 +62,7 @@ NN-slug-with-hyphens.md
 |---|---|---|
 | `01-welcome.md` | Welcome | 1 |
 | `02-installation.md` | Installation | 2 |
-| `10-cli-tools.md` | Cli Tools | 10 |
+| `10-theming-and-branding.md` | Theming & Branding | 10 |
 | `99-appendix.md` | Appendix | 99 |
 
 ## Rule 3 — `attachments/` sits beside the pages

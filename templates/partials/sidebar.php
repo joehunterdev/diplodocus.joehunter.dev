@@ -14,8 +14,7 @@ use Diplodocus\TemplateEngine as T;
     <!-- Brand -->
     <a href="/" class="nv-sidebar-brand">
         <?php if (!empty($logoUrl)): ?>
-            <?php $logo = ($logoUrl[0] === '/' || strpos($logoUrl, 'http') === 0) ? $logoUrl : '/' . $logoUrl; ?>
-            <img src="<?= T::e($logo) ?>" alt="" style="height:1.5rem;width:auto;">
+            <img src="<?= T::e($logoUrl) ?>" alt="<?= T::e($appName ?? 'Diplodocus') ?>" style="height:1.75rem;width:auto;display:block;">
         <?php else: ?>
             <span class="nv-sidebar-brand-mark">D</span>
         <?php endif; ?>

@@ -149,7 +149,7 @@ Most branding changes should happen in `assets/css/theme.css`, not in
 }
 ```
 
-See [Theming & Branding](11-theming-and-branding.md) for the full theme
+See [Theming & Branding](10-theming-and-branding.md) for the full theme
 reference.
 
 ## Environment-specific config
@@ -168,5 +168,4 @@ return [
 
 ## Next
 
-- [CLI tools](10-cli-tools.md)
-- [Theming & branding](11-theming-and-branding.md)
+- [Theming & branding](10-theming-and-branding.md)

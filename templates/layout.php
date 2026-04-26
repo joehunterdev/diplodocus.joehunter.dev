@@ -53,7 +53,7 @@ use Diplodocus\TemplateEngine as T;
     <link rel="author" href="https://joehunter.es">
     <link rel="icon" href="/favicon.ico">
 
-    <?php $v = $config ? $config->get('version', '1') : '1'; ?>
+    <?php $v = $config ? ($config->get('version') ?: '1') : '1'; ?>
 
     <!-- Styles -->
     <link rel="stylesheet" href="/assets/css/theme.css?v=<?= $v ?>">
