@@ -74,7 +74,6 @@ const Sidebar = (function () {
         } else {
             $sidebar.toggleClass('hidden');
             setState({ hidden: $sidebar.hasClass('hidden') });
-            saveState();
         }
         log('Toggled, hidden:', state.hidden);
     }
@@ -88,24 +87,12 @@ const Sidebar = (function () {
         } else {
             $sidebar.addClass('hidden');
             setState({ hidden: true });
-            saveState();
         }
     }
 
-    function saveState() {
-        try { localStorage.setItem(CONFIG.storageKey, state.hidden); } catch (e) {}
-    }
-
-    function restoreState() {
-        if (window.innerWidth >= CONFIG.breakpoint) {
-            try {
-                var isHidden = localStorage.getItem(CONFIG.storageKey) === 'true';
-                if (isHidden) {
-                    $sidebar.addClass('hidden');
-                    setState({ hidden: true });
-                }
-            } catch (e) {}
-        }
+    function clearSavedState() {
+        // Clear any previously persisted hidden state so sidebar always starts visible
+        try { localStorage.removeItem(CONFIG.storageKey); } catch (e) { }
     }
 
     // -- Private: Events --
@@ -140,7 +127,7 @@ const Sidebar = (function () {
         if (state.initialized) return;
 
         bindEvents();
-        restoreState();
+        clearSavedState();
 
         setState({ initialized: true });
         log('Initialized');
