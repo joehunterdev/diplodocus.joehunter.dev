@@ -131,7 +131,7 @@ class App
         $siteDesc    = $this->config->get('site_description', '');
         $ogImage     = $this->config->get('og_image', '/example.png');
         $authorUrl   = $this->config->get('author_url', '');
-        $privateProject = $this->config->get('private_spaces', []);
+        $privateProject = $this->config->get('private_projects', []);
 
         // Build canonical URL
         $path      = $this->router->url(['project' => $project, 'page' => $page]);
