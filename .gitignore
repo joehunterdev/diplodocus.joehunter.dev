@@ -22,7 +22,7 @@ private_md/
 Thumbs.db
 
 # Dependency folders (not used today, but reserved)
-vendor/
+/vendor/
 node_modules/
 
 # Claude Code workspace
