@@ -37,12 +37,12 @@ class Config
         $this->config = [
             // Paths
             'base_path' => $basePath,
-            'spaces_path' => $basePath . '/spaces',   // ← Projects live inside spaces/
+            'projects_path' => $basePath . '/public_md', // default content directory
             'lib_path' => $basePath . '/lib',
             'assets_path' => $basePath . '/assets',
             'templates_path' => $basePath . '/templates',
 
-            // Folder names to ignore when scanning spaces_path for projects
+            // Folder names to ignore when scanning projects_path
             'excluded_dirs' => ['.git', '.backup', '.spaces', 'attachments', 'vendor', 'node_modules'],
 
             // Allowed file types for serving
@@ -85,7 +85,8 @@ class Config
 
             // Branding (can be overridden via config.php)
             'app_name' => 'Diplodocus',
-            'logo_url' => '',
+            'logo_url' => '/assets/img/logo.png',
+            'version'  => date('YmdHi'), // Dynamic version for cache busting
 
             // Stylesheets (theme.css MUST be first — its vars feed the rest)
             'stylesheets' => [
@@ -121,8 +122,8 @@ class Config
             'og_image'         => '/example.png',
             'author_url'       => '',
             'github_url'       => '',
-            // Spaces listed here get noindex + are excluded from sitemap
-            'private_spaces'   => [],
+            // Projects listed here get noindex + are excluded from sitemap
+            'private_projects' => [],
         ];
 
         // Allow local overrides from project root

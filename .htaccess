@@ -12,7 +12,10 @@ DirectoryIndex index.php
     RewriteRule ^sitemap\.xml$ sitemap.php [L,QSA]
     RewriteRule ^robots\.txt$ robots.php [L,QSA]
 
-    # File / attachment serving (?project=X&file=Y)
+    # Clean URL for attachments: /{project}/attachments/{file}
+    RewriteRule ^([^/]+)/attachments/(.+)$ serve.php?project=$1&file=attachments/$2 [L,QSA]
+
+    # File / attachment serving (?project=X&file=Y) — legacy query-param form
     RewriteCond %{QUERY_STRING} (?:^|&)file=
     RewriteRule ^.*$ serve.php [L,QSA]
 
@@ -40,16 +43,16 @@ DirectoryIndex index.php
     Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
-# Caching
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/html "access 1 hour"
-    ExpiresByType text/css "access 1 week"
-    ExpiresByType application/javascript "access 1 week"
-    ExpiresByType image/jpeg "access 1 month"
-    ExpiresByType image/gif "access 1 month"
-    ExpiresByType image/png "access 1 month"
-</IfModule>
+# Caching (disabled for development)
+# <IfModule mod_expires.c>
+#     ExpiresActive On
+#     ExpiresByType text/html "access 1 hour"
+#     ExpiresByType text/css "access 1 week"
+#     ExpiresByType application/javascript "access 1 week"
+#     ExpiresByType image/jpeg "access 1 month"
+#     ExpiresByType image/gif "access 1 month"
+#     ExpiresByType image/png "access 1 month"
+# </IfModule>
 
 # Gzip compression
 <IfModule mod_deflate.c>

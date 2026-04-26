@@ -171,7 +171,7 @@ $scanPath = $argv[2] ?? null;
 
 if ($scanPath === null) {
     $config = Diplodocus\Config::getInstance();
-    $scanPath = $config->get('projects_path', $projectRoot . '/spaces');
+    $scanPath = $config->get('projects_path', $projectRoot . '/public_md');
 }
 
 $cli = new DocsCLI($projectRoot, $scanPath);

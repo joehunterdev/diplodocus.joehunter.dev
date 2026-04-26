@@ -81,6 +81,7 @@ class App
         $toc = [];
         $pageTitle = null;
         $validationResults = null;
+        $searchIndex = [];
 
         // TODO: validation feature disabled
         // if (isset($_GET['validate'])) {
@@ -98,12 +99,18 @@ class App
                 return;
             }
 
+            // Global search index across all pages in the project
+            $searchIndex = $this->renderer->buildProjectSearchIndex($project);
+
             if ($page) {
                 $rendered = $this->renderer->render($project, $page);
                 if ($rendered) {
                     $content    = $rendered['html'];
                     $toc        = $rendered['toc'];
                     $pageTitle  = $rendered['title'];
+                    $projectContext = $rendered['project'] ?? null;
+                    $pageIndex  = $rendered['pageIndex'] ?? false;
+                    $pageCount  = $rendered['pageCount'] ?? null;
                 }
             }
         }
@@ -117,6 +124,10 @@ class App
             'currentPage' => $page,
             'content' => $content,
             'toc' => $toc,
+            'project' => $projectContext ?? null,
+            'pageIndex' => $pageIndex ?? false,
+            'pageCount' => $pageCount ?? null,
+            'searchIndex' => $searchIndex ?? [],
             //TODO: can go
             'validationResults' => $validationResults,
             'hasSecurityIssues' => $validationResults ? !empty($validationResults['security']) : false,
@@ -150,7 +161,7 @@ class App
         $siteDesc    = $this->config->get('site_description', '');
         $ogImage     = $this->config->get('og_image', '/example.png');
         $authorUrl   = $this->config->get('author_url', '');
-        $privateProject = $this->config->get('private_spaces', []);
+        $privateProject = $this->config->get('private_projects', []);
 
         // Build canonical URL
         $path      = $this->router->url(['project' => $project, 'page' => $page]);

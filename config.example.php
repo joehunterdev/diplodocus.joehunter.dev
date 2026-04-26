@@ -67,5 +67,5 @@ return [
     'author_url'       => 'https://joehunter.es',
     'github_url'       => 'https://github.com/joehunterdev',
     // Project listed here will be noindexed and excluded from sitemap
-    'private_spaces'   => ['esa.clublacosta.com'],
+    'private_projects'   => ['esa.clublacosta.com'],
 ];

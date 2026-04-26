@@ -25,6 +25,7 @@ use Diplodocus\TemplateEngine as T;
     <div style="position:relative;">
         <input type="text" data-sidebar-search class="dc-sidebar-search"
             placeholder="Search documentation…">
+        <div data-search-results class="dc-search-results" hidden></div>
     </div>
 
     <nav style="flex:1; overflow-y:auto; padding-top:.5rem;">
@@ -41,7 +42,7 @@ use Diplodocus\TemplateEngine as T;
             <?php endforeach; ?>
 
         <?php else: ?>
-            <!-- ── SPACE: back link + pages ── -->
+            <!-- ── SPACE: back link + pages + progress ── -->
             <a href="<?= $router->url([]) ?>" data-nav-link class="dc-sidebar-back">
                 <svg style="width:.8rem;height:.8rem;margin-right:.4rem;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -50,11 +51,14 @@ use Diplodocus\TemplateEngine as T;
             </a>
 
             <?php
-            $spaceName = '';
-            foreach ($projects as $p) {
-                if ($p['slug'] === $currentProject) {
-                    $spaceName = $p['name'];
-                    break;
+            // Get project name from $project (if available) or fall back to $projects lookup
+            $spaceName = $project['slug'] ?? $currentProject;
+            if (!isset($project) || !is_array($project)) {
+                foreach ($projects ?? [] as $p) {
+                    if ($p['slug'] === $currentProject) {
+                        $spaceName = $p['name'] ?? $p['slug'];
+                        break;
+                    }
                 }
             }
             ?>
@@ -62,11 +66,28 @@ use Diplodocus\TemplateEngine as T;
                 <?= T::e($spaceName) ?>
             </p>
 
-            <?php foreach ($pages as $page): ?>
-                <?php $isActive = $page['slug'] === ($currentPage ?? ''); ?>
-                <a href="<?= $router->url(['project' => $currentProject, 'page' => $page['slug']]) ?>"
+            <!-- Page progress indicator (if we have project context) -->
+            <?php if (isset($pageIndex) && isset($pageCount)): ?>
+                <div class="dc-sidebar-progress" style="font-size:.8rem; color:var(--dc-text-muted); padding:0.5rem 1rem; margin-bottom:0.5rem;">
+                    Page <?= $pageIndex + 1 ?> of <?= $pageCount ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- List all pages in project -->
+            <?php
+            $pageList = $project['pages'] ?? $pages ?? [];
+            foreach ($pageList as $idx => $page):
+                $isActive = false;
+                if (isset($pageIndex)) {
+                    $isActive = ($idx === $pageIndex);
+                } else {
+                    $isActive = ($page['slug'] ?? $page['name'] ?? '') === ($currentPage ?? '');
+                }
+                $pageHref = $page['slug'] ?? $page['name'] ?? '';
+            ?>
+                <a href="<?= $router->url(['project' => $currentProject, 'page' => $pageHref]) ?>"
                     data-nav-link class="dc-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
-                    <?= T::e($page['name']) ?>
+                    <?= T::e($page['displayName'] ?? $page['name'] ?? ucfirst(str_replace(['-', '_'], ' ', $pageHref))) ?>
                 </a>
             <?php endforeach; ?>
         <?php endif; ?>

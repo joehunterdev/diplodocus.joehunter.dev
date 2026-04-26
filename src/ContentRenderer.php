@@ -2,6 +2,10 @@
 
 /**
  * ContentRenderer - Handles markdown parsing and HTML generation
+ *
+ * Hybrid approach:
+ * - loadProject(): Scan project directory, return list of pages + metadata
+ * - render(): Lazy-parse only the requested page, enrich with project context
  */
 
 namespace Diplodocus;
@@ -24,29 +28,92 @@ class ContentRenderer
     }
 
     /**
-     * Render a markdown file to HTML
+     * Load project structure: pages list, attachments, metadata
+     * Per-request (no caching) — always checks file mtime
      */
-    public function render(string $projectSlug, string $pageSlug): ?array
+    public function loadProject(string $projectSlug): ?array
     {
-        // Find the project across all configured paths
-        $projectPath = null;
+        $projectPath = $this->findProjectPath($projectSlug);
+        if ($projectPath === null) return null;
+
+        // Scan markdown files
+        $files = @scandir($projectPath);
+        if ($files === false) return null;
+
+        $pages = [];
+        foreach ($files as $file) {
+            if ($file[0] === '.' || !str_ends_with($file, '.md')) continue;
+            $filePath = $projectPath . DIRECTORY_SEPARATOR . $file;
+            if (!is_file($filePath)) continue;
+
+            // Extract page slug (remove .md, optionally remove 00- prefix)
+            $pageSlug = substr($file, 0, -3);
+            $displayName = preg_replace('/^\d+-/', '', $pageSlug);
+
+            $pages[] = [
+                'slug' => $pageSlug,
+                'filename' => $file,
+                'displayName' => str_replace(['-', '_'], ' ', ucwords($displayName)),
+                'mtime' => filemtime($filePath),
+            ];
+        }
+
+        // Sort by filename (natural order)
+        usort($pages, fn($a, $b) => strnatcmp($a['filename'], $b['filename']));
+
+        // Scan attachments directory
+        $attachments = [];
+        $attachmentsPath = $projectPath . DIRECTORY_SEPARATOR . 'attachments';
+        if (is_dir($attachmentsPath)) {
+            $attachmentFiles = @scandir($attachmentsPath);
+            if ($attachmentFiles !== false) {
+                foreach ($attachmentFiles as $file) {
+                    if ($file[0] !== '.' && is_file($attachmentsPath . DIRECTORY_SEPARATOR . $file)) {
+                        $attachments[] = $file;
+                    }
+                }
+            }
+        }
+
+        return [
+            'slug' => $projectSlug,
+            'path' => $projectPath,
+            'pages' => $pages,
+            'attachments' => $attachments,
+            'pageCount' => count($pages),
+        ];
+    }
+
+    /**
+     * Find project path across configured paths
+     */
+    private function findProjectPath(string $projectSlug): ?string
+    {
         foreach ($this->projectsPaths as $projectsPath) {
             $candidate = $projectsPath . DIRECTORY_SEPARATOR . $projectSlug;
             if (is_dir($candidate)) {
-                $projectPath = $candidate;
-                break;
+                return $candidate;
             }
         }
-        if ($projectPath === null) return null;
+        return null;
+    }
 
-        $filePath = $projectPath . DIRECTORY_SEPARATOR . $pageSlug . '.md';
+    /**
+     * Render a markdown file to HTML with project context
+     */
+    public function render(string $projectSlug, string $pageSlug): ?array
+    {
+        // Load project structure
+        $project = $this->loadProject($projectSlug);
+        if ($project === null) return null;
 
+        $filePath = $project['path'] . DIRECTORY_SEPARATOR . $pageSlug . '.md';
         if (!file_exists($filePath)) {
             return null;
         }
 
         // Create parser with project-specific base path for image resolution
-        $parser = new \DiplodocusMarkdown($projectPath);
+        $parser = new \DiplodocusMarkdown($project['path']);
 
         $markdown = file_get_contents($filePath);
         $html = $parser->text($markdown);
@@ -72,10 +139,26 @@ class ContentRenderer
         // Wrap tables in a scroll container for mobile
         $html = $this->wrapTables($html);
 
+        // Build search index from title + headings
+        $searchIndex = $this->buildSearchIndex($title, $toc);
+
+        // Find page index in project
+        $pageIndex = null;
+        foreach ($project['pages'] as $idx => $page) {
+            if ($page['slug'] === $pageSlug) {
+                $pageIndex = $idx;
+                break;
+            }
+        }
+
         return [
             'title' => $title,
             'html' => $html,
-            'toc' => $toc
+            'toc' => $toc,
+            'searchIndex' => $searchIndex,  // NEW: for search module
+            'project' => $project,       // NEW: project metadata
+            'pageIndex' => $pageIndex,   // NEW: position in project
+            'pageCount' => count($project['pages']),  // NEW: total pages
         ];
     }
 
@@ -99,6 +182,67 @@ class ContentRenderer
         }
 
         return $toc;
+    }
+
+    /**
+     * Build a global search index across all pages in a project.
+     * Extracts headings from raw markdown (no full parse) for performance.
+     */
+    public function buildProjectSearchIndex(string $projectSlug): array
+    {
+        $project = $this->loadProject($projectSlug);
+        if (!$project) return [];
+
+        $index = [];
+        foreach ($project['pages'] as $page) {
+            $filePath = $project['path'] . DIRECTORY_SEPARATOR . $page['slug'] . '.md';
+            if (!file_exists($filePath)) continue;
+
+            $markdown = file_get_contents($filePath);
+            foreach (explode("\n", $markdown) as $line) {
+                if (!preg_match('/^(#{1,6})\s+(.+)$/', trim($line), $m)) continue;
+                $level = strlen($m[1]);
+                $text = trim($m[2]);
+                $index[] = [
+                    'type'      => $level === 1 ? 'title' : 'heading',
+                    'text'      => $text,
+                    'pageSlug'  => $page['slug'],
+                    'headingId' => $this->slugify($text),
+                    'level'     => $level,
+                ];
+            }
+        }
+
+        return $index;
+    }
+
+    /**
+     * Build searchable index: page title + all headings
+     * Used by search module to display results
+     */
+    private function buildSearchIndex(string $title, array $toc): array
+    {
+        $index = [];
+
+        // Add page title as first searchable item
+        $index[] = [
+            'type' => 'title',
+            'text' => $title,
+            'headingId' => null,
+            'level' => 1
+        ];
+
+        // Add all headings from table of contents
+        foreach ($toc as $heading) {
+            $index[] = [
+                'type' => 'heading',
+                'text' => $heading['text'],
+                'headingId' => $heading['id'],
+                'level' => $heading['level']
+            ];
+        }
+
+        return $index;
     }
 
     /**

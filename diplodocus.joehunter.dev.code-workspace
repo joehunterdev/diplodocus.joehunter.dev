@@ -23,7 +23,7 @@
 			"**/*.map": true,
 			".backup/**": true,
 			".claude/**": true,
-			"public/.gitignore": false
+			"public_md/.gitignore": false
 		},
 		"files.watcherExclude": {},
 		"editor.formatOnSave": true,
@@ -45,7 +45,15 @@
 		"intelephense.environment.phpVersion": "8.5.0",
 		"files.associations": {
 			"*.php": "php"
-		}
+		},
+		"terminal.integrated.defaultProfile.windows": "PowerShell",
+		"terminal.integrated.profiles.windows": {
+			"PowerShell": {
+				"path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+				"args": []
+			}
+		},
+		"claude.terminalPath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
 	},
 	"extensions": {
 		"recommendations": [

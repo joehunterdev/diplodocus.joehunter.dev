@@ -100,4 +100,4 @@ const CodeHighlight = (function () {
 
 })();
 
-window.CodeHighlight = CodeHighlight;
+export default CodeHighlight;

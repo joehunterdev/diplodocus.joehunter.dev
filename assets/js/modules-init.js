@@ -21,5 +21,7 @@
     PageLogic.register('codeHighlight', CodeHighlight.init, { context: 'global', priority: 70 });
     PageLogic.register('attachmentGallery', AttachmentGallery.init, { context: 'global', priority: 70 });
     PageLogic.register('mermaidDiagrams', MermaidDiagrams.init, { context: 'global', priority: 60 });
+    PageLogic.register('interactiveContent', InteractiveContent.init, { context: 'global', priority: 50 });
+    PageLogic.register('pageComments', PageComments.init, { context: 'global', priority: 50 });
 
 })();

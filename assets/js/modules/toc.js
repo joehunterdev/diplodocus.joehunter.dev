@@ -207,4 +207,4 @@ const TOC = (function () {
 
 })();
 
-window.TOC = TOC;
+export default TOC;

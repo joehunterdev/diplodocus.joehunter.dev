@@ -116,4 +116,4 @@ const MermaidDiagrams = (function () {
 
 })();
 
-window.MermaidDiagrams = MermaidDiagrams;
+export default MermaidDiagrams;

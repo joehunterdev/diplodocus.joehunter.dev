@@ -12,7 +12,7 @@ use Diplodocus\Config;
 
 $config        = Config::getInstance();
 $siteUrl       = rtrim($config->get('site_url', ''), '/');
-$privateSpaces = $config->get('private_spaces', []);
+$privateSpaces = $config->get('private_projects', []);
 
 header('Content-Type: text/plain; charset=utf-8');
 

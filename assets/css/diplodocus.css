@@ -390,6 +390,67 @@ table tbody tr:hover td {
   color: var(--dc-text-subtle);
 }
 
+/* Search results dropdown — absolutely positioned inside the relative wrapper */
+.dc-search-results {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: var(--dc-bg-sidebar);
+  border: 1px solid var(--dc-border-default);
+  border-radius: var(--dc-radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-height: 55vh;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.dc-search-hit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--dc-text-primary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--dc-border-subtle);
+  transition: background 0.1s ease;
+}
+
+.dc-search-hit:last-child {
+  border-bottom: none;
+}
+
+.dc-search-hit:hover {
+  background: var(--dc-bg-hover);
+}
+
+.dc-search-hit-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.dc-search-hit-meta {
+  font-size: 0.7rem;
+  color: var(--dc-text-muted);
+  flex-shrink: 0;
+  background: var(--dc-bg-elevated);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--dc-radius-sm);
+}
+
+.dc-search-empty {
+  padding: 1.25rem;
+  text-align: center;
+  color: var(--dc-text-muted);
+  font-size: 0.875rem;
+}
+
 .dc-sidebar-search-icon {
   position: absolute;
   right: 0.75rem;
@@ -1099,4 +1160,137 @@ aside.dc-toc.hidden {
   border-radius: 0;
   width: 100%;
   min-width: 480px;
+}
+
+/* ── Interactive Content (Checkboxes) ────────────────────────────── */
+.task-list-item {
+  list-style: none;
+}
+
+.task-list-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+  accent-color: var(--dc-brand-primary);
+}
+
+.task-list-item input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.task-list-item input[type="checkbox"]:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.task-list-item input[type="checkbox"]:focus {
+  outline: 2px solid var(--dc-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ── Page Comments ───────────────────────────────────────────────── */
+.dc-add-comment-btn {
+  transition: all 0.2s ease;
+}
+
+.dc-add-comment-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.dc-add-comment-btn:active {
+  transform: translateY(0);
+}
+
+.dc-comments-panel {
+  margin: 1.5rem 0;
+  background: var(--dc-bg-elevated);
+  border: 1px solid var(--dc-border-subtle);
+  border-radius: var(--dc-radius-lg);
+}
+
+.dc-comments-empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--dc-text-muted);
+  font-size: 0.875rem;
+}
+
+.dc-comments-list {
+  padding: 0.75rem;
+}
+
+.dc-comment {
+  padding: 0.75rem;
+  border: 1px solid var(--dc-border-subtle);
+  border-radius: var(--dc-radius-sm);
+  background: var(--dc-bg-surface);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.dc-comment:last-child {
+  margin-bottom: 0;
+}
+
+.dc-comment p {
+  margin: 0.5rem 0 0;
+  color: var(--dc-text-primary);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.dc-delete-comment {
+  background: none;
+  border: none;
+  color: var(--dc-text-muted);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.dc-delete-comment:hover {
+  color: var(--dc-text-error, #ef4444);
+}
+
+/* ── Page Navigation (Prev/Next) ─────────────────────────────────── */
+.dc-page-nav {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--dc-border-subtle);
+  margin-top: 2rem;
+}
+
+.dc-nav-link {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--dc-border-subtle);
+  border-radius: var(--dc-radius-md);
+  background: var(--dc-bg-elevated);
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dc-nav-link:hover {
+  background: var(--dc-brand-primary-soft);
+  border-color: var(--dc-brand-primary);
+}
+
+.dc-nav-prev {
+  text-align: left;
+}
+
+.dc-nav-next {
+  text-align: right;
+}
+
+.dc-sidebar-progress {
+  font-size: 0.8rem;
+  color: var(--dc-text-muted);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--dc-border-subtle);
 }
