@@ -156,7 +156,7 @@ const Interactions = (function () {
     // -- Private: DOM injection --
     function injectTriggerBtn() {
         $triggerBtn = window.jQuery(
-            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>Add</button>'
+            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>+ Add note</button>'
         );
         window.jQuery('body').append($triggerBtn);
     }
@@ -400,13 +400,14 @@ const Interactions = (function () {
                 top: (e.clientY + 10) + 'px',
                 left: (e.clientX - 40) + 'px',
             }).removeAttr('hidden');
-            e.stopPropagation();
+            // Prevent the document handler below from immediately hiding it
+            e._ixHandled = true;
         });
 
         // Direct click on trigger button — open modal
         $triggerBtn.on('click' + ns, function (e) {
             e.preventDefault();
-            e.stopPropagation();
+            e._ixHandled = true;
             log('Trigger btn clicked, pendingBlockIndex:', pendingBlockIndex);
             if (pendingBlockIndex === null) { hideTriggerBtn(); return; }
             var sel = window.getSelection();
@@ -414,8 +415,9 @@ const Interactions = (function () {
             openModal(pendingBlockIndex, selectedText);
         });
 
-        // Hide trigger button on any document click not caught above
-        $(document).on('click' + ns, function () {
+        // Hide trigger button on any document click not from a block or the button itself
+        $(document).on('click' + ns, function (e) {
+            if (e._ixHandled) return;
             hideTriggerBtn();
         });
 
@@ -471,14 +473,6 @@ const Interactions = (function () {
             if (state.activePopover) closeAllPopovers();
         });
 
-        // Mobile markers toggle
-        $(document).on('click' + ns, SELECTORS.mobileToggle, function () {
-            var visible = !state.mobileMarkersVisible;
-            setState({ mobileMarkersVisible: visible });
-            $(SELECTORS.marker).toggleClass('is-visible', visible);
-            $mobileToggle.html(visible ? '&#x1F4AC; Hide interactions' : '&#x1F4AC; interactions');
-        });
-
         window.addEventListener('resize', onResize);
     }
 
@@ -501,7 +495,6 @@ const Interactions = (function () {
         indexBlocks();
         injectTriggerBtn();
         injectModal();
-        injectMobileToggle();
 
         var interactions = loadInteractions();
         setState({ initialized: true, interactions: interactions });
@@ -516,7 +509,6 @@ const Interactions = (function () {
         unbindEvents();
         if ($triggerBtn) $triggerBtn.remove();
         if ($modal) $modal.remove();
-        if ($mobileToggle) $mobileToggle.remove();
         window.jQuery(SELECTORS.marker).remove();
         window.jQuery('[data-block-index]').removeAttr('data-block-index');
         setState({ initialized: false, interactions: [], activePopover: null });
