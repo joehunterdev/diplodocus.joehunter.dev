@@ -1,11 +1,11 @@
-/* ==========================================================================
-   Diplodocus — Structural CSS (Mintlify-aligned)
+﻿/* ==========================================================================
+   Diplodocus â€” Structural CSS (Mintlify-aligned)
    --------------------------------------------------------------------------
    NO hardcoded colours. Every value flows through var(--dc-*) from theme.css.
    Change the look of your site by editing theme.css, not this file.
    ========================================================================== */
 
-/* ── Base ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Base â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 body,
 html {
   font-family: var(--dc-font-body);
@@ -20,7 +20,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Prose (Mintlify article spec) ────────────────────────────────── */
+/* â”€â”€ Prose (Mintlify article spec) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .prose {
   max-width: var(--dc-content-max);
   color: var(--dc-text-primary);
@@ -91,7 +91,7 @@ body {
   border-bottom-color: var(--dc-text-link);
 }
 
-/* Inline code — Mintlify: bg-gray-100/.5, px-2 py-0.5, rounded-md */
+/* Inline code â€” Mintlify: bg-gray-100/.5, px-2 py-0.5, rounded-md */
 .prose code {
   background: var(--dc-bg-elevated);
   color: var(--dc-brand-primary);
@@ -133,7 +133,7 @@ body {
   border-radius: 0 4px 4px 0;
 }
 
-/* Callout variants — styled by first <strong> child label */
+/* Callout variants â€” styled by first <strong> child label */
 .prose blockquote:has(> p:first-child > strong:first-child) {
   position: relative;
 }
@@ -146,11 +146,11 @@ body {
   margin-right: 0.25rem;
 }
 
-/* Note — blue/info */
+/* Note â€” blue/info */
 .prose blockquote:has(> p:first-child > strong:first-child:is([data-callout="note"])),
 .prose blockquote.callout-note,
 .prose blockquote:has(> p > strong:first-child)>p:first-child:has(strong:first-child) {
-  /* fallback — use attribute selector on the STRONG text content isn't possible in pure CSS,
+  /* fallback â€” use attribute selector on the STRONG text content isn't possible in pure CSS,
      so we rely on a post-processor to add data-callout attrs. See below. */
 }
 
@@ -216,7 +216,7 @@ body {
   accent-color: var(--dc-brand-primary);
 }
 
-/* ── Syntax highlighting ──────────────────────────────────────────── */
+/* â”€â”€ Syntax highlighting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hljs {
   background: var(--dc-bg-code) !important;
   color: var(--dc-text-code);
@@ -238,7 +238,7 @@ body {
   color: var(--dc-hl-comment);
 }
 
-/* ── Tables (Mintlify: clean, border-collapse) ────────────────────── */
+/* â”€â”€ Tables (Mintlify: clean, border-collapse) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -275,7 +275,7 @@ table tbody tr:hover td {
   background: var(--dc-table-row-hover);
 }
 
-/* ── Mintlify card ────────────────────────────────────────────────── */
+/* â”€â”€ Mintlify card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-card {
   display: block;
   border: 1px solid var(--dc-border-subtle);
@@ -323,7 +323,7 @@ table tbody tr:hover td {
   line-height: 1.5;
 }
 
-/* ── Sidebar (Mintlify 288px) ─────────────────────────────────────── */
+/* â”€â”€ Sidebar (Mintlify 288px) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-sidebar {
   width: var(--dc-sidebar-width);
   flex-shrink: 0;
@@ -390,7 +390,7 @@ table tbody tr:hover td {
   color: var(--dc-text-subtle);
 }
 
-/* Search results dropdown — absolutely positioned inside the relative wrapper */
+/* Search results dropdown â€” absolutely positioned inside the relative wrapper */
 .dc-search-results {
   position: absolute;
   top: calc(100% + 2px);
@@ -542,7 +542,7 @@ table tbody tr:hover td {
   gap: 0.125rem;
 }
 
-/* ── Header (Mintlify 48px sticky) ────────────────────────────────── */
+/* â”€â”€ Header (Mintlify 48px sticky) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-header {
   height: var(--dc-header-height);
   background: var(--dc-bg-surface);
@@ -606,7 +606,7 @@ table tbody tr:hover td {
   color: var(--dc-text-primary);
 }
 
-/* ── Table of contents (Mintlify 288px, sticky, left-border active) ─ */
+/* â”€â”€ Table of contents (Mintlify 288px, sticky, left-border active) â”€ */
 .dc-toc {
   width: var(--dc-toc-width);
   flex-shrink: 0;
@@ -669,7 +669,7 @@ table tbody tr:hover td {
   padding-left: 2.25rem;
 }
 
-/* ── Main content area ─────────────────────────────────────────────── */
+/* â”€â”€ Main content area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-main {
   flex: 1;
   min-width: 0;
@@ -686,7 +686,7 @@ table tbody tr:hover td {
   max-width: var(--dc-content-max);
 }
 
-/* ── Attachment Gallery (unchanged structure) ──────────────────────── */
+/* â”€â”€ Attachment Gallery (unchanged structure) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .attachment-gallery {
   margin: 2rem 0 1rem;
 }
@@ -752,7 +752,7 @@ table tbody tr:hover td {
   color: var(--dc-text-inverse);
 }
 
-/* ── Data preview ──────────────────────────────────────────────────── */
+/* â”€â”€ Data preview â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .data-preview table {
   font-size: 0.875rem;
 }
@@ -783,7 +783,7 @@ table tbody tr:hover td {
   box-shadow: var(--dc-shadow-md);
 }
 
-/* ── Lightbox ──────────────────────────────────────────────────────── */
+/* â”€â”€ Lightbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-attachment-lightbox] {
   animation: dc-fadeIn 0.2s ease;
 }
@@ -841,7 +841,7 @@ table tbody tr:hover td {
   border-radius: var(--dc-radius-xl);
 }
 
-/* ── Dashboard (home + space landing) ────────────────────────────── */
+/* â”€â”€ Dashboard (home + space landing) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-dashboard {
   width: 100%;
 }
@@ -959,7 +959,7 @@ table tbody tr:hover td {
   transform: translateX(3px);
 }
 
-/* ── Sidebar extras ───────────────────────────────────────────────── */
+/* â”€â”€ Sidebar extras â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-sidebar-section-label {
   font-size: 0.7rem;
   font-weight: 700;
@@ -1001,7 +1001,7 @@ table tbody tr:hover td {
   align-items: center;
 }
 
-/* ── Responsive — collapse sidebar / toc at narrow widths ─────────── */
+/* â”€â”€ Responsive â€” collapse sidebar / toc at narrow widths â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /* Tailwind's .hidden has low specificity; our .dc-sidebar rule wins.
    Add an explicit override so the hamburger toggle actually hides. */
 .dc-sidebar.hidden,
@@ -1014,14 +1014,14 @@ aside.dc-toc.hidden {
   display: none;
 }
 
-/* Tablet — hide TOC, keep sidebar */
+/* Tablet â€” hide TOC, keep sidebar */
 @media (max-width: 1024px) {
   .dc-toc {
     display: none;
   }
 }
 
-/* Mobile — hide sidebar by default, overlay when opened */
+/* Mobile â€” hide sidebar by default, overlay when opened */
 @media (max-width: 768px) {
   .dc-sidebar {
     position: fixed;
@@ -1075,7 +1075,7 @@ aside.dc-toc.hidden {
   }
 }
 
-/* ── Mermaid diagrams ─────────────────────────────────────────────── */
+/* â”€â”€ Mermaid diagrams â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-mermaid {
   margin: 1.5rem 0;
   text-align: center;
@@ -1096,7 +1096,7 @@ aside.dc-toc.hidden {
   overflow-x: auto;
 }
 
-/* Hide original code block while mermaid replaces it — prevents flash */
+/* Hide original code block while mermaid replaces it â€” prevents flash */
 [data-content-article] pre:has(> code.language-mermaid) {
   visibility: hidden;
   height: 0;
@@ -1104,7 +1104,7 @@ aside.dc-toc.hidden {
   margin: 0;
 }
 
-/* ── Utilities ────────────────────────────────────────────────────── */
+/* â”€â”€ Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .prose pre {
   overflow-x: auto;
 }
@@ -1135,7 +1135,7 @@ aside.dc-toc.hidden {
   min-width: 480px;
 }
 
-/* ── Interactive Content (Checkboxes) ────────────────────────────── */
+/* â”€â”€ Interactive Content (Checkboxes) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .task-list-item {
   list-style: none;
 }
@@ -1160,7 +1160,7 @@ aside.dc-toc.hidden {
   outline-offset: 2px;
 }
 
-/* ── Page Comments ───────────────────────────────────────────────── */
+/* â”€â”€ Page Comments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-add-comment-btn {
   transition: all 0.2s ease;
 }
@@ -1227,7 +1227,7 @@ aside.dc-toc.hidden {
   color: var(--dc-text-error, #ef4444);
 }
 
-/* ── Page Navigation (Prev/Next) ─────────────────────────────────── */
+/* â”€â”€ Page Navigation (Prev/Next) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dc-page-nav {
   display: flex;
   gap: 1rem;
@@ -1268,13 +1268,13 @@ aside.dc-toc.hidden {
   border-bottom: 1px solid var(--dc-border-subtle);
 }
 
-/* ── Annotations ───────────────────────────────────────────────────── */
+/* â”€â”€ Annotations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 [data-content-article] {
   position: relative;
 }
 
-.dc-annotation-trigger-btn {
+.dc-ix-trigger-btn {
   position: fixed;
   z-index: 200;
   padding: 0.25rem 0.6rem;
@@ -1287,9 +1287,9 @@ aside.dc-toc.hidden {
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
-.dc-annotation-trigger-btn:hover { opacity: 0.9; }
+.dc-ix-trigger-btn:hover { opacity: 0.9; }
 
-.dc-annotation-modal {
+.dc-ix-modal {
   position: fixed;
   inset: 0;
   z-index: 400;
@@ -1298,8 +1298,8 @@ aside.dc-toc.hidden {
   align-items: center;
   justify-content: center;
 }
-.dc-annotation-modal[hidden] { display: none; }
-.dc-annotation-modal-panel {
+.dc-ix-modal[hidden] { display: none; }
+.dc-ix-modal-panel {
   background: var(--dc-bg-card);
   border: 1px solid var(--dc-border);
   border-radius: 8px;
@@ -1311,13 +1311,13 @@ aside.dc-toc.hidden {
   gap: 1rem;
 }
 
-.dc-annotation-tabs {
+.dc-ix-tabs {
   display: flex;
   gap: 0.5rem;
   border-bottom: 1px solid var(--dc-border);
   padding-bottom: 0.5rem;
 }
-.dc-annotation-tab {
+.dc-ix-tab {
   padding: 0.25rem 0.75rem;
   font-size: 0.8rem;
   border: 1px solid transparent;
@@ -1326,12 +1326,12 @@ aside.dc-toc.hidden {
   background: none;
   color: var(--dc-text-muted);
 }
-.dc-annotation-tab.is-active {
+.dc-ix-tab.is-active {
   border-color: var(--dc-accent);
   color: var(--dc-accent);
 }
 
-.dc-annotation-textarea {
+.dc-ix-textarea {
   width: 100%;
   min-height: 80px;
   resize: vertical;
@@ -1345,14 +1345,14 @@ aside.dc-toc.hidden {
   box-sizing: border-box;
 }
 
-.dc-annotation-attachment-grid {
+.dc-ix-attachment-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   gap: 0.5rem;
   max-height: 200px;
   overflow-y: auto;
 }
-.dc-annotation-attachment-item {
+.dc-ix-attachment-item {
   border: 2px solid transparent;
   border-radius: 4px;
   cursor: pointer;
@@ -1363,9 +1363,9 @@ aside.dc-toc.hidden {
   color: var(--dc-text-muted);
   overflow: hidden;
 }
-.dc-annotation-attachment-item:hover { border-color: var(--dc-border); }
-.dc-annotation-attachment-item.is-selected { border-color: var(--dc-accent); }
-.dc-annotation-attachment-item img {
+.dc-ix-attachment-item:hover { border-color: var(--dc-border); }
+.dc-ix-attachment-item.is-selected { border-color: var(--dc-accent); }
+.dc-ix-attachment-item img {
   width: 100%;
   height: 48px;
   object-fit: cover;
@@ -1373,7 +1373,7 @@ aside.dc-toc.hidden {
   display: block;
   margin-bottom: 2px;
 }
-.dc-annotation-attachment-item-icon {
+.dc-ix-attachment-item-icon {
   height: 48px;
   display: flex;
   align-items: center;
@@ -1381,12 +1381,12 @@ aside.dc-toc.hidden {
   font-size: 1.5rem;
 }
 
-.dc-annotation-modal-actions {
+.dc-ix-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
 }
-.dc-annotation-btn-cancel {
+.dc-ix-btn-cancel {
   padding: 0.35rem 0.75rem;
   font-size: 0.8rem;
   border: 1px solid var(--dc-border);
@@ -1395,7 +1395,7 @@ aside.dc-toc.hidden {
   color: var(--dc-text-muted);
   cursor: pointer;
 }
-.dc-annotation-btn-save {
+.dc-ix-btn-save {
   padding: 0.35rem 0.75rem;
   font-size: 0.8rem;
   border: none;
@@ -1404,15 +1404,15 @@ aside.dc-toc.hidden {
   color: #fff;
   cursor: pointer;
 }
-.dc-annotation-btn-save:disabled { opacity: 0.5; cursor: default; }
+.dc-ix-btn-save:disabled { opacity: 0.5; cursor: default; }
 
-.dc-annotation-marker {
+.dc-ix-marker {
   position: absolute;
   right: -2rem;
   width: 1.5rem;
   z-index: 100;
 }
-.dc-annotation-icon-btn {
+.dc-ix-icon-btn {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
@@ -1426,9 +1426,9 @@ aside.dc-toc.hidden {
   padding: 0;
   line-height: 1;
 }
-.dc-annotation-icon-btn:hover { border-color: var(--dc-accent); }
+.dc-ix-icon-btn:hover { border-color: var(--dc-accent); }
 
-.dc-annotation-popover {
+.dc-ix-popover {
   position: absolute;
   right: 2rem;
   top: 0;
@@ -1441,17 +1441,17 @@ aside.dc-toc.hidden {
   z-index: 150;
   font-size: 0.8rem;
 }
-.dc-annotation-popover[hidden] { display: none; }
-.dc-annotation-popover-text { color: var(--dc-text); margin: 0 0 0.4rem; line-height: 1.5; }
-.dc-annotation-popover-time { display: block; color: var(--dc-text-muted); font-size: 0.7rem; margin-bottom: 0.5rem; }
-.dc-annotation-thumb { width: 100%; border-radius: 4px; margin-bottom: 0.4rem; display: block; }
-.dc-annotation-filename { color: var(--dc-text-muted); word-break: break-all; display: block; margin-bottom: 0.4rem; }
-.dc-annotation-popover-footer {
+.dc-ix-popover[hidden] { display: none; }
+.dc-ix-popover-text { color: var(--dc-text); margin: 0 0 0.4rem; line-height: 1.5; }
+.dc-ix-popover-time { display: block; color: var(--dc-text-muted); font-size: 0.7rem; margin-bottom: 0.5rem; }
+.dc-ix-thumb { width: 100%; border-radius: 4px; margin-bottom: 0.4rem; display: block; }
+.dc-ix-filename { color: var(--dc-text-muted); word-break: break-all; display: block; margin-bottom: 0.4rem; }
+.dc-ix-popover-footer {
   border-top: 1px solid var(--dc-border-subtle);
   padding-top: 0.4rem;
   margin-top: 0.25rem;
 }
-.dc-annotation-delete-btn {
+.dc-ix-delete-btn {
   font-size: 0.7rem;
   color: var(--dc-error, #e53e3e);
   background: none;
@@ -1459,19 +1459,19 @@ aside.dc-toc.hidden {
   cursor: pointer;
   padding: 0;
 }
-.dc-annotation-delete-btn:hover { text-decoration: underline; }
+.dc-ix-delete-btn:hover { text-decoration: underline; }
 
-.dc-annotation-mobile-toggle { display: none; }
+.dc-ix-mobile-toggle { display: none; }
 
 @media (max-width: 768px) {
-  .dc-annotation-marker { display: none; }
-  .dc-annotation-marker.is-visible {
+  .dc-ix-marker { display: none; }
+  .dc-ix-marker.is-visible {
     display: block;
     position: static;
     width: auto;
     margin: 0.25rem 0;
   }
-  .dc-annotation-mobile-toggle {
+  .dc-ix-mobile-toggle {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;

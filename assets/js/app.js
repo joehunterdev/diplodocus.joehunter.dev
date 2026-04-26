@@ -24,7 +24,7 @@ import AttachmentGallery from './modules/attachment-gallery.js';
 import MermaidDiagrams from './modules/mermaid-diagrams.js';
 import InteractiveContent from './modules/interactive-content.js';
 import PageComments from './modules/page-comments.js';
-import Annotation from './modules/annotation.js';
+import Interactions from './modules/interactions.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     // Priority order: layout → navigation → content → features
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     MermaidDiagrams.init();
     InteractiveContent.init();
     PageComments.init();
-    Annotation.init();
+    Interactions.init();
 
     console.log('[App] Initialized');
 });

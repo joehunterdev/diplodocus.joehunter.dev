@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ===========================================
  * Annotation
  * ===========================================
@@ -11,18 +11,18 @@
  *   <article data-content-article class="prose">...</article>
  *
  * Requires:
- *   window.projectData  — { slug, attachments[] }
- *   window.attachmentBase — e.g. '/getting-started/attachments/'
+ *   window.projectData  â€” { slug, attachments[] }
+ *   window.attachmentBase â€” e.g. '/getting-started/attachments/'
  */
 
-const Annotation = (function () {
+const Interactions = (function () {
     'use strict';
 
     // -- Private: Config --
     const CONFIG = {
         debug: false,
-        eventNamespace: '.annotation',
-        storageKey: 'dc-annotations',
+        eventNamespace: '.interactions',
+        storageKey: 'dc-interactions',
         debounceMs: 150,
         imageExts: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'],
     };
@@ -30,20 +30,20 @@ const Annotation = (function () {
     // -- Private: Selectors --
     const SELECTORS = {
         article:        '[data-content-article]',
-        triggerBtn:     '[data-annotation-trigger-btn]',
-        modal:          '[data-annotation-modal]',
-        modalTab:       '[data-annotation-tab]',
-        tabPanel:       '[data-annotation-tab-panel]',
-        commentArea:    '[data-annotation-comment]',
-        attachmentGrid: '[data-annotation-attachment-grid]',
-        attachmentItem: '[data-annotation-attachment-item]',
-        saveBtn:        '[data-annotation-save]',
-        cancelBtn:      '[data-annotation-cancel]',
-        marker:         '[data-annotation-marker]',
-        markerTrigger:  '[data-annotation-trigger]',
-        popover:        '[data-annotation-popover]',
-        deleteBtn:      '[data-annotation-delete]',
-        mobileToggle:   '[data-annotation-mobile-toggle]',
+        triggerBtn:     '[data-ix-trigger-btn]',
+        modal:          '[data-ix-modal]',
+        modalTab:       '[data-ix-tab]',
+        tabPanel:       '[data-ix-tab-panel]',
+        commentArea:    '[data-ix-comment]',
+        attachmentGrid: '[data-ix-attachment-grid]',
+        attachmentItem: '[data-ix-attachment-item]',
+        saveBtn:        '[data-ix-save]',
+        cancelBtn:      '[data-ix-cancel]',
+        marker:         '[data-ix-marker]',
+        markerTrigger:  '[data-ix-trigger]',
+        popover:        '[data-ix-popover]',
+        deleteBtn:      '[data-ix-delete]',
+        mobileToggle:   '[data-ix-mobile-toggle]',
     };
 
     const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, table';
@@ -68,7 +68,7 @@ const Annotation = (function () {
 
     // -- Private: Utils --
     function log(...args) {
-        if (CONFIG.debug) console.log('[Annotation]', ...args);
+        if (CONFIG.debug) console.log('[Interactions]', ...args);
     }
 
     function setState(newState) {
@@ -155,28 +155,28 @@ const Annotation = (function () {
     // -- Private: DOM injection --
     function injectTriggerBtn() {
         $triggerBtn = window.jQuery(
-            '<button data-annotation-trigger-btn class="dc-annotation-trigger-btn" hidden>+ Annotate</button>'
+            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>+ Annotate</button>'
         );
         window.jQuery('body').append($triggerBtn);
     }
 
     function injectModal() {
         var html =
-            '<div data-annotation-modal class="dc-annotation-modal" hidden>' +
-              '<div class="dc-annotation-modal-panel">' +
-                '<div class="dc-annotation-tabs">' +
-                  '<button data-annotation-tab="comment" class="dc-annotation-tab is-active">Comment</button>' +
-                  '<button data-annotation-tab="attachment" class="dc-annotation-tab">Attachment</button>' +
+            '<div data-ix-modal class="dc-ix-modal" hidden>' +
+              '<div class="dc-ix-modal-panel">' +
+                '<div class="dc-ix-tabs">' +
+                  '<button data-ix-tab="comment" class="dc-ix-tab is-active">Comment</button>' +
+                  '<button data-ix-tab="attachment" class="dc-ix-tab">Attachment</button>' +
                 '</div>' +
-                '<div data-annotation-tab-panel="comment">' +
-                  '<textarea data-annotation-comment class="dc-annotation-textarea" placeholder="Add a comment..."></textarea>' +
+                '<div data-ix-tab-panel="comment">' +
+                  '<textarea data-ix-comment class="dc-ix-textarea" placeholder="Add a comment..."></textarea>' +
                 '</div>' +
-                '<div data-annotation-tab-panel="attachment" hidden>' +
-                  '<div data-annotation-attachment-grid class="dc-annotation-attachment-grid"></div>' +
+                '<div data-ix-tab-panel="attachment" hidden>' +
+                  '<div data-ix-attachment-grid class="dc-ix-attachment-grid"></div>' +
                 '</div>' +
-                '<div class="dc-annotation-modal-actions">' +
-                  '<button data-annotation-cancel class="dc-annotation-btn-cancel">Cancel</button>' +
-                  '<button data-annotation-save class="dc-annotation-btn-save">Save</button>' +
+                '<div class="dc-ix-modal-actions">' +
+                  '<button data-ix-cancel class="dc-ix-btn-cancel">Cancel</button>' +
+                  '<button data-ix-save class="dc-ix-btn-save">Save</button>' +
                 '</div>' +
               '</div>' +
             '</div>';
@@ -186,7 +186,7 @@ const Annotation = (function () {
 
     function injectMobileToggle() {
         $mobileToggle = window.jQuery(
-            '<button data-annotation-mobile-toggle class="dc-annotation-mobile-toggle">&#x1F4AC; Annotations</button>'
+            '<button data-ix-mobile-toggle class="dc-ix-mobile-toggle">&#x1F4AC; Annotations</button>'
         );
         $article.prepend($mobileToggle);
     }
@@ -208,9 +208,9 @@ const Annotation = (function () {
             var url = base + encodeURIComponent(filename);
             var inner = isImageFile(filename)
                 ? '<img src="' + url + '" alt="' + escapeHtml(filename) + '"><span>' + escapeHtml(filename) + '</span>'
-                : '<div class="dc-annotation-attachment-item-icon">&#x1F4CE;</div><span>' + escapeHtml(filename) + '</span>';
+                : '<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div><span>' + escapeHtml(filename) + '</span>';
             $grid.append(
-                '<button class="dc-annotation-attachment-item" data-annotation-attachment-item="' + escapeHtml(filename) + '">' +
+                '<button class="dc-ix-attachment-item" data-ix-attachment-item="' + escapeHtml(filename) + '">' +
                 inner + '</button>'
             );
         });
@@ -251,10 +251,10 @@ const Annotation = (function () {
     function switchTab(tab) {
         var $ = window.jQuery;
         $(SELECTORS.modalTab).removeClass('is-active');
-        $('[data-annotation-tab="' + tab + '"]').addClass('is-active');
-        $('[data-annotation-tab-panel]').each(function () {
+        $('[data-ix-tab="' + tab + '"]').addClass('is-active');
+        $('[data-ix-tab-panel]').each(function () {
             var $p = $(this);
-            if ($p.attr('data-annotation-tab-panel') === tab) {
+            if ($p.attr('data-ix-tab-panel') === tab) {
                 $p.removeAttr('hidden');
             } else {
                 $p.attr('hidden', '');
@@ -300,7 +300,7 @@ const Annotation = (function () {
             };
         }
 
-        var annotations = state.annotations.concat([annotation]);
+        var annotations = state.annotations.concat([Interactions]);
         setState({ annotations: annotations, pendingAnchor: null, selectedAttachment: null });
         saveAnnotations(annotations);
         closeModal();
@@ -314,30 +314,30 @@ const Annotation = (function () {
         var top = getBlockTop(annotation.anchorBlockIndex);
         var isAttachment = annotation.type === 'attachment';
         var icon = isAttachment ? '&#x1F4CE;' : '&#x1F4AC;';
-        var typeClass = 'dc-annotation-marker--' + annotation.type;
+        var typeClass = 'dc-ix-marker--' + annotation.type;
         var id = annotation.id;
 
         var popoverBody;
         if (isAttachment) {
             var url = (window.attachmentBase || '') + encodeURIComponent(annotation.attachmentFilename);
             popoverBody = isImageFile(annotation.attachmentFilename)
-                ? '<img src="' + url + '" class="dc-annotation-thumb" alt="' + escapeHtml(annotation.attachmentFilename) + '">'
-                : '<div class="dc-annotation-attachment-item-icon">&#x1F4CE;</div>';
-            popoverBody += '<span class="dc-annotation-filename">' + escapeHtml(annotation.attachmentFilename) + '</span>';
+                ? '<img src="' + url + '" class="dc-ix-thumb" alt="' + escapeHtml(annotation.attachmentFilename) + '">'
+                : '<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div>';
+            popoverBody += '<span class="dc-ix-filename">' + escapeHtml(annotation.attachmentFilename) + '</span>';
         } else {
             popoverBody =
-                '<p class="dc-annotation-popover-text">' + escapeHtml(annotation.text) + '</p>' +
-                '<time class="dc-annotation-popover-time">' + formatDate(annotation.created) + '</time>';
+                '<p class="dc-ix-popover-text">' + escapeHtml(annotation.text) + '</p>' +
+                '<time class="dc-ix-popover-time">' + formatDate(annotation.created) + '</time>';
         }
 
         $article.append(
-            '<div data-annotation-marker data-annotation-id="' + id + '"' +
-            ' class="dc-annotation-marker ' + typeClass + '" style="top:' + top + 'px;">' +
-              '<button data-annotation-trigger="' + id + '" class="dc-annotation-icon-btn" title="View annotation">' + icon + '</button>' +
-              '<div data-annotation-popover="' + id + '" class="dc-annotation-popover" hidden>' +
-                '<div class="dc-annotation-popover-body">' + popoverBody + '</div>' +
-                '<div class="dc-annotation-popover-footer">' +
-                  '<button data-annotation-delete="' + id + '" class="dc-annotation-delete-btn">Delete</button>' +
+            '<div data-ix-marker data-ix-id="' + id + '"' +
+            ' class="dc-ix-marker ' + typeClass + '" style="top:' + top + 'px;">' +
+              '<button data-ix-trigger="' + id + '" class="dc-ix-icon-btn" title="View annotation">' + icon + '</button>' +
+              '<div data-ix-popover="' + id + '" class="dc-ix-popover" hidden>' +
+                '<div class="dc-ix-popover-body">' + popoverBody + '</div>' +
+                '<div class="dc-ix-popover-footer">' +
+                  '<button data-ix-delete="' + id + '" class="dc-ix-delete-btn">Delete</button>' +
                 '</div>' +
               '</div>' +
             '</div>'
@@ -350,7 +350,7 @@ const Annotation = (function () {
 
     function recalcPositions() {
         state.annotations.forEach(function (annotation) {
-            window.jQuery('[data-annotation-marker][data-annotation-id="' + annotation.id + '"]')
+            window.jQuery('[data-ix-marker][data-ix-id="' + annotation.id + '"]')
                 .css('top', getBlockTop(annotation.anchorBlockIndex) + 'px');
         });
     }
@@ -363,7 +363,7 @@ const Annotation = (function () {
     // -- Private: Popovers --
     function openPopover(id) {
         closeAllPopovers();
-        window.jQuery('[data-annotation-popover="' + id + '"]').removeAttr('hidden');
+        window.jQuery('[data-ix-popover="' + id + '"]').removeAttr('hidden');
         setState({ activePopover: id });
     }
 
@@ -378,7 +378,7 @@ const Annotation = (function () {
         var annotations = state.annotations.filter(function (a) { return a.id !== numId; });
         setState({ annotations: annotations });
         saveAnnotations(annotations);
-        window.jQuery('[data-annotation-marker][data-annotation-id="' + id + '"]').remove();
+        window.jQuery('[data-ix-marker][data-ix-id="' + id + '"]').remove();
         log('Deleted:', id);
     }
 
@@ -425,14 +425,14 @@ const Annotation = (function () {
 
         // Modal tab switching
         $(document).on('click' + ns, SELECTORS.modalTab, function () {
-            switchTab($(this).attr('data-annotation-tab'));
+            switchTab($(this).attr('data-ix-tab'));
         });
 
         // Attachment item selection
         $(document).on('click' + ns, SELECTORS.attachmentItem, function () {
             $(SELECTORS.attachmentItem).removeClass('is-selected');
             $(this).addClass('is-selected');
-            setState({ selectedAttachment: $(this).attr('data-annotation-attachment-item') });
+            setState({ selectedAttachment: $(this).attr('data-ix-attachment-item') });
         });
 
         // Save / cancel
@@ -447,7 +447,7 @@ const Annotation = (function () {
         // Marker popover toggle
         $(document).on('click' + ns, SELECTORS.markerTrigger, function (e) {
             e.stopPropagation();
-            var id = $(this).attr('data-annotation-trigger');
+            var id = $(this).attr('data-ix-trigger');
             if (state.activePopover === String(id)) {
                 closeAllPopovers();
             } else {
@@ -465,10 +465,10 @@ const Annotation = (function () {
         // Delete
         $(document).on('click' + ns, SELECTORS.deleteBtn, function (e) {
             e.stopPropagation();
-            deleteAnnotation($(this).attr('data-annotation-delete'));
+            deleteAnnotation($(this).attr('data-ix-delete'));
         });
 
-        // Escape — close modal or popovers
+        // Escape â€” close modal or popovers
         $(document).on('keydown' + ns, function (e) {
             if (e.key !== 'Escape') return;
             if (!$modal.attr('hidden')) { closeModal(); return; }
@@ -495,7 +495,7 @@ const Annotation = (function () {
     // -- Public: Init --
     function init() {
         var $ = window.jQuery;
-        if (!$) { console.warn('[Annotation] jQuery not available'); return; }
+        if (!$) { console.warn('[Interactions] jQuery not available'); return; }
 
         $article = $(SELECTORS.article);
         if (!$article.length) return;
@@ -532,4 +532,5 @@ const Annotation = (function () {
 
 })();
 
-export default Annotation;
+export default Interactions;
+
