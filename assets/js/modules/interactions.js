@@ -1,11 +1,11 @@
 ﻿/**
  * ===========================================
- * Annotation
+ * Interaction
  * ===========================================
  *
- * Inline document annotations stored in localStorage.
+ * Inline document interactions stored in localStorage.
  * Select text in the content area to add a comment or tag an attachment.
- * Annotations appear as right-margin markers; click to open popover.
+ * interactions appear as right-margin markers; click to open popover.
  *
  * @usage HTML
  *   <article data-content-article class="prose">...</article>
@@ -20,7 +20,7 @@ const Interactions = (function () {
 
     // -- Private: Config --
     const CONFIG = {
-        debug: false,
+        debug: true,
         eventNamespace: '.interactions',
         storageKey: 'dc-interactions',
         debounceMs: 150,
@@ -29,21 +29,21 @@ const Interactions = (function () {
 
     // -- Private: Selectors --
     const SELECTORS = {
-        article:        '[data-content-article]',
-        triggerBtn:     '[data-ix-trigger-btn]',
-        modal:          '[data-ix-modal]',
-        modalTab:       '[data-ix-tab]',
-        tabPanel:       '[data-ix-tab-panel]',
-        commentArea:    '[data-ix-comment]',
+        article: '[data-content-article]',
+        triggerBtn: '[data-ix-trigger-btn]',
+        modal: '[data-ix-modal]',
+        modalTab: '[data-ix-tab]',
+        tabPanel: '[data-ix-tab-panel]',
+        commentArea: '[data-ix-comment]',
         attachmentGrid: '[data-ix-attachment-grid]',
         attachmentItem: '[data-ix-attachment-item]',
-        saveBtn:        '[data-ix-save]',
-        cancelBtn:      '[data-ix-cancel]',
-        marker:         '[data-ix-marker]',
-        markerTrigger:  '[data-ix-trigger]',
-        popover:        '[data-ix-popover]',
-        deleteBtn:      '[data-ix-delete]',
-        mobileToggle:   '[data-ix-mobile-toggle]',
+        saveBtn: '[data-ix-save]',
+        cancelBtn: '[data-ix-cancel]',
+        marker: '[data-ix-marker]',
+        markerTrigger: '[data-ix-trigger]',
+        popover: '[data-ix-popover]',
+        deleteBtn: '[data-ix-delete]',
+        mobileToggle: '[data-ix-mobile-toggle]',
     };
 
     const BLOCK_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, table';
@@ -51,7 +51,7 @@ const Interactions = (function () {
     // -- Private: State --
     let state = {
         initialized: false,
-        annotations: [],
+        interactions: [],
         pendingAnchor: null,
         selectedAttachment: null,
         activeTab: 'comment',
@@ -99,7 +99,7 @@ const Interactions = (function () {
         return window.projectData.slug + ':' + pageSlug;
     }
 
-    function loadAnnotations() {
+    function loadInteractions() {
         var key = getPageKey();
         if (!key) return [];
         try {
@@ -108,12 +108,12 @@ const Interactions = (function () {
         } catch (e) { return []; }
     }
 
-    function saveAnnotations(annotations) {
+    function saveInteractions(interactions) {
         var key = getPageKey();
         if (!key) return;
         try {
             var stored = JSON.parse(localStorage.getItem(CONFIG.storageKey) || '{}');
-            stored[key] = annotations;
+            stored[key] = interactions;
             localStorage.setItem(CONFIG.storageKey, JSON.stringify(stored));
         } catch (e) { log('Storage write failed:', e); }
     }
@@ -155,7 +155,7 @@ const Interactions = (function () {
     // -- Private: DOM injection --
     function injectTriggerBtn() {
         $triggerBtn = window.jQuery(
-            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>+ Annotate</button>'
+            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>&#x1F4AC; Add note</button>'
         );
         window.jQuery('body').append($triggerBtn);
     }
@@ -163,22 +163,22 @@ const Interactions = (function () {
     function injectModal() {
         var html =
             '<div data-ix-modal class="dc-ix-modal" hidden>' +
-              '<div class="dc-ix-modal-panel">' +
-                '<div class="dc-ix-tabs">' +
-                  '<button data-ix-tab="comment" class="dc-ix-tab is-active">Comment</button>' +
-                  '<button data-ix-tab="attachment" class="dc-ix-tab">Attachment</button>' +
-                '</div>' +
-                '<div data-ix-tab-panel="comment">' +
-                  '<textarea data-ix-comment class="dc-ix-textarea" placeholder="Add a comment..."></textarea>' +
-                '</div>' +
-                '<div data-ix-tab-panel="attachment" hidden>' +
-                  '<div data-ix-attachment-grid class="dc-ix-attachment-grid"></div>' +
-                '</div>' +
-                '<div class="dc-ix-modal-actions">' +
-                  '<button data-ix-cancel class="dc-ix-btn-cancel">Cancel</button>' +
-                  '<button data-ix-save class="dc-ix-btn-save">Save</button>' +
-                '</div>' +
-              '</div>' +
+            '<div class="dc-ix-modal-panel">' +
+            '<div class="dc-ix-tabs">' +
+            '<button data-ix-tab="comment" class="dc-ix-tab is-active">Comment</button>' +
+            '<button data-ix-tab="attachment" class="dc-ix-tab">Attachment</button>' +
+            '</div>' +
+            '<div data-ix-tab-panel="comment">' +
+            '<textarea data-ix-comment class="dc-ix-textarea" placeholder="Add a comment..."></textarea>' +
+            '</div>' +
+            '<div data-ix-tab-panel="attachment" hidden>' +
+            '<div data-ix-attachment-grid class="dc-ix-attachment-grid"></div>' +
+            '</div>' +
+            '<div class="dc-ix-modal-actions">' +
+            '<button data-ix-cancel class="dc-ix-btn-cancel">Cancel</button>' +
+            '<button data-ix-save class="dc-ix-btn-save">Save</button>' +
+            '</div>' +
+            '</div>' +
             '</div>';
         window.jQuery('body').append(html);
         $modal = window.jQuery(SELECTORS.modal);
@@ -186,7 +186,7 @@ const Interactions = (function () {
 
     function injectMobileToggle() {
         $mobileToggle = window.jQuery(
-            '<button data-ix-mobile-toggle class="dc-ix-mobile-toggle">&#x1F4AC; Annotations</button>'
+            '<button data-ix-mobile-toggle class="dc-ix-mobile-toggle">&#x1F4AC; interactions</button>'
         );
         $article.prepend($mobileToggle);
     }
@@ -273,12 +273,12 @@ const Interactions = (function () {
         var $ = window.jQuery;
         if (!state.pendingAnchor) return;
 
-        var annotation;
+        var interaction;
 
         if (state.activeTab === 'comment') {
             var text = $(SELECTORS.commentArea).val().trim();
             if (!text) return;
-            annotation = {
+            interaction = {
                 id: Date.now(),
                 type: 'comment',
                 text: text,
@@ -289,7 +289,7 @@ const Interactions = (function () {
             };
         } else {
             if (!state.selectedAttachment) return;
-            annotation = {
+            interaction = {
                 id: Date.now(),
                 type: 'attachment',
                 attachmentFilename: state.selectedAttachment,
@@ -300,58 +300,58 @@ const Interactions = (function () {
             };
         }
 
-        var annotations = state.annotations.concat([Interactions]);
-        setState({ annotations: annotations, pendingAnchor: null, selectedAttachment: null });
-        saveAnnotations(annotations);
+        var interactions = state.interactions.concat([interaction]);
+        setState({ interactions: interactions, pendingAnchor: null, selectedAttachment: null });
+        saveInteractions(interactions);
         closeModal();
-        renderMarker(annotation);
+        renderMarker(interaction);
         window.getSelection().removeAllRanges();
-        log('Saved:', annotation.id);
+        log('Saved:', interaction.id);
     }
 
     // -- Private: Markers --
-    function renderMarker(annotation) {
-        var top = getBlockTop(annotation.anchorBlockIndex);
-        var isAttachment = annotation.type === 'attachment';
+    function renderMarker(interaction) {
+        var top = getBlockTop(interaction.anchorBlockIndex);
+        var isAttachment = interaction.type === 'attachment';
         var icon = isAttachment ? '&#x1F4CE;' : '&#x1F4AC;';
-        var typeClass = 'dc-ix-marker--' + annotation.type;
-        var id = annotation.id;
+        var typeClass = 'dc-ix-marker--' + interaction.type;
+        var id = interaction.id;
 
         var popoverBody;
         if (isAttachment) {
-            var url = (window.attachmentBase || '') + encodeURIComponent(annotation.attachmentFilename);
-            popoverBody = isImageFile(annotation.attachmentFilename)
-                ? '<img src="' + url + '" class="dc-ix-thumb" alt="' + escapeHtml(annotation.attachmentFilename) + '">'
+            var url = (window.attachmentBase || '') + encodeURIComponent(interaction.attachmentFilename);
+            popoverBody = isImageFile(interaction.attachmentFilename)
+                ? '<img src="' + url + '" class="dc-ix-thumb" alt="' + escapeHtml(interaction.attachmentFilename) + '">'
                 : '<div class="dc-ix-attachment-item-icon">&#x1F4CE;</div>';
-            popoverBody += '<span class="dc-ix-filename">' + escapeHtml(annotation.attachmentFilename) + '</span>';
+            popoverBody += '<span class="dc-ix-filename">' + escapeHtml(interaction.attachmentFilename) + '</span>';
         } else {
             popoverBody =
-                '<p class="dc-ix-popover-text">' + escapeHtml(annotation.text) + '</p>' +
-                '<time class="dc-ix-popover-time">' + formatDate(annotation.created) + '</time>';
+                '<p class="dc-ix-popover-text">' + escapeHtml(interaction.text) + '</p>' +
+                '<time class="dc-ix-popover-time">' + formatDate(interaction.created) + '</time>';
         }
 
         $article.append(
             '<div data-ix-marker data-ix-id="' + id + '"' +
             ' class="dc-ix-marker ' + typeClass + '" style="top:' + top + 'px;">' +
-              '<button data-ix-trigger="' + id + '" class="dc-ix-icon-btn" title="View annotation">' + icon + '</button>' +
-              '<div data-ix-popover="' + id + '" class="dc-ix-popover" hidden>' +
-                '<div class="dc-ix-popover-body">' + popoverBody + '</div>' +
-                '<div class="dc-ix-popover-footer">' +
-                  '<button data-ix-delete="' + id + '" class="dc-ix-delete-btn">Delete</button>' +
-                '</div>' +
-              '</div>' +
+            '<button data-ix-trigger="' + id + '" class="dc-ix-icon-btn" title="View interaction">' + icon + '</button>' +
+            '<div data-ix-popover="' + id + '" class="dc-ix-popover" hidden>' +
+            '<div class="dc-ix-popover-body">' + popoverBody + '</div>' +
+            '<div class="dc-ix-popover-footer">' +
+            '<button data-ix-delete="' + id + '" class="dc-ix-delete-btn">Delete</button>' +
+            '</div>' +
+            '</div>' +
             '</div>'
         );
     }
 
     function renderAllMarkers() {
-        state.annotations.forEach(renderMarker);
+        state.interactions.forEach(renderMarker);
     }
 
     function recalcPositions() {
-        state.annotations.forEach(function (annotation) {
-            window.jQuery('[data-ix-marker][data-ix-id="' + annotation.id + '"]')
-                .css('top', getBlockTop(annotation.anchorBlockIndex) + 'px');
+        state.interactions.forEach(function (interaction) {
+            window.jQuery('[data-ix-marker][data-ix-id="' + interaction.id + '"]')
+                .css('top', getBlockTop(interaction.anchorBlockIndex) + 'px');
         });
     }
 
@@ -373,11 +373,11 @@ const Interactions = (function () {
     }
 
     // -- Private: Delete --
-    function deleteAnnotation(id) {
+    function deleteInteraction(id) {
         var numId = parseInt(id, 10);
-        var annotations = state.annotations.filter(function (a) { return a.id !== numId; });
-        setState({ annotations: annotations });
-        saveAnnotations(annotations);
+        var interactions = state.interactions.filter(function (a) { return a.id !== numId; });
+        setState({ interactions: interactions });
+        saveInteractions(interactions);
         window.jQuery('[data-ix-marker][data-ix-id="' + id + '"]').remove();
         log('Deleted:', id);
     }
@@ -401,7 +401,7 @@ const Interactions = (function () {
             }
             var rect = range.getBoundingClientRect();
             $triggerBtn.css({
-                top:  (rect.bottom + 6) + 'px',
+                top: (rect.bottom + 6) + 'px',
                 left: (rect.right - 60) + 'px',
             }).removeAttr('hidden');
         });
@@ -465,7 +465,7 @@ const Interactions = (function () {
         // Delete
         $(document).on('click' + ns, SELECTORS.deleteBtn, function (e) {
             e.stopPropagation();
-            deleteAnnotation($(this).attr('data-ix-delete'));
+            deleteInteraction($(this).attr('data-ix-delete'));
         });
 
         // Escape â€” close modal or popovers
@@ -480,7 +480,7 @@ const Interactions = (function () {
             var visible = !state.mobileMarkersVisible;
             setState({ mobileMarkersVisible: visible });
             $(SELECTORS.marker).toggleClass('is-visible', visible);
-            $mobileToggle.html(visible ? '&#x1F4AC; Hide Annotations' : '&#x1F4AC; Annotations');
+            $mobileToggle.html(visible ? '&#x1F4AC; Hide interactions' : '&#x1F4AC; interactions');
         });
 
         window.addEventListener('resize', onResize);
@@ -507,11 +507,11 @@ const Interactions = (function () {
         injectModal();
         injectMobileToggle();
 
-        var annotations = loadAnnotations();
-        setState({ initialized: true, annotations: annotations });
+        var interactions = loadInteractions();
+        setState({ initialized: true, interactions: interactions });
         renderAllMarkers();
         bindEvents();
-        log('Initialized with', annotations.length, 'annotation(s)');
+        log('Initialized with', interactions.length, 'interaction(s)');
     }
 
     // -- Public: Destroy --
@@ -523,7 +523,7 @@ const Interactions = (function () {
         if ($mobileToggle) $mobileToggle.remove();
         window.jQuery(SELECTORS.marker).remove();
         window.jQuery('[data-block-index]').removeAttr('data-block-index');
-        setState({ initialized: false, annotations: [], activePopover: null });
+        setState({ initialized: false, interactions: [], activePopover: null });
         log('Destroyed');
     }
 
