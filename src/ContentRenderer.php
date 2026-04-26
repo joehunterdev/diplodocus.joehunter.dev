@@ -185,6 +185,38 @@ class ContentRenderer
     }
 
     /**
+     * Build a global search index across all pages in a project.
+     * Extracts headings from raw markdown (no full parse) for performance.
+     */
+    public function buildProjectSearchIndex(string $projectSlug): array
+    {
+        $project = $this->loadProject($projectSlug);
+        if (!$project) return [];
+
+        $index = [];
+        foreach ($project['pages'] as $page) {
+            $filePath = $project['path'] . DIRECTORY_SEPARATOR . $page['slug'] . '.md';
+            if (!file_exists($filePath)) continue;
+
+            $markdown = file_get_contents($filePath);
+            foreach (explode("\n", $markdown) as $line) {
+                if (!preg_match('/^(#{1,6})\s+(.+)$/', trim($line), $m)) continue;
+                $level = strlen($m[1]);
+                $text = trim($m[2]);
+                $index[] = [
+                    'type'      => $level === 1 ? 'title' : 'heading',
+                    'text'      => $text,
+                    'pageSlug'  => $page['slug'],
+                    'headingId' => $this->slugify($text),
+                    'level'     => $level,
+                ];
+            }
+        }
+
+        return $index;
+    }
+
+    /**
      * Build searchable index: page title + all headings
      * Used by search module to display results
      */

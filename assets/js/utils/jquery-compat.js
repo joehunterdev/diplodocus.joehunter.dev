@@ -123,6 +123,16 @@
                 return api;
             },
 
+            removeAttr: function (a) {
+                elements.forEach(function (el) { el.removeAttribute(a); });
+                return api;
+            },
+
+            empty: function () {
+                elements.forEach(function (el) { el.innerHTML = ''; });
+                return api;
+            },
+
             prop: function (p, v) {
                 if (v === undefined) return elements[0] ? elements[0][p] : null;
                 elements.forEach(function (el) { el[p] = v; });

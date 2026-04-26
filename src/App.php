@@ -81,6 +81,9 @@ class App
                 return;
             }
 
+            // Global search index across all pages in the project
+            $searchIndex = $this->renderer->buildProjectSearchIndex($project);
+
             if ($page) {
                 $rendered = $this->renderer->render($project, $page);
                 if ($rendered) {
@@ -90,7 +93,6 @@ class App
                     $projectContext = $rendered['project'] ?? null;
                     $pageIndex  = $rendered['pageIndex'] ?? false;
                     $pageCount  = $rendered['pageCount'] ?? null;
-                    $searchIndex = $rendered['searchIndex'] ?? [];
                 }
             }
         }

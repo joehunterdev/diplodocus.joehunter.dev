@@ -129,7 +129,7 @@ const Search = (function () {
             });
         }
 
-        // Search current page headings
+        // Search all headings across all project pages
         if (window.searchIndex && Array.isArray(window.searchIndex)) {
             window.searchIndex.forEach(function (item) {
                 const text = item.text.toLowerCase();
@@ -139,7 +139,7 @@ const Search = (function () {
                         text: item.text,
                         level: item.level,
                         project: window.projectData ? window.projectData.slug : null,
-                        pageSlug: window.projectData && window.projectData.pages && window.projectData.pages.length > 0 ? window.projectData.pages[0].slug : null,
+                        pageSlug: item.pageSlug || null,
                         headingId: item.headingId,
                     });
                 }
@@ -174,11 +174,11 @@ const Search = (function () {
             } else if (result.type === 'heading') {
                 label = result.text;
                 meta = 'H' + result.level;
-                href = (window.location.pathname || '/') + (result.headingId ? '#' + result.headingId : '');
+                href = '/' + encodeURIComponent(result.project) + '/' + encodeURIComponent(result.pageSlug) + (result.headingId ? '#' + result.headingId : '');
             } else if (result.type === 'title') {
                 label = result.text;
                 meta = 'Title';
-                href = (window.location.pathname || '/');
+                href = '/' + encodeURIComponent(result.project) + '/' + encodeURIComponent(result.pageSlug);
             }
 
             html += '<a href="' + href + '" class="dc-search-hit">';
