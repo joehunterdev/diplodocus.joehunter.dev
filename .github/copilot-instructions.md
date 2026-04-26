@@ -13,7 +13,7 @@ No Node, no npm, no build step. Drop `.md` files into `public/`, point a browser
 | Templates | Plain PHP partials (`templates/`) |
 | Styles | CSS custom properties via `assets/css/theme.css` + `diplodocus.css` |
 | JS | Vanilla JS / jQuery modules in `assets/js/` — see `.github/javascript-instructions.md` |
-| Routing | Clean paths (`/{space}/{page}`) via `.htaccess` → `index.php` |
+| Routing | Clean paths (`/{project}/{page}`) via `.htaccess` → `index.php` |
 | Markdown | Custom `lib/Parsedown.php` |
 
 ---
@@ -53,8 +53,8 @@ config.example.php      Committed template for config.php
 | URL | Result |
 |---|---|
 | `/` | Home dashboard — all spaces as cards |
-| `/{space}/` | Redirects to `/{space}/{first-page}` |
-| `/{space}/{page}` | Renders that page |
+| `/{project}/` | Redirects to `/{project}/{first-page}` |
+| `/{project}/{page}` | Renders that page |
 | `/?validate=1` | Runs linter + security scanner |
 | `/?action=download-project&project=x` | Downloads space as zip |
 
