@@ -65,6 +65,7 @@ const Interactions = (function () {
     let $modal = null;
     let $mobileToggle = null;
     let resizeTimer = null;
+    let pendingBlockIndex = null;
 
     // -- Private: Utils --
     function log(...args) {
@@ -155,7 +156,7 @@ const Interactions = (function () {
     // -- Private: DOM injection --
     function injectTriggerBtn() {
         $triggerBtn = window.jQuery(
-            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>&#x1F4AC; Add note</button>'
+            '<button data-ix-trigger-btn class="dc-ix-trigger-btn" hidden>Add</button>'
         );
         window.jQuery('body').append($triggerBtn);
     }
@@ -387,40 +388,35 @@ const Interactions = (function () {
         var $ = window.jQuery;
         var ns = CONFIG.eventNamespace;
 
-        // Show trigger button on text selection within article
-        $article.on('mouseup' + ns, function () {
-            var sel = window.getSelection();
-            if (!sel || sel.isCollapsed || !sel.toString().trim()) {
-                hideTriggerBtn();
-                return;
-            }
-            var range = sel.getRangeAt(0);
-            if (!$article.get(0).contains(range.commonAncestorContainer)) {
-                hideTriggerBtn();
-                return;
-            }
-            var rect = range.getBoundingClientRect();
+        // Click any block element to show the trigger button — no text selection needed
+        $article.on('click' + ns, BLOCK_SELECTOR, function (e) {
+            // Ignore clicks on existing markers / popovers
+            if ($(e.target).closest(SELECTORS.marker).length) return;
+            var idx = parseInt($(this).attr('data-block-index'), 10);
+            if (isNaN(idx)) return;
+            pendingBlockIndex = idx;
+            // Position the button near the click point
             $triggerBtn.css({
-                top: (rect.bottom + 6) + 'px',
-                left: (rect.right - 60) + 'px',
+                top: (e.clientY + 10) + 'px',
+                left: (e.clientX - 40) + 'px',
             }).removeAttr('hidden');
+            e.stopPropagation();
         });
 
-        // Open modal from trigger button
-        $(document).on('click' + ns, SELECTORS.triggerBtn, function (e) {
+        // Direct click on trigger button — open modal
+        $triggerBtn.on('click' + ns, function (e) {
             e.preventDefault();
+            e.stopPropagation();
+            log('Trigger btn clicked, pendingBlockIndex:', pendingBlockIndex);
+            if (pendingBlockIndex === null) { hideTriggerBtn(); return; }
             var sel = window.getSelection();
-            var selectedText = sel ? sel.toString().trim().substring(0, 80) : '';
-            var blockIndex = getSelectionBlockIndex();
-            if (blockIndex === null) { hideTriggerBtn(); return; }
-            openModal(blockIndex, selectedText);
+            var selectedText = (sel && !sel.isCollapsed) ? sel.toString().trim().substring(0, 80) : '';
+            openModal(pendingBlockIndex, selectedText);
         });
 
-        // Hide trigger on mousedown outside it
-        $(document).on('mousedown' + ns, function (e) {
-            if (!$(e.target).closest(SELECTORS.triggerBtn).length) {
-                hideTriggerBtn();
-            }
+        // Hide trigger button on any document click not caught above
+        $(document).on('click' + ns, function () {
+            hideTriggerBtn();
         });
 
         // Modal tab switching

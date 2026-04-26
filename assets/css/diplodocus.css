@@ -1294,9 +1294,14 @@ aside.dc-toc.hidden {
 
 .dc-ix-modal {
   position: fixed;
-  inset: 0;
-  z-index: 400;
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1309,13 +1314,16 @@ aside.dc-toc.hidden {
 .dc-ix-modal-panel {
   background: var(--dc-bg-card);
   border: 1px solid var(--dc-border);
-  border-radius: 8px;
-  width: 420px;
+  border-radius: 10px;
+  width: 460px;
   max-width: calc(100vw - 2rem);
-  padding: 1.25rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 9001;
 }
 
 .dc-ix-tabs {
