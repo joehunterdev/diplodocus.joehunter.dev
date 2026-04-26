@@ -84,7 +84,6 @@ use Diplodocus\TemplateEngine as T;
                 Download Space
             </a>
         <?php endif; ?>
-        <a href="/?validate=1" class="nv-sidebar-link">Validate Documentation</a>
     </div>
 
 </aside>

@@ -10,7 +10,7 @@ require_once __DIR__ . '/Config.php';
 require_once __DIR__ . '/Router.php';
 require_once __DIR__ . '/ProjectManager.php';
 require_once __DIR__ . '/ContentRenderer.php';
-require_once __DIR__ . '/Validator.php';
+// require_once __DIR__ . '/Validator.php'; // TODO: validation feature disabled
 require_once __DIR__ . '/TemplateEngine.php';
 
 class App
@@ -19,7 +19,7 @@ class App
     private Router $router;
     private ProjectManager $projectManager;
     private ContentRenderer $renderer;
-    private Validator $validator;
+    // private Validator $validator; // TODO: validation feature disabled
     private TemplateEngine $template;
 
     public function __construct()
@@ -27,14 +27,11 @@ class App
         $this->config = Config::getInstance();
         $basePath = $this->config->get('base_path');
         $spacesPath = $this->config->get('projects_paths', $this->config->get('projects_path'));
-        $excludedDirs = $this->config->get('excluded_dirs', []);
 
-        // Router and ContentRenderer still need a primary single path for file serving
-        $primaryPath = is_array($spacesPath) ? $spacesPath[0] : $spacesPath;
-        $this->router = new Router($primaryPath);
-        $this->projectManager = new ProjectManager($spacesPath, $excludedDirs);
+        $this->router = new Router($spacesPath);
+        $this->projectManager = new ProjectManager($spacesPath);
         $this->renderer = new ContentRenderer($spacesPath);
-        $this->validator = new Validator($basePath);
+        // $this->validator = new Validator($basePath); // TODO: validation feature disabled
         $this->template = new TemplateEngine($this->config->get('templates_path'));
     }
 
@@ -55,30 +52,9 @@ class App
      */
     private function dispatch(): void
     {
-        // Route the request
-        $route = $this->router->route();
-
-        // Handle attachment / file requests
-        if ($route['type'] === 'file') {
-            $this->router->serveFile();
-            return;
-        }
-
-        // Handle sitemap.xml
-        if ($route['type'] === 'sitemap') {
-            $this->serveSitemap();
-            return;
-        }
-
-        // Handle robots.txt
-        if ($route['type'] === 'robots') {
-            $this->serveRobots();
-            return;
-        }
-
-        // Handle documentation requests
+        $route   = $this->router->route();
         $project = $route['project'];
-        $page = $route['page'];
+        $page    = $route['page'];
 
         // Get projects and pages
         $projects = $this->projectManager->getProjects();
@@ -88,10 +64,10 @@ class App
         $pageTitle = null;
         $validationResults = null;
 
-        // Validate if requested
-        if (isset($_GET['validate'])) {
-            $validationResults = $this->validator->validateAll();
-        }
+        // TODO: validation feature disabled
+        // if (isset($_GET['validate'])) {
+        //     $validationResults = $this->validator->validateAll();
+        // }
 
         // Get pages for current project (no auto-redirect — home = no project)
         if ($project) {
@@ -123,6 +99,7 @@ class App
             'currentPage' => $page,
             'content' => $content,
             'toc' => $toc,
+            //TODO: can go
             'validationResults' => $validationResults,
             'hasSecurityIssues' => $validationResults ? !empty($validationResults['security']) : false,
             'hasLintIssues' => $validationResults ? !empty($validationResults['lint']) : false,
@@ -198,73 +175,6 @@ class App
             'authorUrl'     => $authorUrl,
             'robots'        => $robots,
         ];
-    }
-
-    /**
-     * Serve a dynamic sitemap.xml
-     */
-    private function serveSitemap(): void
-    {
-        $siteUrl      = rtrim($this->config->get('site_url', ''), '/');
-        $privateProject = $this->config->get('private_spaces', []);
-        $projects     = $this->projectManager->getProjects();
-
-        header('Content-Type: application/xml; charset=utf-8');
-
-        $urls = [];
-
-        // Home
-        $urls[] = [
-            'loc'        => $siteUrl . '/',
-            'changefreq' => 'weekly',
-            'priority'   => '1.0',
-        ];
-
-        foreach ($projects as $proj) {
-            $slug = $proj['slug'];
-            if (in_array($slug, $privateProject, true)) {
-                continue;
-            }
-            $pages = $this->projectManager->getPages($slug);
-            foreach ($pages as $p) {
-                $urls[] = [
-                    'loc'        => $siteUrl . $this->router->url(['project' => $slug, 'page' => $p['slug']]),
-                    'changefreq' => 'monthly',
-                    'priority'   => '0.8',
-                ];
-            }
-        }
-
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        foreach ($urls as $u) {
-            echo "  <url>\n";
-            echo "    <loc>" . htmlspecialchars($u['loc'], ENT_QUOTES, 'UTF-8') . "</loc>\n";
-            echo "    <changefreq>{$u['changefreq']}</changefreq>\n";
-            echo "    <priority>{$u['priority']}</priority>\n";
-            echo "  </url>\n";
-        }
-        echo '</urlset>';
-    }
-
-    /**
-     * Serve a dynamic robots.txt
-     */
-    private function serveRobots(): void
-    {
-        $siteUrl      = rtrim($this->config->get('site_url', ''), '/');
-        $privateProject = $this->config->get('private_spaces', []);
-
-        header('Content-Type: text/plain; charset=utf-8');
-
-        echo "User-agent: *\n";
-        echo "Allow: /\n";
-        foreach ($privateProject as $space) {
-            echo 'Disallow: /' . rawurlencode($space) . "/\n";
-        }
-        if ($siteUrl) {
-            echo "\nSitemap: {$siteUrl}/sitemap.xml\n";
-        }
     }
 
     /**
@@ -371,11 +281,9 @@ HTML;
         return $this->config;
     }
 
-    /**
-     * Get validator instance
-     */
-    public function getValidator(): Validator
-    {
-        return $this->validator;
-    }
+    // TODO: validation feature disabled
+    // public function getValidator(): Validator
+    // {
+    //     return $this->validator;
+    // }
 }

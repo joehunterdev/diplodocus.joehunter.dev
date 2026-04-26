@@ -20,6 +20,9 @@ class DiplodocusMarkdown extends Parsedown
     /** @var string Absolute path to the project (e.g. /…/public/getting-started). */
     protected $basePath = '';
 
+    /** @var bool Set to true while inlineImage is running so inlineLink skips href rewriting. */
+    private $processingImage = false;
+
     /** @var string[] Extensions that, when used as a bare filename, are treated as attachments. */
     protected $attachmentExtensions = [
         'png',
@@ -48,7 +51,9 @@ class DiplodocusMarkdown extends Parsedown
     // ── Image src rewriting ───────────────────────────────────────────
     protected function inlineImage($Excerpt)
     {
+        $this->processingImage = true;
         $Inline = parent::inlineImage($Excerpt);
+        $this->processingImage = false;
         if (!isset($Inline['element']['attributes']['src'])) {
             return $Inline;
         }
@@ -66,6 +71,11 @@ class DiplodocusMarkdown extends Parsedown
     protected function inlineLink($Excerpt)
     {
         $Inline = parent::inlineLink($Excerpt);
+        // When called during image processing, skip href rewriting — the src
+        // is handled separately by inlineImage → resolveAssetPath.
+        if ($this->processingImage) {
+            return $Inline;
+        }
         if (!isset($Inline['element']['attributes']['href'])) {
             return $Inline;
         }

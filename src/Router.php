@@ -8,12 +8,18 @@ namespace Diplodocus;
 
 class Router
 {
-    private string $projectsPath;
+    private array $projectsPaths;
     private array $params = [];
 
-    public function __construct(string $projectsPath)
+    public function __construct($projectsPath)
     {
-        $this->projectsPath = rtrim($projectsPath, '/\\');
+        if (is_array($projectsPath)) {
+            $this->projectsPaths = array_map(function ($p) {
+                return rtrim($p, '/\\');
+            }, $projectsPath);
+        } else {
+            $this->projectsPaths = [rtrim($projectsPath, '/\\')];
+        }
         $this->parseRequest();
     }
 
@@ -35,16 +41,6 @@ class Router
         $uri  = trim($uri, '/');
         $segs = ($uri !== '') ? explode('/', $uri) : [];
 
-        // Special system routes
-        if ($uri === 'sitemap.xml') {
-            $this->params = ['type' => 'sitemap', 'project' => null, 'page' => null, 'file' => null, 'action' => null];
-            return;
-        }
-        if ($uri === 'robots.txt') {
-            $this->params = ['type' => 'robots', 'project' => null, 'page' => null, 'file' => null, 'action' => null];
-            return;
-        }
-
         // Segment 0 = space, segment 1 = page — fall back to ?project / ?page
         $project = !empty($segs[0]) ? $segs[0] : ($_GET['project'] ?? null);
         $page    = !empty($segs[1]) ? $segs[1] : ($_GET['page']    ?? null);
@@ -61,27 +57,20 @@ class Router
      * Resolve the current request into a structured route.
      * Returns: ['type' => 'file'|'page', 'project' => ?, 'page' => ?, 'file' => ?]
      */
+    /**
+     * Resolve the current request into a structured route.
+     * Returns: ['type' => 'page', 'project' => ?, 'page' => ?]
+     *
+     * File serving, sitemap, and robots are handled by their own
+     * standalone entry points (serve.php, sitemap.php, robots.php)
+     * before this ever runs.
+     */
     public function route(): array
     {
-        // System routes
-        if (isset($this->params['type']) && in_array($this->params['type'], ['sitemap', 'robots'], true)) {
-            return ['type' => $this->params['type'], 'project' => null, 'page' => null, 'file' => null];
-        }
-
-        if ($this->isFileRequest()) {
-            return [
-                'type'    => 'file',
-                'project' => $this->params['project'],
-                'file'    => $this->params['file'],
-                'page'    => null,
-            ];
-        }
-
         return [
             'type'    => 'page',
             'project' => $this->params['project'],
             'page'    => $this->params['page'],
-            'file'    => null,
         ];
     }
 
@@ -113,12 +102,20 @@ class Router
         $requestedFile = $this->params['file'];
         $projectSlug = $this->params['project'];
 
-        // Security: only allow files from within project directories
-        $projectPath = $this->projectsPath . DIRECTORY_SEPARATOR . $projectSlug;
-        $filePath = realpath($projectPath . DIRECTORY_SEPARATOR . $requestedFile);
+        // Security: search all configured paths for the project directory
+        $filePath = false;
+        $projectPath = null;
+        foreach ($this->projectsPaths as $basePath) {
+            $candidate = $basePath . DIRECTORY_SEPARATOR . $projectSlug;
+            if (is_dir($candidate)) {
+                $projectPath = $candidate;
+                $filePath = realpath($candidate . DIRECTORY_SEPARATOR . $requestedFile);
+                if ($filePath) break;
+            }
+        }
 
         // Verify file is within project directory (prevent directory traversal)
-        if ($filePath && strpos($filePath, realpath($projectPath)) === 0 && file_exists($filePath)) {
+        if ($filePath && $projectPath && strpos($filePath, realpath($projectPath)) === 0 && file_exists($filePath)) {
             $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             $mimeTypes = [
                 'png' => 'image/png',

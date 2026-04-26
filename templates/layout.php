@@ -20,25 +20,17 @@ use Diplodocus\TemplateEngine as T;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <?php
-    // SEO metadata — computed in App::buildSeo() and passed as $seo[]
     $seo = $seo ?? [];
     $metaTitle       = $seo['title']       ?? ($title ?? $appName);
-    $metaDescription = $seo['description'] ?? '';
+    $metaDescription = $seo['description'] ?? 'Diplodocus — a markdown-first documentation site by Joe Hunter.';
     $metaCanonical   = $seo['canonical']   ?? '';
-    $metaOgImage     = $seo['ogImage']     ?? '';
-    $metaAuthorUrl   = $seo['authorUrl']   ?? '';
     $metaRobots      = $seo['robots']      ?? 'index,follow';
     ?>
 
     <title><?= T::e($metaTitle) ?></title>
-
-    <?php if ($metaDescription): ?>
-        <meta name="description" content="<?= T::e($metaDescription) ?>">
-    <?php endif; ?>
-
+    <meta name="description" content="<?= T::e($metaDescription) ?>">
     <meta name="author" content="Joe Hunter">
     <meta name="robots" content="<?= T::e($metaRobots) ?>">
-
     <?php if ($metaCanonical): ?>
         <link rel="canonical" href="<?= T::e($metaCanonical) ?>">
     <?php endif; ?>
@@ -46,46 +38,26 @@ use Diplodocus\TemplateEngine as T;
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= T::e($metaTitle) ?>">
-    <?php if ($metaDescription): ?>
-        <meta property="og:description" content="<?= T::e($metaDescription) ?>">
-    <?php endif; ?>
+    <meta property="og:description" content="<?= T::e($metaDescription) ?>">
+    <meta property="og:image" content="https://diplodocus.joehunter.dev/example.png">
     <?php if ($metaCanonical): ?>
         <meta property="og:url" content="<?= T::e($metaCanonical) ?>">
-    <?php endif; ?>
-    <?php if ($metaOgImage): ?>
-        <meta property="og:image" content="<?= T::e($metaOgImage) ?>">
     <?php endif; ?>
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= T::e($metaTitle) ?>">
-    <?php if ($metaDescription): ?>
-        <meta name="twitter:description" content="<?= T::e($metaDescription) ?>">
-    <?php endif; ?>
-    <?php if ($metaOgImage): ?>
-        <meta name="twitter:image" content="<?= T::e($metaOgImage) ?>">
-    <?php endif; ?>
+    <meta name="twitter:description" content="<?= T::e($metaDescription) ?>">
+    <meta name="twitter:image" content="https://diplodocus.joehunter.dev/example.png">
 
-    <?php if ($metaAuthorUrl): ?>
-        <link rel="author" href="<?= T::e($metaAuthorUrl) ?>">
-    <?php endif; ?>
-
-    <!-- Favicon -->
+    <link rel="author" href="https://joehunter.es">
     <link rel="icon" href="/favicon.ico">
 
-    <!-- Styles (theme.css MUST be first — its vars feed every sheet after) -->
-    <?php
-    $styles = $config->get('stylesheets', [
-        'assets/css/theme.css',
-        'assets/css/tailwind.min.css',
-        'assets/css/highlight-dark.min.css',
-        'assets/css/diplodocus.css',
-    ]);
-    foreach ($styles as $sheet):
-        $sheet = (strpos($sheet, 'http') === 0 || $sheet[0] === '/') ? $sheet : '/' . $sheet;
-    ?>
-        <link rel="stylesheet" href="<?= T::e($sheet) ?>">
-    <?php endforeach; ?>
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
+    <link rel="stylesheet" href="/assets/css/highlight-dark.min.css">
+    <link rel="stylesheet" href="/assets/css/diplodocus.css">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -117,13 +89,18 @@ use Diplodocus\TemplateEngine as T;
     <?= $engine->partial('partials/modals', get_defined_vars()) ?>
 
     <!-- Scripts -->
-    <?php
-    $scripts = $config->get('scripts', ['assets/js/highlight.min.js', 'assets/js/app.js']);
-    foreach ($scripts as $s):
-        $s = (strpos($s, 'http') === 0 || $s[0] === '/') ? $s : '/' . $s;
-    ?>
-        <script src="<?= T::e($s) ?>"></script>
-    <?php endforeach; ?>
+    <script src="/assets/js/vendor/highlight.min.js"></script>
+    <script src="/assets/js/utils/jquery-compat.js"></script>
+    <script src="/assets/js/utils/page-logic.js"></script>
+    <script src="/assets/js/vendor/mermaid.min.js"></script>
+    <script src="/assets/js/modules/sidebar.js"></script>
+    <script src="/assets/js/modules/search.js"></script>
+    <script src="/assets/js/modules/toc.js"></script>
+    <script src="/assets/js/modules/code-highlight.js"></script>
+    <script src="/assets/js/modules/attachment-gallery.js"></script>
+    <script src="/assets/js/modules/mermaid-diagrams.js"></script>
+    <script src="/assets/js/modules-init.js"></script>
+    <script src="/assets/js/app.js"></script>
 </body>
 
 </html>

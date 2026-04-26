@@ -75,6 +75,9 @@ const TOC = (function () {
         const $ = window.jQuery;
         if ($candidate.length) {
             var el = $candidate[0];
+            if (!(el instanceof Element)) {
+                return { $element: $('html, body'), isWindow: true };
+            }
             var style = window.getComputedStyle(el);
             var isScrollable = /(auto|scroll|overlay)/.test(style.overflowY) &&
                 el.scrollHeight > el.clientHeight;
