@@ -24,7 +24,7 @@ const MermaidDiagrams = (function () {
         eventNamespace: '.mermaid',
         theme: 'dark',
         sourceSelector: '[data-content-article] pre code.language-mermaid',
-        renderedClass: 'nv-mermaid',
+        renderedClass: 'dc-mermaid',
     };
 
     let state = {
@@ -68,7 +68,7 @@ const MermaidDiagrams = (function () {
 
         blocks.forEach(function (codeEl, idx) {
             var source = codeEl.textContent.trim();
-            var id = 'nv-mermaid-' + Date.now() + '-' + idx;
+            var id = 'dc-mermaid-' + Date.now() + '-' + idx;
             var wrapper = document.createElement('div');
             wrapper.className = CONFIG.renderedClass;
 
@@ -84,7 +84,7 @@ const MermaidDiagrams = (function () {
                     }
                 }).catch(function (err) {
                     log('render failed for block', idx, err);
-                    wrapper.innerHTML = '<pre class="nv-mermaid-error">Mermaid error: '
+                    wrapper.innerHTML = '<pre class="dc-mermaid-error">Mermaid error: '
                         + (err.message || String(err)) + '</pre>';
                     var pre = codeEl.closest('pre');
                     if (pre && pre.parentNode) {

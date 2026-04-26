@@ -28,7 +28,7 @@ diplodocus/
 ├── lib/                 ← vendored Parsedown + scanners
 ├── assets/css/
 │   ├── theme.css        ← ONE file controls all colours/fonts/radii
-│   └── diplodocus.css       ← structural CSS (uses var(--nv-*) only)
+│   └── diplodocus.css       ← structural CSS (uses var(--dc-*) only)
 ├── templates/           ← PHP templates
 │
 └── public/                ← your content lives here
@@ -68,10 +68,10 @@ custom properties. Change your brand with three lines:
 
 ```diff
   :root {
--   --nv-brand-primary:       #1e3a5f;
--   --nv-brand-primary-hover: #2d4a6f;
-+   --nv-brand-primary:       #10b981;
-+   --nv-brand-primary-hover: #059669;
+-   --dc-brand-primary:       #1e3a5f;
+-   --dc-brand-primary-hover: #2d4a6f;
++   --dc-brand-primary:       #10b981;
++   --dc-brand-primary-hover: #059669;
   }
 ```
 

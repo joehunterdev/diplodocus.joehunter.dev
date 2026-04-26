@@ -75,8 +75,8 @@ use Diplodocus\TemplateEngine as T;
             <?= $engine->partial('partials/header', get_defined_vars()) ?>
 
             <main data-main-scroll style="flex:1; display:flex;">
-                <div class="nv-main">
-                    <div class="nv-main-inner">
+                <div class="dc-main">
+                    <div class="dc-main-inner">
                         <?= $content ?>
                     </div>
                 </div>
