@@ -96,21 +96,21 @@ use Diplodocus\TemplateEngine as T;
         $nextPage = ($pageIndex < $pageCount - 1) ? $project['pages'][$pageIndex + 1] : null;
         if ($prevPage || $nextPage):
     ?>
-        <nav class="dc-page-nav" style="display:flex; gap:1rem; padding:2rem 1rem; border-top:1px solid var(--dc-border-subtle); margin-top:2rem;">
-            <?php if ($prevPage): ?>
-                <a href="<?= $router->url(['project' => $project['slug'], 'page' => $prevPage['slug']]) ?>" class="dc-nav-link dc-nav-prev" style="flex:1;">
-                    <span style="font-size:0.875rem; color:var(--dc-text-muted);">← Previous</span>
-                    <div style="font-weight:500;"><?= T::e($prevPage['displayName']) ?></div>
-                </a>
-            <?php endif; ?>
-            <?php if ($nextPage): ?>
-                <a href="<?= $router->url(['project' => $project['slug'], 'page' => $nextPage['slug']]) ?>" class="dc-nav-link dc-nav-next" style="flex:1; text-align:right;">
-                    <span style="font-size:0.875rem; color:var(--dc-text-muted);">Next →</span>
-                    <div style="font-weight:500;"><?= T::e($nextPage['displayName']) ?></div>
-                </a>
-            <?php endif; ?>
-        </nav>
-    <?php endif; ?>
+            <nav class="dc-page-nav" style="display:flex; gap:1rem; padding:2rem 1rem; border-top:1px solid var(--dc-border-subtle); margin-top:2rem;">
+                <?php if ($prevPage): ?>
+                    <a href="<?= $router->url(['project' => $project['slug'], 'page' => $prevPage['slug']]) ?>" class="dc-nav-link dc-nav-prev" style="flex:1;">
+                        <span style="font-size:0.875rem; color:var(--dc-text-muted);">← Previous</span>
+                        <div style="font-weight:500;"><?= T::e($prevPage['displayName']) ?></div>
+                    </a>
+                <?php endif; ?>
+                <?php if ($nextPage): ?>
+                    <a href="<?= $router->url(['project' => $project['slug'], 'page' => $nextPage['slug']]) ?>" class="dc-nav-link dc-nav-next" style="flex:1; text-align:right;">
+                        <span style="font-size:0.875rem; color:var(--dc-text-muted);">Next →</span>
+                        <div style="font-weight:500;"><?= T::e($nextPage['displayName']) ?></div>
+                    </a>
+                <?php endif; ?>
+            </nav>
+        <?php endif; ?>
     <?php endif; ?>
 
     <!-- Inject project context into JavaScript -->
@@ -124,20 +124,12 @@ use Diplodocus\TemplateEngine as T;
     <?php endif; ?>
 
     <!-- Scripts -->
+    <!-- Vendor: not ES modules, must load before app.js -->
     <script src="/assets/js/vendor/highlight.min.js?v=<?= $v ?>"></script>
     <script src="/assets/js/utils/jquery-compat.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/utils/page-logic.js?v=<?= $v ?>"></script>
     <script src="/assets/js/vendor/mermaid.min.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/sidebar.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/search.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/toc.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/code-highlight.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/attachment-gallery.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/mermaid-diagrams.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/interactive-content.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules/page-comments.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/modules-init.js?v=<?= $v ?>"></script>
-    <script src="/assets/js/app.js?v=<?= $v ?>"></script>
+    <!-- App: ES module, imports all modules -->
+    <script type="module" src="/assets/js/app.js?v=<?= $v ?>"></script>
 </body>
 
 </html>

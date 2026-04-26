@@ -290,4 +290,4 @@ const PageComments = (function () {
     return { init: init, destroy: destroy };
 })();
 
-window.PageComments = PageComments;
+export default PageComments;

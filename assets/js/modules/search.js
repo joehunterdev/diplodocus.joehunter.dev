@@ -59,14 +59,7 @@ const Search = (function () {
 
     function setup() {
         cacheDom();
-        // Create results panel if it doesn't exist
-        if ($resultsPanel.length === 0) {
-            const $ = window.jQuery;
-            const panelHtml = '<div data-search-results style="display:none; position:fixed; max-height:320px; overflow-y:auto; background:var(--dc-bg-secondary); border:1px solid var(--dc-border-subtle); border-radius:6px; z-index:1000; box-shadow:0 4px 12px rgba(0,0,0,0.15); min-width:200px; max-width:320px;"></div>';
-            $('body').append(panelHtml);
-            $resultsPanel = $('[data-search-results]');
-        }
-        return $input.length > 0 && window.projectData;
+        return $input.length > 0 && $resultsPanel.length > 0;
     }
 
     // -- Private: Build search index from all pages --
@@ -111,7 +104,8 @@ const Search = (function () {
         setState({ query: query });
 
         if (!query || query.length < CONFIG.minLength) {
-            $resultsPanel.hide();
+            $resultsPanel.attr('hidden', '');
+            $resultsPanel.empty();
             setState({ results: [] });
             return;
         }
@@ -157,67 +151,49 @@ const Search = (function () {
         log('Searched:', query, 'found:', results.length);
     }
 
-    // -- Private: Position results panel below input --
-    function positionPanel() {
-        var inputRect = $input[0].getBoundingClientRect();
-        $resultsPanel.css({
-            left: inputRect.left + 'px',
-            top: (inputRect.bottom + 8) + 'px',
-            width: inputRect.width + 'px'
-        });
-    }
-
     // -- Private: Render results panel --
     function renderResults(results) {
         const $ = window.jQuery;
 
         if (results.length === 0) {
-            $resultsPanel.html('<div style="padding:1.5rem; text-align:center; color:var(--dc-text-secondary); font-size:0.875rem;">No results found</div>');
-            positionPanel();
-            $resultsPanel.show();
+            $resultsPanel.html('<div class="dc-search-empty">No results found</div>');
+            $resultsPanel.removeAttr('hidden');
             return;
         }
 
-        let html = '<div style="padding:0.5rem 0;">';
+        let html = '';
         results.forEach(function (result) {
             let href = '';
             let label = '';
-            let icon = '';
-            let typeLabel = '';
+            let meta = '';
 
             if (result.type === 'page') {
-                icon = '📄';
                 label = result.text;
-                typeLabel = 'Page';
-                href = '/?project=' + encodeURIComponent(result.project) + '&page=' + encodeURIComponent(result.pageSlug);
+                meta = 'Page';
+                href = '/' + encodeURIComponent(result.project) + '/' + encodeURIComponent(result.pageSlug);
             } else if (result.type === 'heading') {
-                icon = result.level === 2 ? '##' : '###';
                 label = result.text;
-                typeLabel = 'Heading H' + result.level;
-                // Link to heading on current page
+                meta = 'H' + result.level;
                 href = (window.location.pathname || '/') + (result.headingId ? '#' + result.headingId : '');
             } else if (result.type === 'title') {
-                icon = '📋';
                 label = result.text;
-                typeLabel = 'Title';
+                meta = 'Title';
                 href = (window.location.pathname || '/');
             }
 
-            html += '<a href="' + href + '" style="display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0.75rem; cursor:pointer; color:var(--dc-text-primary); text-decoration:none; border-bottom:1px solid var(--dc-border-subtle); transition:background-color 0.15s ease; font-size:0.85rem;" onmouseover="this.style.backgroundColor=\'rgba(255,255,255,0.06)\'" onmouseout="this.style.backgroundColor=\'transparent\'">';
-            html += '<span style="font-size:0.9rem; flex-shrink:0;">' + icon + '</span>';
-            html += '<span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;">' + label.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>';
-            html += '<span style="font-size:0.7rem; color:var(--dc-text-secondary); flex-shrink:0;">' + typeLabel + '</span>';
+            html += '<a href="' + href + '" class="dc-search-hit">';
+            html += '<span class="dc-search-hit-label">' + label.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>';
+            html += '<span class="dc-search-hit-meta">' + meta + '</span>';
             html += '</a>';
         });
-        html += '</div>';
 
         $resultsPanel.html(html);
-        positionPanel();
-        $resultsPanel.show();
+        $resultsPanel.removeAttr('hidden');
     }
 
     function clearResults() {
-        $resultsPanel.hide();
+        $resultsPanel.attr('hidden', '');
+        $resultsPanel.empty();
         setState({ query: '', results: [] });
     }
 
@@ -282,4 +258,4 @@ const Search = (function () {
 
 })();
 
-window.Search = Search;
+export default Search;

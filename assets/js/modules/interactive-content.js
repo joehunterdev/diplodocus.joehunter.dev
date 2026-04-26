@@ -221,4 +221,4 @@ const InteractiveContent = (function () {
     return { init: init, destroy: destroy };
 })();
 
-window.InteractiveContent = InteractiveContent;
+export default InteractiveContent;

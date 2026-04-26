@@ -152,4 +152,4 @@ const Sidebar = (function () {
 
 })();
 
-window.Sidebar = Sidebar;
+export default Sidebar;

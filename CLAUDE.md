@@ -21,7 +21,8 @@ Key rules:
 - Always use the Revealing Module Pattern (IIFE)
 - Never add inline logic to `assets/js/app.js` — use modules in `assets/js/modules/`
 - Always check if a module already exists before creating one
-- Always register new modules in `modules-init.js`
+- Register new modules by importing in `app.js` and calling `.init()` — **no `modules-init.js`, no `PageLogic`**
+- End every module with `export default ModuleName;`
 - Never use IDs or classes as JS hooks — use `data-*` attributes only
 - Always use jQuery (`window.jQuery`)
 - All events must be namespaced

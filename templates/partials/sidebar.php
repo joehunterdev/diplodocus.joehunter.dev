@@ -25,6 +25,7 @@ use Diplodocus\TemplateEngine as T;
     <div style="position:relative;">
         <input type="text" data-sidebar-search class="dc-sidebar-search"
             placeholder="Search documentation…">
+        <div data-search-results class="dc-search-results" hidden></div>
     </div>
 
     <nav style="flex:1; overflow-y:auto; padding-top:.5rem;">

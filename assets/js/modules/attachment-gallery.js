@@ -246,7 +246,7 @@ const AttachmentGallery = (function () {
                 function updateSections() {
                     var selected = $pageSelect.get(0).options[$pageSelect.get(0).selectedIndex];
                     var sections = [];
-                    try { sections = JSON.parse(selected.dataset.sections || '[]'); } catch (e) {}
+                    try { sections = JSON.parse(selected.dataset.sections || '[]'); } catch (e) { }
                     $sectionSelect.html('<option value="">-- Optional --</option>');
                     sections.forEach(function (sec) {
                         $sectionSelect.get(0).innerHTML += '<option value="' + escapeHtml(sec) + '">' + escapeHtml(sec) + '</option>';
@@ -268,15 +268,15 @@ const AttachmentGallery = (function () {
                             section: form.section.value,
                         }),
                     })
-                    .then(function (r) { return r.json(); })
-                    .then(function (resp) {
-                        if (resp.success) {
-                            $content.html('<p class="text-green-600 text-xs text-center py-2">Tagged!</p>');
-                            setTimeout(function () { $(SELECTORS.tagPopover).css('display', 'none'); }, 500);
-                        } else {
-                            $content.find('button[type="submit"]').after('<p class="text-red-500 text-xs mt-1">Error</p>');
-                        }
-                    });
+                        .then(function (r) { return r.json(); })
+                        .then(function (resp) {
+                            if (resp.success) {
+                                $content.html('<p class="text-green-600 text-xs text-center py-2">Tagged!</p>');
+                                setTimeout(function () { $(SELECTORS.tagPopover).css('display', 'none'); }, 500);
+                            } else {
+                                $content.find('button[type="submit"]').after('<p class="text-red-500 text-xs mt-1">Error</p>');
+                            }
+                        });
                 });
             });
     }
@@ -400,15 +400,15 @@ const AttachmentGallery = (function () {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ attachment: attachment, page: page, section: section }),
             })
-            .then(function (r) { return r.json(); })
-            .then(function (resp) {
-                if (resp.success) {
-                    $tag.css({ opacity: '0', transform: 'translateX(20px)' });
-                    setTimeout(function () { $tag.get(0).remove(); }, 300);
-                } else {
-                    alert('Error removing tag: ' + (resp.error || 'Unknown'));
-                }
-            });
+                .then(function (r) { return r.json(); })
+                .then(function (resp) {
+                    if (resp.success) {
+                        $tag.css({ opacity: '0', transform: 'translateX(20px)' });
+                        setTimeout(function () { $tag.get(0).remove(); }, 300);
+                    } else {
+                        alert('Error removing tag: ' + (resp.error || 'Unknown'));
+                    }
+                });
         });
     }
 
@@ -445,4 +445,4 @@ const AttachmentGallery = (function () {
 
 })();
 
-window.AttachmentGallery = AttachmentGallery;
+export default AttachmentGallery;
