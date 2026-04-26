@@ -43,6 +43,7 @@ const TOC = (function () {
     let $links = null;
     let $headings = null;
     let $scrollContainer = null;
+    let isWindowScroll = false;  // Track whether we're scrolling the window or an element
 
     // -- Private: Utils --
     function log(...args) {
@@ -62,7 +63,9 @@ const TOC = (function () {
         // scrollable (overflow-y: visible), fall back to window scrolling so
         // scrollTop reads and animations land on the real scroller.
         var $candidate = $(SELECTORS.scrollContainer);
-        $scrollContainer = resolveScroller($candidate);
+        var resolved = resolveScroller($candidate);
+        $scrollContainer = resolved.$element;
+        isWindowScroll = resolved.isWindow;
 
         // Headings come from rendered markdown — use semantic selectors
         $headings = $(SELECTORS.article + ' h2, ' + SELECTORS.article + ' h3, ' + SELECTORS.article + ' h4');
@@ -75,15 +78,17 @@ const TOC = (function () {
             var style = window.getComputedStyle(el);
             var isScrollable = /(auto|scroll|overlay)/.test(style.overflowY) &&
                 el.scrollHeight > el.clientHeight;
-            if (isScrollable) return $candidate;
+            if (isScrollable) {
+                return { $element: $candidate, isWindow: false };
+            }
         }
         // Fall back to the window scroller. Use html,body for cross-browser animate target.
-        return $('html, body');
+        return { $element: $('html, body'), isWindow: true };
     }
 
     function getScrollTop() {
         // Works whether we're scrolling an element or the window.
-        if ($scrollContainer && $scrollContainer.length && $scrollContainer[0] !== document.documentElement && $scrollContainer[0] !== document.body) {
+        if (!isWindowScroll) {
             return $scrollContainer.scrollTop();
         }
         return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -103,13 +108,20 @@ const TOC = (function () {
         $headings.each(function () {
             var $h = $(this);
             var id = $h.attr('id');
-            // Use getBoundingClientRect so we work for both window and element scrollers.
+
+            if (!id) return;
+
+            // Use getBoundingClientRect relative to the viewport
             var rectTop = this.getBoundingClientRect().top;
-            // Translate to document-space if we're scrolling the window; element-space otherwise.
-            var topRelative = ($scrollContainer[0] === document.documentElement || $scrollContainer[0] === document.body)
-                ? rectTop + scrollTop
-                : $h.position().top + scrollTop;
-            if (id && topRelative <= scrollTop + CONFIG.scrollOffset) {
+
+            // For window scrolling, rectTop is measured from viewport top
+            // For element scrolling, we need position relative to container top
+            var topRelative = isWindowScroll
+                ? rectTop
+                : this.offsetTop - $scrollContainer.scrollTop();
+
+            // Check if heading is above or near the scroll position (within scrollOffset)
+            if (topRelative <= CONFIG.scrollOffset) {
                 activeId = id;
             }
         });
@@ -134,14 +146,13 @@ const TOC = (function () {
             var $target = $(target);
             if (!$target.length) return;
 
-            var scrollTop = getScrollTop();
             var targetTop;
-            if ($scrollContainer[0] === document.documentElement || $scrollContainer[0] === document.body) {
-                // Window-based scroller: offset() is doc-relative.
+            if (isWindowScroll) {
+                // Window-based scroller: use offset() to get document-relative position
                 targetTop = $target.offset().top - CONFIG.scrollOffset;
             } else {
-                // Element-based scroller: position() is container-relative.
-                targetTop = $target.position().top + scrollTop - CONFIG.scrollOffset;
+                // Element-based scroller: use position() relative to container
+                targetTop = $target.position().top - CONFIG.scrollOffset;
             }
 
             $scrollContainer.animate({ scrollTop: Math.max(0, targetTop) }, 300);
@@ -153,9 +164,7 @@ const TOC = (function () {
         });
 
         // Listen to the right scroll source
-        var $scrollSrc = ($scrollContainer[0] === document.documentElement || $scrollContainer[0] === document.body)
-            ? $(window)
-            : $scrollContainer;
+        var $scrollSrc = isWindowScroll ? $(window) : $scrollContainer;
         $scrollSrc.on('scroll' + CONFIG.eventNamespace, function () {
             updateActiveLink();
         });

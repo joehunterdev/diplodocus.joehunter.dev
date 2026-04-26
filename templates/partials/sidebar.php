@@ -43,7 +43,7 @@ use Diplodocus\TemplateEngine as T;
 
         <?php else: ?>
             <!-- ── SPACE: back link + pages ── -->
-            <a href="?" data-nav-link class="nv-sidebar-back">
+            <a href="<?= $router->url([]) ?>" data-nav-link class="nv-sidebar-back">
                 <svg style="width:.8rem;height:.8rem;margin-right:.4rem;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
