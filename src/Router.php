@@ -62,7 +62,8 @@ class Router
     {
         if ($slug === null) return null;
         // Reject null bytes, slashes, or directory traversal attempts
-        if (strpos($slug, "\0") !== false
+        if (
+            strpos($slug, "\0") !== false
             || strpos($slug, '/') !== false
             || strpos($slug, '\\') !== false
             || strpos($slug, '..') !== false

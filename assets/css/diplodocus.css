@@ -1244,21 +1244,26 @@ aside.dc-toc.hidden {
 .task-list-item input[type="checkbox"] {
   margin-right: 0.5rem;
   cursor: pointer;
-  accent-color: var(--dc-brand-primary);
+  accent-color: var(--dc-accent);
+  width: 1em;
+  height: 1em;
+  transition: opacity 0.15s;
 }
 
-.task-list-item input[type="checkbox"]:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.task-list-item input[type="checkbox"]:hover:not(:disabled) {
+.task-list-item input[type="checkbox"]:hover {
   opacity: 0.8;
 }
 
 .task-list-item input[type="checkbox"]:focus {
-  outline: 2px solid var(--dc-brand-primary);
+  outline: 2px solid var(--dc-accent);
   outline-offset: 2px;
+}
+
+/* Checked items saved as interactions — subtle highlight on the row */
+.task-list-item:has(input[type="checkbox"]:checked) {
+  color: var(--dc-text-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--dc-accent);
 }
 
 /* â”€â”€ Page Comments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */

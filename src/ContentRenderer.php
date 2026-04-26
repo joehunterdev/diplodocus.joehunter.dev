@@ -277,12 +277,14 @@ class ContentRenderer
      */
     private function tagTaskLists(string $html): string
     {
+        $index = 0;
         return preg_replace_callback(
             '#<li>((\[( |x|X)\])\s*(.*?))</li>#s',
-            function ($m) {
+            function ($m) use (&$index) {
                 $checked = ($m[3] === 'x' || $m[3] === 'X') ? ' checked' : '';
                 $text = $m[4];
-                return '<li class="task-list-item"><input type="checkbox" disabled' . $checked . '> ' . $text . '</li>';
+                $i = $index++;
+                return '<li class="task-list-item"><input type="checkbox" data-task-index="' . $i . '"' . $checked . '> ' . $text . '</li>';
             },
             $html
         );

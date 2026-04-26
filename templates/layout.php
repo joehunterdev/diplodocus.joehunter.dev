@@ -117,10 +117,10 @@ use Diplodocus\TemplateEngine as T;
     <?php if (isset($project)): ?>
         <script>
             window.projectData = <?php
-                $jsProject = $project;
-                unset($jsProject['path']); // Never expose server filesystem paths
-                echo json_encode($jsProject, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-            ?>;
+                                    $jsProject = $project;
+                                    unset($jsProject['path']); // Never expose server filesystem paths
+                                    echo json_encode($jsProject, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+                                    ?>;
             window.pageIndex = <?php echo json_encode($pageIndex); ?>;
             window.pageCount = <?php echo json_encode($pageCount); ?>;
             window.searchIndex = <?php echo json_encode($searchIndex ?? [], JSON_HEX_TAG | JSON_HEX_AMP); ?>;

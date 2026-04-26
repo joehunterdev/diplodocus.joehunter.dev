@@ -128,6 +128,11 @@
                 return api;
             },
 
+            remove: function () {
+                elements.forEach(function (el) { if (el.parentNode) el.parentNode.removeChild(el); });
+                return api;
+            },
+
             empty: function () {
                 elements.forEach(function (el) { el.innerHTML = ''; });
                 return api;

@@ -147,11 +147,11 @@ const InteractionControls = (function () {
 
     // -- Import validation --
 
-    var IMPORT_MAX_BYTES   = 512 * 1024;              // 512 KB
-    var VALID_TYPES        = ['comment', 'attachment', 'checked'];
-    var SLUG_KEY_RE        = /^[a-zA-Z0-9][a-zA-Z0-9._-]*:[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
-    var ISO_RE             = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
-    var MAX_STRING_LEN     = 4000;
+    var IMPORT_MAX_BYTES = 512 * 1024;              // 512 KB
+    var VALID_TYPES = ['comment', 'attachment', 'checked'];
+    var SLUG_KEY_RE = /^[a-zA-Z0-9][a-zA-Z0-9._-]*:[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
+    var ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+    var MAX_STRING_LEN = 4000;
 
     function validateImportPayload(payload) {
         // Top-level shape

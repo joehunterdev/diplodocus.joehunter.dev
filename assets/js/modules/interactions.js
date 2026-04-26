@@ -452,11 +452,70 @@ const Interactions = (function () {
     }
 
     // -- Private: Events --
+    // -- Private: Task list checked state --
+
+    /**
+     * Restore checkbox visual state from saved interactions on page load.
+     * Interactions of type 'checked' have anchorBlockIndex === task index.
+     */
+    function restoreTaskChecks() {
+        state.interactions.forEach(function (ix) {
+            if (ix.type !== 'checked') return;
+            var cb = $article[0] && $article[0].querySelector('[data-task-index="' + ix.anchorBlockIndex + '"]');
+            if (cb) cb.checked = true;
+        });
+    }
+
+    /**
+     * Handle a task list checkbox click — toggle a 'checked' interaction.
+     */
+    function handleTaskCheck(checkbox) {
+        var idx = parseInt(checkbox.getAttribute('data-task-index'), 10);
+        if (isNaN(idx)) return;
+
+        var isChecked = checkbox.checked;
+        var interactions;
+
+        if (isChecked) {
+            // Add a checked interaction if one doesn't already exist for this index
+            var exists = state.interactions.some(function (ix) {
+                return ix.type === 'checked' && ix.anchorBlockIndex === idx;
+            });
+            if (!exists) {
+                var interaction = {
+                    id: Date.now(),
+                    type: 'checked',
+                    anchorBlockIndex: idx,
+                    anchorHeadingId: null,
+                    anchorSelectedText: null,
+                    created: new Date().toISOString(),
+                };
+                interactions = state.interactions.concat([interaction]);
+            } else {
+                return; // already saved
+            }
+        } else {
+            // Remove the checked interaction for this index
+            interactions = state.interactions.filter(function (ix) {
+                return !(ix.type === 'checked' && ix.anchorBlockIndex === idx);
+            });
+        }
+
+        setState({ interactions: interactions });
+        saveInteractions(interactions);
+        log('Task', idx, isChecked ? 'checked' : 'unchecked');
+    }
+
     function bindEvents() {
         var $ = window.jQuery;
         var ns = CONFIG.eventNamespace;
 
-        // Click any block element to show the trigger button — no text selection needed
+        // Task list checkboxes — intercept before anything else
+        $article[0] && $article[0].addEventListener('change', function (e) {
+            if (e.target && e.target.getAttribute('data-task-index') !== null) {
+                handleTaskCheck(e.target);
+            }
+        });
         $article.on('click' + ns, BLOCK_SELECTOR, function (e) {
             // Ignore clicks on existing markers / popovers
             if ($(e.target).closest(SELECTORS.marker).length) return;
@@ -567,6 +626,7 @@ const Interactions = (function () {
         var interactions = loadInteractions();
         setState({ initialized: true, interactions: interactions });
         renderAllMarkers();
+        restoreTaskChecks();
         bindEvents();
         log('Initialized with', interactions.length, 'interaction(s)');
     }
