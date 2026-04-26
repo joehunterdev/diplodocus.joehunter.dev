@@ -199,7 +199,9 @@ class Router
 
         if (!$project) return '/';
         if (!$page)    return '/' . rawurlencode($project) . '/';
-        return '/' . rawurlencode($project) . '/' . rawurlencode($page);
+        // Strip leading numeric order prefix (e.g. "10-" → "") for cleaner URLs
+        $pageSlug = preg_replace('/^\d+-/', '', $page);
+        return '/' . rawurlencode($project) . '/' . rawurlencode($pageSlug);
     }
 
     /**

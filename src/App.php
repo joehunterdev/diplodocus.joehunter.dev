@@ -103,7 +103,18 @@ class App
             $searchIndex = $this->renderer->buildProjectSearchIndex($project);
 
             if ($page) {
-                $rendered = $this->renderer->render($project, $page);
+                // Resolve clean URL slug (e.g. "theming-and-branding") to the
+                // actual filename slug (e.g. "10-theming-and-branding") for rendering.
+                // Supports both the full slug and the stripped form.
+                $fileSlug = $page;
+                foreach ($pages as $p) {
+                    $urlSlug = preg_replace('/^\d+-/', '', $p['slug']);
+                    if ($p['slug'] === $page || $urlSlug === $page) {
+                        $fileSlug = $p['slug'];
+                        break;
+                    }
+                }
+                $rendered = $this->renderer->render($project, $fileSlug);
                 if ($rendered) {
                     $content    = $rendered['html'];
                     $toc        = $rendered['toc'];

@@ -81,7 +81,10 @@ use Diplodocus\TemplateEngine as T;
                 if (isset($pageIndex)) {
                     $isActive = ($idx === $pageIndex);
                 } else {
-                    $isActive = ($page['slug'] ?? $page['name'] ?? '') === ($currentPage ?? '');
+                    $rawSlug  = $page['slug'] ?? $page['name'] ?? '';
+                    $urlSlug  = preg_replace('/^\d+-/', '', $rawSlug);
+                    $curClean = preg_replace('/^\d+-/', '', $currentPage ?? '');
+                    $isActive = ($urlSlug === $curClean);
                 }
                 $pageHref = $page['slug'] ?? $page['name'] ?? '';
             ?>
