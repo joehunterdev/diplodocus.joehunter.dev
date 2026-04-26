@@ -26,14 +26,14 @@ class App
     {
         $this->config = Config::getInstance();
         $basePath = $this->config->get('base_path');
-        $projectsPath = $this->config->get('projects_paths', $this->config->get('projects_path'));
+        $spacesPath = $this->config->get('projects_paths', $this->config->get('projects_path'));
         $excludedDirs = $this->config->get('excluded_dirs', []);
 
         // Router and ContentRenderer still need a primary single path for file serving
-        $primaryPath = is_array($projectsPath) ? $projectsPath[0] : $projectsPath;
+        $primaryPath = is_array($spacesPath) ? $spacesPath[0] : $spacesPath;
         $this->router = new Router($primaryPath);
-        $this->projectManager = new ProjectManager($projectsPath, $excludedDirs);
-        $this->renderer = new ContentRenderer($projectsPath);
+        $this->projectManager = new ProjectManager($spacesPath, $excludedDirs);
+        $this->renderer = new ContentRenderer($spacesPath);
         $this->validator = new Validator($basePath);
         $this->template = new TemplateEngine($this->config->get('templates_path'));
     }
