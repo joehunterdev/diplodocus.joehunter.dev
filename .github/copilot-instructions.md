@@ -75,9 +75,9 @@ config.example.php      Committed template for config.php
 ---
 
 ## CSS conventions
-- All design tokens live in `assets/css/theme.css` as `--nv-*` CSS variables
-- `diplodocus.css` uses only `var(--nv-*)` — no hardcoded hex or px magic numbers
-- Key layout variables: `--nv-sidebar-width`, `--nv-toc-width`, `--nv-content-max`
+- All design tokens live in `assets/css/theme.css` as `--dc-*` CSS variables
+- `diplodocus.css` uses only `var(--dc-*)` — no hardcoded hex or px magic numbers
+- Key layout variables: `--dc-sidebar-width`, `--dc-toc-width`, `--dc-content-max`
 - Asset paths in templates must be **root-relative** (`/assets/css/...`), never relative, so clean URLs don't break them
 
 ---

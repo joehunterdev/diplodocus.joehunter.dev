@@ -2,6 +2,9 @@
 /config.php
 /config.local.php
 
+# Private documentation (local only, not committed)
+private_md/
+
 # Backups + caches
 .backup/
 .spaces/

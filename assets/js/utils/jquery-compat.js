@@ -81,12 +81,12 @@
             },
 
             addClass: function (c) {
-                elements.forEach(function (el) { c.split(' ').forEach(function(cls){ if(cls) el.classList.add(cls); }); });
+                elements.forEach(function (el) { c.split(' ').forEach(function (cls) { if (cls) el.classList.add(cls); }); });
                 return api;
             },
 
             removeClass: function (c) {
-                elements.forEach(function (el) { c.split(' ').forEach(function(cls){ if(cls) el.classList.remove(cls); }); });
+                elements.forEach(function (el) { c.split(' ').forEach(function (cls) { if (cls) el.classList.remove(cls); }); });
                 return api;
             },
 
@@ -206,6 +206,9 @@
                 return elements[0] ? elements[0].contains(el instanceof HTMLElement ? el : el.get(0)) : false;
             },
         };
+
+        // Expose numeric index properties so $obj[0], $obj[1], etc. work like real jQuery
+        elements.forEach(function (el, i) { api[i] = el; });
 
         return api;
     }

@@ -1,5 +1,0 @@
-# Ignore all spaces except getting-started
-*
-!getting-started/
-!getting-started/**
-!.gitignore

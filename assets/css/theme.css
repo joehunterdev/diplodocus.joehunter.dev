@@ -2,133 +2,133 @@
    Diplodocus — Core Theme Variables (Mintlify-aligned)
    --------------------------------------------------------------------------
    THE contract: every colour, font, radius, and shadow lives here.
-   Structural CSS (notiva.css) must only reference var(--nv-*) — no hex.
+   Structural CSS (notiva.css) must only reference var(--dc-*) — no hex.
    Override this file to rebrand the whole site — nothing else need change.
    ========================================================================== */
 
 :root {
   /* ── Brand (Diplodocus teal + purple) ──────────────────────── */
-  --nv-brand-primary: rgb(0 185 158);
+  --dc-brand-primary: rgb(0 185 158);
   /* #00B99E — logo cyan-teal, light mode */
-  --nv-brand-primary-hover: rgb(0 162 138);
+  --dc-brand-primary-hover: rgb(0 162 138);
   /* #00A28A */
-  --nv-brand-primary-soft: rgb(0 185 158 / 0.08);
-  --nv-brand-primary-muted: rgb(0 185 158 / 0.14);
-  --nv-brand-primary-light: rgb(0 232 196);
+  --dc-brand-primary-soft: rgb(0 185 158 / 0.08);
+  --dc-brand-primary-muted: rgb(0 185 158 / 0.14);
+  --dc-brand-primary-light: rgb(0 232 196);
   /* #00E8C4 — vivid cyan-teal for dark mode */
-  --nv-brand-accent: rgb(139 92 246);
+  --dc-brand-accent: rgb(139 92 246);
   /* #8B5CF6 — logo purple */
 
   /* ── Grayscale (Mintlify warm-neutral) ─────────────────────── */
-  --nv-gray-50: rgb(243 246 244);
+  --dc-gray-50: rgb(243 246 244);
   /* #f3f6f4 */
-  --nv-gray-100: rgb(238 241 239);
+  --dc-gray-100: rgb(238 241 239);
   /* #eef1ef */
-  --nv-gray-200: rgb(223 225 224);
+  --dc-gray-200: rgb(223 225 224);
   /* #dfe1e0 */
-  --nv-gray-300: rgb(206 209 207);
+  --dc-gray-300: rgb(206 209 207);
   /* #ced1cf */
-  --nv-gray-400: rgb(159 161 160);
+  --dc-gray-400: rgb(159 161 160);
   /* #9fa1a0 */
-  --nv-gray-500: rgb(112 115 113);
+  --dc-gray-500: rgb(112 115 113);
   /* #707371 */
-  --nv-gray-600: rgb(80 83 81);
+  --dc-gray-600: rgb(80 83 81);
   /* #505351 */
-  --nv-gray-700: rgb(63 65 64);
+  --dc-gray-700: rgb(63 65 64);
   /* #3f4140 */
-  --nv-gray-800: rgb(38 40 39);
+  --dc-gray-800: rgb(38 40 39);
   /* #262827 */
-  --nv-gray-900: rgb(23 26 24);
+  --dc-gray-900: rgb(23 26 24);
   /* #171a18 */
-  --nv-gray-950: rgb(10 13 12);
+  --dc-gray-950: rgb(10 13 12);
   /* #0a0d0c */
 
   /* ── Surfaces ──────────────────────────────────────────────── */
-  --nv-bg-base: #ffffff;
-  --nv-bg-surface: #ffffff;
-  --nv-bg-elevated: var(--nv-gray-50);
-  --nv-bg-sidebar: #ffffff;
-  --nv-bg-code: var(--nv-gray-900);
-  --nv-bg-code-alt: var(--nv-gray-800);
-  --nv-bg-hover: var(--nv-gray-100);
+  --dc-bg-base: #ffffff;
+  --dc-bg-surface: #ffffff;
+  --dc-bg-elevated: var(--dc-gray-50);
+  --dc-bg-sidebar: #ffffff;
+  --dc-bg-code: var(--dc-gray-900);
+  --dc-bg-code-alt: var(--dc-gray-800);
+  --dc-bg-hover: var(--dc-gray-100);
 
   /* ── Text ──────────────────────────────────────────────────── */
-  --nv-text-primary: var(--nv-gray-800);
-  --nv-text-secondary: var(--nv-gray-600);
-  --nv-text-muted: var(--nv-gray-500);
-  --nv-text-subtle: var(--nv-gray-400);
-  --nv-text-inverse: #ffffff;
-  --nv-text-link: var(--nv-brand-primary);
-  --nv-text-link-hover: var(--nv-brand-primary-hover);
-  --nv-text-code: var(--nv-gray-200);
+  --dc-text-primary: var(--dc-gray-800);
+  --dc-text-secondary: var(--dc-gray-600);
+  --dc-text-muted: var(--dc-gray-500);
+  --dc-text-subtle: var(--dc-gray-400);
+  --dc-text-inverse: #ffffff;
+  --dc-text-link: var(--dc-brand-primary);
+  --dc-text-link-hover: var(--dc-brand-primary-hover);
+  --dc-text-code: var(--dc-gray-200);
 
   /* ── Borders & dividers ────────────────────────────────────── */
-  --nv-border-subtle: var(--nv-gray-100);
-  --nv-border-default: var(--nv-gray-200);
-  --nv-border-strong: var(--nv-gray-300);
-  --nv-border-focus: var(--nv-brand-primary);
+  --dc-border-subtle: var(--dc-gray-100);
+  --dc-border-default: var(--dc-gray-200);
+  --dc-border-strong: var(--dc-gray-300);
+  --dc-border-focus: var(--dc-brand-primary);
 
   /* ── Typography ────────────────────────────────────────────── */
-  --nv-font-body: 'Inter', -apple-system, BlinkMacSystemFont,
+  --dc-font-body: 'Inter', -apple-system, BlinkMacSystemFont,
     'Segoe UI', system-ui, Roboto, sans-serif;
-  --nv-font-mono: 'JetBrains Mono', 'SF Mono', SFMono-Regular,
+  --dc-font-mono: 'JetBrains Mono', 'SF Mono', SFMono-Regular,
     Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
-  --nv-font-size-base: 16px;
-  --nv-line-height: 1.625;
+  --dc-font-size-base: 16px;
+  --dc-line-height: 1.625;
 
   /* ── Spacing scale ─────────────────────────────────────────── */
-  --nv-space-1: 0.25rem;
-  --nv-space-2: 0.5rem;
-  --nv-space-3: 0.75rem;
-  --nv-space-4: 1rem;
-  --nv-space-5: 1.25rem;
-  --nv-space-6: 1.5rem;
-  --nv-space-8: 2rem;
+  --dc-space-1: 0.25rem;
+  --dc-space-2: 0.5rem;
+  --dc-space-3: 0.75rem;
+  --dc-space-4: 1rem;
+  --dc-space-5: 1.25rem;
+  --dc-space-6: 1.5rem;
+  --dc-space-8: 2rem;
 
   /* ── Radii (Mintlify) ──────────────────────────────────────── */
-  --nv-radius-sm: 0.375rem;
+  --dc-radius-sm: 0.375rem;
   /* 6px  buttons/inline code */
-  --nv-radius-md: 0.5rem;
+  --dc-radius-md: 0.5rem;
   /* 8px  inputs */
-  --nv-radius-lg: 0.875rem;
+  --dc-radius-lg: 0.875rem;
   /* 14px code blocks */
-  --nv-radius-xl: 1rem;
+  --dc-radius-xl: 1rem;
   /* 16px cards */
-  --nv-radius-full: 9999px;
+  --dc-radius-full: 9999px;
   /* pill toggles */
 
   /* ── Shadows (Mintlify is mostly shadowless, uses borders) ── */
-  --nv-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04);
-  --nv-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05),
+  --dc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04);
+  --dc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05),
     0 2px 4px -2px rgb(0 0 0 / 0.04);
-  --nv-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.06),
+  --dc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.06),
     0 4px 6px -4px rgb(0 0 0 / 0.04);
-  --nv-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08),
+  --dc-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08),
     0 8px 10px -6px rgb(0 0 0 / 0.04);
-  --nv-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.16);
+  --dc-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.16);
 
   /* ── Syntax highlighting (hljs / shiki-ish) ────────────────── */
-  --nv-hl-keyword: #ff7b72;
-  --nv-hl-string: #79c0ff;
-  --nv-hl-number: #f0883e;
-  --nv-hl-comment: #8b949e;
+  --dc-hl-keyword: #ff7b72;
+  --dc-hl-string: #79c0ff;
+  --dc-hl-number: #f0883e;
+  --dc-hl-comment: #8b949e;
 
   /* ── Layout dimensions (Mintlify) ──────────────────────────── */
-  --nv-sidebar-width: 16rem;
+  --dc-sidebar-width: 16rem;
   /* 256px — was 288px */
-  --nv-toc-width: 14rem;
+  --dc-toc-width: 14rem;
   /* 224px — was 288px */
-  --nv-header-height: 3rem;
+  --dc-header-height: 3rem;
   /* 48px  */
-  --nv-content-max: 860px;
+  --dc-content-max: 860px;
   /* prose container — was 696px */
 
   /* ── Table headers (neutral Mintlify-style) ────────────────── */
-  --nv-table-header-bg: var(--nv-gray-50);
-  --nv-table-header-text: var(--nv-text-primary);
-  --nv-table-row-alt: var(--nv-gray-50);
-  --nv-table-row-hover: var(--nv-gray-100);
+  --dc-table-header-bg: var(--dc-gray-50);
+  --dc-table-header-text: var(--dc-text-primary);
+  --dc-table-row-alt: var(--dc-gray-50);
+  --dc-table-row-hover: var(--dc-gray-100);
 }
 
 /* Dark-mode override — same variable names, different values.
@@ -137,38 +137,38 @@
 html[data-theme="dark"],
 body[data-theme="dark"] {
   /* ── Backgrounds (Mintlify near-black) ─────────────────────── */
-  --nv-bg-base:    rgb(10 11 11);
+  --dc-bg-base: rgb(10 11 11);
   /* #0a0b0b — page */
-  --nv-bg-surface: rgb(14 16 16);
+  --dc-bg-surface: rgb(14 16 16);
   /* #0e1010 — cards, header */
-  --nv-bg-elevated: rgb(20 23 23);
+  --dc-bg-elevated: rgb(20 23 23);
   /* #141717 — slightly lifted panels */
-  --nv-bg-sidebar: rgb(10 11 11);
+  --dc-bg-sidebar: rgb(10 11 11);
   /* same as base */
-  --nv-bg-hover:   rgb(28 32 32);
+  --dc-bg-hover: rgb(28 32 32);
   /* hover state */
 
   /* ── Text ──────────────────────────────────────────────────── */
-  --nv-text-primary:   var(--nv-gray-100);
-  --nv-text-secondary: var(--nv-gray-300);
-  --nv-text-muted:     var(--nv-gray-400);
-  --nv-text-subtle:    var(--nv-gray-600);
+  --dc-text-primary: var(--dc-gray-100);
+  --dc-text-secondary: var(--dc-gray-300);
+  --dc-text-muted: var(--dc-gray-400);
+  --dc-text-subtle: var(--dc-gray-600);
 
   /* ── Borders ───────────────────────────────────────────────── */
-  --nv-border-subtle:  rgb(255 255 255 / 0.05);
-  --nv-border-default: rgb(255 255 255 / 0.09);
-  --nv-border-strong:  rgb(255 255 255 / 0.15);
+  --dc-border-subtle: rgb(255 255 255 / 0.05);
+  --dc-border-default: rgb(255 255 255 / 0.09);
+  --dc-border-strong: rgb(255 255 255 / 0.15);
 
   /* ── Tables ────────────────────────────────────────────────── */
-  --nv-table-header-bg: var(--nv-gray-800);
-  --nv-table-row-alt:   var(--nv-gray-900);
-  --nv-table-row-hover: var(--nv-gray-800);
+  --dc-table-header-bg: var(--dc-gray-800);
+  --dc-table-row-alt: var(--dc-gray-900);
+  --dc-table-row-hover: var(--dc-gray-800);
 
   /* ── Brand (vivid cyan-teal for dark backgrounds) ───────────── */
-  --nv-brand-primary:       var(--nv-brand-primary-light);
+  --dc-brand-primary: var(--dc-brand-primary-light);
   /* #00E8C4 */
-  --nv-brand-primary-hover: rgb(0 208 176);
+  --dc-brand-primary-hover: rgb(0 208 176);
   /* slightly dimmer on hover */
-  --nv-brand-primary-soft:  rgb(0 232 196 / 0.10);
-  --nv-brand-primary-muted: rgb(0 232 196 / 0.18);
+  --dc-brand-primary-soft: rgb(0 232 196 / 0.10);
+  --dc-brand-primary-muted: rgb(0 232 196 / 0.18);
 }

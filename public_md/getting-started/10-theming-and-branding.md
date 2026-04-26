@@ -9,7 +9,7 @@ every page, sidebar, table, button, and code block on your site repaints.
 
 `theme.css` contains **only CSS custom properties**. No selectors, no
 layout, no `!important`. Every colour, font, radius, and shadow used
-elsewhere in the engine is a `var(--nv-*)` reference back to this file.
+elsewhere in the engine is a `var(--dc-*)` reference back to this file.
 
 This means:
 
@@ -22,50 +22,50 @@ This means:
 ```css
 :root {
   /* Brand */
-  --nv-brand-primary:       #1e3a5f;
-  --nv-brand-primary-hover: #2d4a6f;
-  --nv-brand-accent:        #3b82f6;
+  --dc-brand-primary:       #1e3a5f;
+  --dc-brand-primary-hover: #2d4a6f;
+  --dc-brand-accent:        #3b82f6;
 
   /* Surfaces */
-  --nv-bg-base:     #f3f4f6;
-  --nv-bg-surface:  #ffffff;
-  --nv-bg-sidebar:  #ffffff;
-  --nv-bg-code:     #0f172a;
+  --dc-bg-base:     #f3f4f6;
+  --dc-bg-surface:  #ffffff;
+  --dc-bg-sidebar:  #ffffff;
+  --dc-bg-code:     #0f172a;
 
   /* Text */
-  --nv-text-primary:   #111827;
-  --nv-text-secondary: #374151;
-  --nv-text-muted:     #6b7280;
+  --dc-text-primary:   #111827;
+  --dc-text-secondary: #374151;
+  --dc-text-muted:     #6b7280;
 
   /* Borders */
-  --nv-border-subtle: #e5e7eb;
-  --nv-border-strong: #9ca3af;
+  --dc-border-subtle: #e5e7eb;
+  --dc-border-strong: #9ca3af;
 
   /* Typography */
-  --nv-font-body: 'Inter', system-ui, sans-serif;
-  --nv-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --dc-font-body: 'Inter', system-ui, sans-serif;
+  --dc-font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Spacing */
-  --nv-space-1: 0.25rem;
-  --nv-space-4: 1rem;
-  --nv-space-8: 2rem;
+  --dc-space-1: 0.25rem;
+  --dc-space-4: 1rem;
+  --dc-space-8: 2rem;
 
   /* Radii */
-  --nv-radius-sm: 0.25rem;
-  --nv-radius-md: 0.5rem;
-  --nv-radius-lg: 0.75rem;
+  --dc-radius-sm: 0.25rem;
+  --dc-radius-md: 0.5rem;
+  --dc-radius-lg: 0.75rem;
 
   /* Shadows */
-  --nv-shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-  --nv-shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+  --dc-shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --dc-shadow-md: 0 4px 12px rgba(0,0,0,0.15);
 
   /* Syntax highlighting */
-  --nv-hl-keyword: #ff7b72;
-  --nv-hl-string:  #79c0ff;
+  --dc-hl-keyword: #ff7b72;
+  --dc-hl-string:  #79c0ff;
 
   /* Tables */
-  --nv-table-header-bg:   var(--nv-brand-primary);
-  --nv-table-header-text: #ffffff;
+  --dc-table-header-bg:   var(--dc-brand-primary);
+  --dc-table-header-text: #ffffff;
 }
 ```
 
@@ -77,12 +77,12 @@ Easiest possible rebrand — change 3 lines:
 
 ```diff
   :root {
--   --nv-brand-primary:       #1e3a5f;
--   --nv-brand-primary-hover: #2d4a6f;
--   --nv-brand-accent:        #3b82f6;
-+   --nv-brand-primary:       #10b981;  /* emerald */
-+   --nv-brand-primary-hover: #059669;
-+   --nv-brand-accent:        #14b8a6;  /* teal */
+-   --dc-brand-primary:       #1e3a5f;
+-   --dc-brand-primary-hover: #2d4a6f;
+-   --dc-brand-accent:        #3b82f6;
++   --dc-brand-primary:       #10b981;  /* emerald */
++   --dc-brand-primary-hover: #059669;
++   --dc-brand-accent:        #14b8a6;  /* teal */
   }
 ```
 
@@ -96,9 +96,9 @@ Diplodocus ships with a dark-mode override block in the same file:
 ```css
 :root[data-theme="dark"],
 body[data-theme="dark"] {
-  --nv-bg-base:       #0f172a;
-  --nv-bg-surface:    #1e293b;
-  --nv-text-primary:  #f8fafc;
+  --dc-bg-base:       #0f172a;
+  --dc-bg-surface:    #1e293b;
+  --dc-text-primary:  #f8fafc;
   /* … */
 }
 ```
@@ -161,8 +161,8 @@ override file), then change the variable:
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono');
 
 :root {
-  --nv-font-body: 'Inter', sans-serif;
-  --nv-font-mono: 'JetBrains Mono', monospace;
+  --dc-font-body: 'Inter', sans-serif;
+  --dc-font-mono: 'JetBrains Mono', monospace;
 }
 ```
 
@@ -180,4 +180,4 @@ respond to theme changes. Move it into `theme.css` as a new variable.
 
 ## Next
 
-- [Deploying](12-deploying.md)
+- [Deploying](11-deploying.md)

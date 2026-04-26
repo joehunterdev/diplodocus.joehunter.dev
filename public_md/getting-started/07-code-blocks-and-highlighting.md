@@ -161,8 +161,8 @@ LIMIT 10;
 
 ```css
 :root {
-  --nv-brand-primary: #1e3a5f;
-  --nv-text-primary: #111827;
+  --dc-brand-primary: #1e3a5f;
+  --dc-text-primary: #111827;
 }
 ```
 
@@ -178,17 +178,17 @@ LIMIT 10;
 ## Inline code
 
 Wrap short snippets in single backticks: `const x = 1;`, `php cli.php lint`,
-`--nv-brand-primary`.
+`--dc-brand-primary`.
 
 ## Changing the theme
 
 Syntax colours live in `assets/css/theme.css`:
 
 ```css
---nv-hl-keyword: #ff7b72;
---nv-hl-string:  #79c0ff;
---nv-hl-number:  #f0883e;
---nv-hl-comment: #6a9955;
+--dc-hl-keyword: #ff7b72;
+--dc-hl-string:  #79c0ff;
+--dc-hl-number:  #f0883e;
+--dc-hl-comment: #6a9955;
 ```
 
 Edit those four lines to restyle every code block in every project.

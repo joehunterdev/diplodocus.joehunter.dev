@@ -9,22 +9,21 @@
 
 use Diplodocus\TemplateEngine as T;
 ?>
-<aside data-sidebar class="nv-sidebar">
+<aside data-sidebar class="dc-sidebar">
 
     <!-- Brand -->
-    <a href="/" class="nv-sidebar-brand">
+    <a href="/" class="dc-sidebar-brand">
         <?php if (!empty($logoUrl)): ?>
-            <?php $logo = ($logoUrl[0] === '/' || strpos($logoUrl, 'http') === 0) ? $logoUrl : '/' . $logoUrl; ?>
-            <img src="<?= T::e($logo) ?>" alt="" style="height:1.5rem;width:auto;">
+            <img src="<?= T::e($logoUrl) ?>" alt="<?= T::e($appName ?? 'Diplodocus') ?>" style="height:1.75rem;width:auto;display:block;">
         <?php else: ?>
-            <span class="nv-sidebar-brand-mark">D</span>
+            <span class="dc-sidebar-brand-mark">D</span>
         <?php endif; ?>
-        <span class="nv-sidebar-brand-name"><?= T::e($appName ?? 'Diplodocus') ?></span>
+        <span class="dc-sidebar-brand-name"><?= T::e($appName ?? 'Diplodocus') ?></span>
     </a>
 
     <!-- Search -->
     <div style="position:relative;">
-        <input type="text" data-sidebar-search class="nv-sidebar-search"
+        <input type="text" data-sidebar-search class="dc-sidebar-search"
             placeholder="Search documentation…">
     </div>
 
@@ -32,22 +31,22 @@ use Diplodocus\TemplateEngine as T;
 
         <?php if (empty($currentProject)): ?>
             <!-- ── HOME: list all spaces ── -->
-            <p class="nv-sidebar-section-label">Spaces</p>
+            <p class="dc-sidebar-section-label">Project</p>
             <?php foreach ($projects as $project): ?>
                 <a href="<?= $router->url(['project' => $project['slug']]) ?>"
-                    data-nav-link class="nv-sidebar-link">
+                    data-nav-link class="dc-sidebar-link">
                     <?= T::e($project['name']) ?>
-                    <span class="nv-sidebar-badge"><?= (int)$project['fileCount'] ?></span>
+                    <span class="dc-sidebar-badge"><?= (int)$project['fileCount'] ?></span>
                 </a>
             <?php endforeach; ?>
 
         <?php else: ?>
             <!-- ── SPACE: back link + pages ── -->
-            <a href="<?= $router->url([]) ?>" data-nav-link class="nv-sidebar-back">
+            <a href="<?= $router->url([]) ?>" data-nav-link class="dc-sidebar-back">
                 <svg style="width:.8rem;height:.8rem;margin-right:.4rem;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                All Spaces
+                All Project
             </a>
 
             <?php
@@ -59,14 +58,14 @@ use Diplodocus\TemplateEngine as T;
                 }
             }
             ?>
-            <p class="nv-sidebar-section-label" style="margin-top:.75rem;">
+            <p class="dc-sidebar-section-label" style="margin-top:.75rem;">
                 <?= T::e($spaceName) ?>
             </p>
 
             <?php foreach ($pages as $page): ?>
                 <?php $isActive = $page['slug'] === ($currentPage ?? ''); ?>
                 <a href="<?= $router->url(['project' => $currentProject, 'page' => $page['slug']]) ?>"
-                    data-nav-link class="nv-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
+                    data-nav-link class="dc-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
                     <?= T::e($page['name']) ?>
                 </a>
             <?php endforeach; ?>
@@ -75,21 +74,15 @@ use Diplodocus\TemplateEngine as T;
     </nav>
 
     <!-- Footer -->
-    <div class="nv-sidebar-footer">
+    <div class="dc-sidebar-footer">
         <?php if (!empty($currentProject)): ?>
-            <a href="<?= $router->url(['action' => 'download-project', 'project' => $currentProject]) ?>" class="nv-sidebar-link">
+            <a href="<?= $router->url(['action' => 'download-project', 'project' => $currentProject]) ?>" class="dc-sidebar-link">
                 <svg style="width:.85rem;height:.85rem;margin-right:.4rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 Download Docs
             </a>
         <?php endif; ?>
-
-        <!-- Branding -->
-        <a href="https://joehunter.es" target="_blank" rel="noopener" class="nv-sidebar-credit">
-            <span><?= ($v = $config->get('version')) ? ' v' . T::e($v) : '' ?> - Joe Hunter</span>
-            <img src="/assets/img/jh-logo.png" alt="Joe Hunter" class="nv-sidebar-credit-logo">
-        </a>
     </div>
 
 </aside>

@@ -66,6 +66,6 @@ return [
     'og_image'         => '/example.png',   // 1200×630 image at root
     'author_url'       => 'https://joehunter.es',
     'github_url'       => 'https://github.com/joehunterdev',
-    // Spaces listed here will be noindexed and excluded from sitemap
+    // Project listed here will be noindexed and excluded from sitemap
     'private_spaces'   => ['esa.clublacosta.com'],
 ];

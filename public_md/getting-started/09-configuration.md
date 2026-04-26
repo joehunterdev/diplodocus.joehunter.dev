@@ -142,14 +142,14 @@ Most branding changes should happen in `assets/css/theme.css`, not in
 
 ```css
 :root {
-  --nv-brand-primary:       #1e3a5f;  /* ← your brand colour */
-  --nv-brand-primary-hover: #2d4a6f;
-  --nv-brand-accent:        #3b82f6;
+  --dc-brand-primary:       #1e3a5f;  /* ← your brand colour */
+  --dc-brand-primary-hover: #2d4a6f;
+  --dc-brand-accent:        #3b82f6;
   /* …everything else inherits from these */
 }
 ```
 
-See [Theming & Branding](11-theming-and-branding.md) for the full theme
+See [Theming & Branding](10-theming-and-branding.md) for the full theme
 reference.
 
 ## Environment-specific config
@@ -168,5 +168,4 @@ return [
 
 ## Next
 
-- [CLI tools](10-cli-tools.md)
-- [Theming & branding](11-theming-and-branding.md)
+- [Theming & branding](10-theming-and-branding.md)

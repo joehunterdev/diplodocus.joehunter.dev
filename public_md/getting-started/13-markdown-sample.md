@@ -88,7 +88,7 @@ add two trailing spaces before pressing Enter — like the break above.
 1. Prepare the environment
    - Install PHP 7.4+
    - Configure your web server
-2. Drop your `spaces/` folder in place
+2. Drop your `public/` folder in place
 3. Open a browser and visit the root URL
 
 ---
@@ -126,7 +126,7 @@ Diplodocus uses the `**Label** — body` pattern inside a blockquote:
 >
 > ```bash
 > # You can nest code blocks inside callouts too
-> php cli.php lint spaces/getting-started/
+> php cli.php lint public/getting-started/
 > ```
 
 ---
@@ -142,7 +142,7 @@ in `config.php` to enable dark mode.
 
 ```bash
 #!/usr/bin/env bash
-for file in spaces/getting-started/*.md; do
+for file in public/getting-started/*.md; do
     echo "Linting: $file"
     php cli.php lint "$file"
 done
@@ -232,7 +232,7 @@ Images inside table cells:
 | ![Hero](attachments/01a-hero.png) | The Diplodocus welcome page hero image |
 
 > **Tip** — Name attachment files using the page-number prefix convention:
-> `12a-description.png` for the first image on page `12`.
+> `13a-description.png` for the first image on page `13`.
 > See [Attachments & Images](05-attachments-and-images.md) for the full guide.
 
 ---
@@ -319,7 +319,7 @@ sequenceDiagram
     participant ContentRenderer
     participant Parsedown
 
-    Browser->>Router: GET /getting-started/12-markdown-sample
+    Browser->>Router: GET /getting-started/13-markdown-sample
     Router->>ContentRenderer: render(page)
     ContentRenderer->>Parsedown: toHtml(markdown)
     Parsedown-->>ContentRenderer: HTML string
