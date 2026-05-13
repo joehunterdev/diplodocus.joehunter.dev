@@ -43,7 +43,7 @@ That's the whole product.
 ## You are here
 
 This `getting-started/` folder you're reading **is** a Diplodocus project. Every
-feature the engine supports is demonstrated in one of the 12 pages in the
+feature the engine supports is demonstrated in one of the 13 pages in the
 sidebar. Click through them in order and you'll have seen the whole product.
 
 > **Tip** — The sidebar on the left lists every page in this guide. The

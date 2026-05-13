@@ -6,10 +6,15 @@
 
 namespace Diplodocus;
 
+use Diplodocus\Spec\SpecHandler;
+use Diplodocus\Spec\FlatNumberedSpec;
+use Diplodocus\Spec\FeatureDrivenSpec;
+
 class ProjectManager
 {
     private array $projectsPaths;
     private array $excludedDirs;
+    private array $specCache = [];
 
     public function __construct($projectsPath, array $excludedDirs = [])
     {
@@ -37,48 +42,73 @@ class ProjectManager
                 if ($item[0] === '.') continue;
                 if (in_array($item, $this->excludedDirs)) continue;
                 $path = $projectsPath . DIRECTORY_SEPARATOR . $item;
-                if (is_dir($path)) {
-                    $mdFiles = glob($path . DIRECTORY_SEPARATOR . '*.md');
-                    if (!empty($mdFiles)) {
-                        $projects[] = [
-                            'slug'      => $item,
-                            'name'      => $this->formatName($item),
-                            'path'      => $path,
-                            'fileCount' => count($mdFiles)
-                        ];
-                    }
-                }
+                if (!is_dir($path)) continue;
+
+                $hasMarker = is_file($path . DIRECTORY_SEPARATOR . '.diplodocus.json');
+                $mdFiles = glob($path . DIRECTORY_SEPARATOR . '*.md');
+                if (empty($mdFiles) && !$hasMarker) continue;
+
+                $projects[] = [
+                    'slug'      => $item,
+                    'name'      => $this->formatName($item),
+                    'path'      => $path,
+                    'fileCount' => count($mdFiles),
+                ];
             }
         }
         return $projects;
     }
 
     /**
-     * Get all markdown pages for a project
+     * Get all markdown pages for a project, delegating to the project's spec handler.
      */
     public function getPages(string $projectSlug): array
     {
         $projectPath = $this->getProjectPath($projectSlug);
-        if (!is_dir($projectPath)) return [];
+        return $this->getSpec($projectSlug)->getPages($projectPath);
+    }
 
-        $files = glob($projectPath . DIRECTORY_SEPARATOR . '*.md');
-        $pages = [];
+    /**
+     * Get the sidebar tree (mixed pages + groups). Spec-specific shape.
+     */
+    public function getSidebarTree(string $projectSlug): array
+    {
+        $projectPath = $this->getProjectPath($projectSlug);
+        return $this->getSpec($projectSlug)->getSidebarTree($projectPath);
+    }
 
-        foreach ($files as $file) {
-            $filename = basename($file, '.md');
-            if (preg_match('/^(\d+)-(.+)$/', $filename, $matches)) {
-                $pages[] = [
-                    'order' => (int)$matches[1],
-                    'slug' => $filename,
-                    'name' => $this->formatName($matches[2]),
-                    'path' => $file
-                ];
+    /**
+     * Resolve the spec handler for a project. Reads `.diplodocus.json` from the
+     * project root if present; defaults to flat-numbered otherwise.
+     */
+    public function getSpec(string $projectSlug): SpecHandler
+    {
+        if (isset($this->specCache[$projectSlug])) {
+            return $this->specCache[$projectSlug];
+        }
+
+        $markerPath = $this->getProjectPath($projectSlug) . DIRECTORY_SEPARATOR . '.diplodocus.json';
+        $specName = 'flat-numbered';
+
+        if (is_file($markerPath)) {
+            $decoded = json_decode((string)file_get_contents($markerPath), true);
+            if (is_array($decoded) && !empty($decoded['spec'])) {
+                $specName = (string)$decoded['spec'];
             }
         }
 
-        usort($pages, fn($a, $b) => $a['order'] <=> $b['order']);
+        return $this->specCache[$projectSlug] = $this->buildSpec($specName);
+    }
 
-        return $pages;
+    private function buildSpec(string $name): SpecHandler
+    {
+        switch ($name) {
+            case 'feature-driven':
+                return new FeatureDrivenSpec();
+            case 'flat-numbered':
+            default:
+                return new FlatNumberedSpec();
+        }
     }
 
     /**

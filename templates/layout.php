@@ -100,13 +100,13 @@ use Diplodocus\TemplateEngine as T;
                 <?php if ($prevPage): ?>
                     <a href="<?= $router->url(['project' => $project['slug'], 'page' => $prevPage['slug']]) ?>" class="dc-nav-link dc-nav-prev" style="flex:1;">
                         <span style="font-size:0.875rem; color:var(--dc-text-muted);">← Previous</span>
-                        <div style="font-weight:500;"><?= T::e($prevPage['displayName']) ?></div>
+                        <div style="font-weight:500;"><?= T::e($prevPage['name'] ?? $prevPage['slug'] ?? '') ?></div>
                     </a>
                 <?php endif; ?>
                 <?php if ($nextPage): ?>
                     <a href="<?= $router->url(['project' => $project['slug'], 'page' => $nextPage['slug']]) ?>" class="dc-nav-link dc-nav-next" style="flex:1; text-align:right;">
                         <span style="font-size:0.875rem; color:var(--dc-text-muted);">Next →</span>
-                        <div style="font-weight:500;"><?= T::e($nextPage['displayName']) ?></div>
+                        <div style="font-weight:500;"><?= T::e($nextPage['name'] ?? $nextPage['slug'] ?? '') ?></div>
                     </a>
                 <?php endif; ?>
             </nav>

@@ -15,8 +15,9 @@ require_once __DIR__ . '/../lib/DiplodocusMarkdown.php';
 class ContentRenderer
 {
     private array $projectsPaths;
+    private ?ProjectManager $projectManager;
 
-    public function __construct($projectsPath)
+    public function __construct($projectsPath, ?ProjectManager $projectManager = null)
     {
         if (is_array($projectsPath)) {
             $this->projectsPaths = array_map(function ($p) {
@@ -25,43 +26,24 @@ class ContentRenderer
         } else {
             $this->projectsPaths = [rtrim($projectsPath, '/\\')];
         }
+        $this->projectManager = $projectManager;
     }
 
     /**
-     * Load project structure: pages list, attachments, metadata
-     * Per-request (no caching) — always checks file mtime
+     * Load project structure: pages list, attachments, metadata.
+     * Page discovery is delegated to the project's spec handler via ProjectManager
+     * (so both flat-numbered and feature-driven projects work). Per-request (no caching).
      */
     public function loadProject(string $projectSlug): ?array
     {
         $projectPath = $this->findProjectPath($projectSlug);
         if ($projectPath === null) return null;
 
-        // Scan markdown files
-        $files = @scandir($projectPath);
-        if ($files === false) return null;
+        $pages = $this->projectManager
+            ? $this->projectManager->getPages($projectSlug)
+            : [];
 
-        $pages = [];
-        foreach ($files as $file) {
-            if ($file[0] === '.' || !str_ends_with($file, '.md')) continue;
-            $filePath = $projectPath . DIRECTORY_SEPARATOR . $file;
-            if (!is_file($filePath)) continue;
-
-            // Extract page slug (remove .md, optionally remove 00- prefix)
-            $pageSlug = substr($file, 0, -3);
-            $displayName = preg_replace('/^\d+-/', '', $pageSlug);
-
-            $pages[] = [
-                'slug' => $pageSlug,
-                'filename' => $file,
-                'displayName' => str_replace(['-', '_'], ' ', ucwords($displayName)),
-                'mtime' => filemtime($filePath),
-            ];
-        }
-
-        // Sort by filename (natural order)
-        usort($pages, fn($a, $b) => strnatcmp($a['filename'], $b['filename']));
-
-        // Scan attachments directory
+        // Scan attachments directory (flat-numbered convention; absent for feature-driven)
         $attachments = [];
         $attachmentsPath = $projectPath . DIRECTORY_SEPARATOR . 'attachments';
         if (is_dir($attachmentsPath)) {
@@ -107,13 +89,25 @@ class ContentRenderer
         $project = $this->loadProject($projectSlug);
         if ($project === null) return null;
 
-        $filePath = $project['path'] . DIRECTORY_SEPARATOR . $pageSlug . '.md';
-        if (!file_exists($filePath)) {
+        // Look up the page by slug — file path comes from the spec handler.
+        $pageEntry = null;
+        foreach ($project['pages'] as $p) {
+            if ($p['slug'] === $pageSlug) {
+                $pageEntry = $p;
+                break;
+            }
+        }
+        if ($pageEntry === null || !file_exists($pageEntry['path'])) {
             return null;
         }
+        $filePath = $pageEntry['path'];
 
-        // Create parser with project-specific base path for image resolution
-        $parser = new \DiplodocusMarkdown($project['path']);
+        // Create parser with project base + spec-specific asset base (where bare image
+        // filenames resolve). Flat-numbered → attachments/; feature-driven → {feature}/.
+        $assetBase = $this->projectManager
+            ? $this->projectManager->getSpec($projectSlug)->getAssetBase($project['path'], $pageSlug)
+            : 'attachments/';
+        $parser = new \DiplodocusMarkdown($project['path'], $assetBase);
 
         $markdown = file_get_contents($filePath);
         $html = $parser->text($markdown);
@@ -195,8 +189,8 @@ class ContentRenderer
 
         $index = [];
         foreach ($project['pages'] as $page) {
-            $filePath = $project['path'] . DIRECTORY_SEPARATOR . $page['slug'] . '.md';
-            if (!file_exists($filePath)) continue;
+            $filePath = $page['path'] ?? null;
+            if (!$filePath || !file_exists($filePath)) continue;
 
             $markdown = file_get_contents($filePath);
             foreach (explode("\n", $markdown) as $line) {

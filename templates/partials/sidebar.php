@@ -73,22 +73,51 @@ use Diplodocus\TemplateEngine as T;
                 </div>
             <?php endif; ?>
 
-            <!-- List all pages in project -->
+            <!-- Sidebar tree — pages or groups, depending on the project's spec -->
             <?php
-            $pageList = $project['pages'] ?? $pages ?? [];
-            foreach ($pageList as $idx => $page):
-                $isActive = false;
-                if (isset($pageIndex)) {
-                    $isActive = ($idx === $pageIndex);
-                } else {
-                    $isActive = ($page['slug'] ?? $page['name'] ?? '') === ($currentPage ?? '');
+            $tree = $sidebarTree ?? [];
+            // Backwards-compatible fallback for any caller still passing only $pages.
+            if (empty($tree) && !empty($pages)) {
+                foreach ($pages as $p) {
+                    $tree[] = ['type' => 'page', 'slug' => $p['slug'] ?? '', 'name' => $p['name'] ?? $p['slug'] ?? ''];
                 }
-                $pageHref = $page['slug'] ?? $page['name'] ?? '';
-            ?>
-                <a href="<?= $router->url(['project' => $currentProject, 'page' => $pageHref]) ?>"
-                    data-nav-link class="dc-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
-                    <?= T::e($page['displayName'] ?? $page['name'] ?? ucfirst(str_replace(['-', '_'], ' ', $pageHref))) ?>
-                </a>
+            }
+            $current = $currentPage ?? '';
+            foreach ($tree as $entry):
+                if (($entry['type'] ?? 'page') === 'group'):
+                    $children = $entry['children'] ?? [];
+                    $groupActive = false;
+                    foreach ($children as $c) {
+                        if (($c['slug'] ?? '') === $current) { $groupActive = true; break; }
+                    }
+                    $leadHref = $entry['leadSlug'] ?? ($children[0]['slug'] ?? '');
+                    ?>
+                    <div class="dc-sidebar-group<?= $groupActive ? ' is-active' : '' ?>">
+                        <a href="<?= $router->url(['project' => $currentProject, 'page' => $leadHref]) ?>"
+                            data-nav-link class="dc-sidebar-group-label">
+                            <?= T::e($entry['name']) ?>
+                        </a>
+                        <div class="dc-sidebar-children">
+                            <?php foreach ($children as $child):
+                                $childSlug = $child['slug'] ?? '';
+                                $isActive = ($childSlug === $current);
+                                ?>
+                                <a href="<?= $router->url(['project' => $currentProject, 'page' => $childSlug]) ?>"
+                                    data-nav-link class="dc-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
+                                    <?= T::e($child['name'] ?? $childSlug) ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php else:
+                    $pageHref = $entry['slug'] ?? '';
+                    $isActive = ($pageHref === $current);
+                    ?>
+                    <a href="<?= $router->url(['project' => $currentProject, 'page' => $pageHref]) ?>"
+                        data-nav-link class="dc-sidebar-child<?= $isActive ? ' is-active' : '' ?>">
+                        <?= T::e($entry['name'] ?? $pageHref) ?>
+                    </a>
+                <?php endif; ?>
             <?php endforeach; ?>
         <?php endif; ?>
 

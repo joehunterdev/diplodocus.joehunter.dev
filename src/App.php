@@ -8,6 +8,9 @@ namespace Diplodocus;
 
 require_once __DIR__ . '/Config.php';
 require_once __DIR__ . '/Router.php';
+require_once __DIR__ . '/Spec/SpecHandler.php';
+require_once __DIR__ . '/Spec/FlatNumberedSpec.php';
+require_once __DIR__ . '/Spec/FeatureDrivenSpec.php';
 require_once __DIR__ . '/ProjectManager.php';
 require_once __DIR__ . '/ContentRenderer.php';
 // require_once __DIR__ . '/Validator.php'; // TODO: validation feature disabled
@@ -30,7 +33,7 @@ class App
 
         $this->router = new Router($projectsPath);
         $this->projectManager = new ProjectManager($projectsPath);
-        $this->renderer = new ContentRenderer($projectsPath);
+        $this->renderer = new ContentRenderer($projectsPath, $this->projectManager);
         // $this->validator = new Validator($basePath); // TODO: validation feature disabled
         $this->template = new TemplateEngine($this->config->get('templates_path'));
     }
@@ -71,8 +74,10 @@ class App
         // }
 
         // Get pages for current project (no auto-redirect — home = no project)
+        $sidebarTree = [];
         if ($project) {
             $pages = $this->projectManager->getPages($project);
+            $sidebarTree = $this->projectManager->getSidebarTree($project);
 
             // Auto-load first page when landing on a space with no page selected
             if (!$page && !empty($pages)) {
@@ -102,6 +107,7 @@ class App
             'config' => $this->config,
             'projects' => $projects,
             'pages' => $pages,
+            'sidebarTree' => $sidebarTree,
             'currentProject' => $project,
             'currentPage' => $page,
             'content' => $content,
