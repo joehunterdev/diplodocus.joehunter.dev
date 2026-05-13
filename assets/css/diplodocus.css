@@ -533,6 +533,34 @@ table tbody tr:hover td {
   font-weight: 600;
 }
 
+/* â”€â”€ Sidebar groups (feature-driven spec) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.dc-sidebar-group {
+  margin: 0.25rem 0 0.5rem 0;
+}
+
+.dc-sidebar-group-label {
+  display: block;
+  padding: 0.3125rem 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--dc-text-primary);
+  text-decoration: none;
+  border-radius: var(--dc-radius-sm);
+  transition: color 0.15s ease;
+}
+
+.dc-sidebar-group-label:hover {
+  color: var(--dc-brand-primary);
+}
+
+.dc-sidebar-group.is-active > .dc-sidebar-group-label {
+  color: var(--dc-brand-primary);
+}
+
+.dc-sidebar-group.is-active > .dc-sidebar-children {
+  border-left-color: var(--dc-brand-primary);
+}
+
 .dc-sidebar-footer {
   margin-top: auto;
   padding-top: 1rem;

@@ -1,7 +1,10 @@
 # Folder Structure
 
-Diplodocus has exactly one convention. Learn this page and you know the whole
-content model.
+Diplodocus has one default convention. Learn this page and you know the whole
+content model for 95% of projects. The other 5% — projects that need a
+different shape, like feature-folders with a brief/plan/implementation
+rhythm — can opt into a different layout. See
+[Document specs](13-document-specs.md) once you've finished this page.
 
 ![Folder tree](attachments/03a-folder-tree.png)
 
@@ -111,7 +114,18 @@ sidebar order. Users switch between them from the top-level project picker.
 - No nested folders for pages — one flat folder per project, keeps things simple
 - No build step — filesystem **is** the source of truth
 
+## When this convention isn't the right shape
+
+The rules above are the **flat-numbered** spec — the engine's default and
+the right choice for most documentation. If your project is feature-driven
+work (each feature has a brief, a plan, an implementation), there's a
+second built-in layout that mirrors that rhythm. Both layouts can coexist
+in the same install — each project picks its own.
+
+See [Document specs](13-document-specs.md) for declaring a different spec.
+
 ## Next
 
 - [Writing pages](04-writing-pages.md) — markdown primitives
 - [Attachments & images](05-attachments-and-images.md) — using your `attachments/` folder
+- [Document specs](13-document-specs.md) — alternative folder layouts

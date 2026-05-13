@@ -72,7 +72,7 @@ const Search = (function () {
             // Add page as searchable item
             allPages.push({
                 type: 'page',
-                text: page.displayName,
+                text: (page.name || page.slug),
                 project: window.projectData.slug,
                 pageSlug: page.slug,
                 headingId: null,
@@ -116,11 +116,11 @@ const Search = (function () {
         // Search all pages
         if (window.projectData && window.projectData.pages) {
             window.projectData.pages.forEach(function (page) {
-                const text = page.displayName.toLowerCase();
+                const text = (page.name || page.slug).toLowerCase();
                 if (text.indexOf(q) !== -1 && results.length < CONFIG.maxResults) {
                     results.push({
                         type: 'page',
-                        text: page.displayName,
+                        text: (page.name || page.slug),
                         project: window.projectData.slug,
                         pageSlug: page.slug,
                         headingId: null,

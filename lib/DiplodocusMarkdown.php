@@ -20,6 +20,9 @@ class DiplodocusMarkdown extends Parsedown
     /** @var string Absolute path to the project (e.g. /…/public/getting-started). */
     protected $basePath = '';
 
+    /** @var string Relative path (trailing slash) inside the project where bare image filenames resolve. */
+    protected $assetBase = 'attachments/';
+
     /** @var bool Set to true while inlineImage is running so inlineLink skips href rewriting. */
     private $processingImage = false;
 
@@ -43,9 +46,10 @@ class DiplodocusMarkdown extends Parsedown
         'pptx',
     ];
 
-    public function __construct($basePath = '')
+    public function __construct($basePath = '', $assetBase = 'attachments/')
     {
         $this->basePath = $basePath;
+        $this->assetBase = $assetBase;
     }
 
     // ── Image src rewriting ───────────────────────────────────────────
@@ -114,8 +118,8 @@ class DiplodocusMarkdown extends Parsedown
         $project = $this->basePath ? basename($this->basePath) : null;
 
         // .md or .md#anchor → clean page URL (with optional fragment)
-        // Matches: 07-page.md, ./06-other.md, 03-folder-structure.md#callouts
-        if ($project && preg_match('~^(?:\./)?([\d]+-[\w-]+)\.md(#[\w-]+)?$~', $href, $m)) {
+        // Matches flat-numbered (07-page.md) and feature-driven (auth-flow-brief.md) alike.
+        if ($project && preg_match('~^(?:\./)?([\w-]+)\.md(#[\w-]+)?$~', $href, $m)) {
             $url = '/' . urlencode($project) . '/' . urlencode($m[1]);
             if (!empty($m[2])) {
                 $url .= $m[2];
@@ -142,8 +146,8 @@ class DiplodocusMarkdown extends Parsedown
             ];
         }
 
-        // Cross-space link: ../my-other-space/01-page.md
-        if ($project && preg_match('~^\.\./([\w.-]+)/([\d]+-[\w-]+)\.md(#[\w-]+)?$~', $href, $m)) {
+        // Cross-space link: ../my-other-space/01-page.md (or any slug.md)
+        if ($project && preg_match('~^\.\./([\w.-]+)/([\w-]+)\.md(#[\w-]+)?$~', $href, $m)) {
             $url = '/' . urlencode($m[1]) . '/' . urlencode($m[2]);
             if (!empty($m[3])) {
                 $url .= $m[3];
@@ -178,9 +182,9 @@ class DiplodocusMarkdown extends Parsedown
         }
 
         $project = basename($this->basePath);
-        // No directory prefix → assume attachments/
+        // No directory prefix → resolve against the spec-supplied asset base.
         if (strpos($path, '/') === false) {
-            $path = 'attachments/' . $path;
+            $path = $this->assetBase . $path;
         }
         // Build root-relative clean URL — works from any page regardless of clean URL depth
         if (preg_match('#^attachments/(.+)$#', $path, $m)) {
