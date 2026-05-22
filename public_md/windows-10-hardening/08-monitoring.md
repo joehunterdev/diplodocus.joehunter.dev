@@ -37,13 +37,15 @@ Automate regular scanning:
 
 For Home edition, manually run full scan weekly:
 
-```
+```powershell
 Task Scheduler → Create Basic Task
 Name: Weekly Defender Scan
 Trigger: Weekly (day/time of choice)
 Action: Program: C:\Program Files\Windows Defender\MsMpEng.exe
 Arguments: -Scan -ScanType 2
 ```
+
+> **Tip:** Schedule scans for off-hours (late night or weekend) to avoid performance impact.
 
 ### Quarantine suspicious files
 
@@ -86,7 +88,7 @@ Event logs record system events, errors, security incidents:
 
 ## Disk cleanup
 
-Free disk space improves performance and security:
+> **Benefit:** Free disk space improves both performance and security (less space for attackers to hide).
 
 ### Disk Cleanup utility
 
@@ -121,6 +123,8 @@ Modern SSDs don't need defragmentation; HDDs benefit occasionally:
 2. Select **Defragment and Optimize Drives**
 3. Select drive, click **Optimize**
 4. Monitor progress (can take 30+ minutes)
+
+> **Note:** SSDs don't need defragmentation; modern Windows detects this and skips the process.
 
 ## Startup performance
 
@@ -160,16 +164,18 @@ Verify Windows system files haven't been modified:
 
 1. Open **Command Prompt (Admin)**
 2. Run:
-   ```
+   ```powershell
    sfc /scannow
    ```
-3. Wait for scan to complete (30 minutes)
+3. Wait for scan to complete (~30 minutes)
 4. If issues found, system repairs automatically
 
 For more advanced scan:
-```
+```powershell
 DISM /Online /Cleanup-Image /RestoreHealth
 ```
+
+> **Tip:** Run sfc /scannow monthly to catch corruption early.
 
 ## Startup troubleshooting
 
@@ -221,13 +227,13 @@ Advanced logging and alerts:
 
 ## Task Scheduler maintenance
 
-Disable unnecessary scheduled tasks:
+### Disable unnecessary scheduled tasks
 
 1. Press **Win+R**, type `taskschd.msc`
 2. Browse: **Task Scheduler Library** → **Microsoft** → **Windows**
 3. Review scheduled tasks
 4. Right-click unused tasks → **Disable**
 
-**Caution:** Disable only tasks you're certain aren't needed.
+> **Caution:** Disable only tasks you're certain aren't needed. When in doubt, leave it enabled.
 
 **Next:** [Advanced Security Topics](09-advanced.md)

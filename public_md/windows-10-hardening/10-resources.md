@@ -92,33 +92,39 @@
 
 ## Key takeaways
 
-**Security is a process, not a destination.** Your security posture must evolve as:
+> **Remember:** Security is a **process, not a destination**. Your security posture must evolve as:
 - New threats emerge
 - Windows updates introduce features
 - Your needs and risk profile change
 - Technology evolves
 
-**Prioritize:**
-1. **Keep system patched** — most critical
-2. **Use strong passwords** — foundation of security
-3. **Enable 2FA** — protects accounts
-4. **Encrypt sensitive data** — protects at rest
-5. **Monitor regularly** — catch issues early
+### Prioritize
 
-**Remember:**
-- No system is 100% secure
-- Defense-in-depth approach is most effective
-- User awareness is crucial (don't click suspicious links)
-- Backups are essential disaster recovery
-- Test your security controls regularly
+| Priority | Action | Why It Matters |
+|----------|--------|----------------|
+| 1 | **Keep system patched** | Patches fix 99% of known exploits |
+| 2 | **Use strong passwords** | Foundation of all security |
+| 3 | **Enable 2FA** | Protects against credential theft |
+| 4 | **Encrypt sensitive data** | Protection at rest and in transit |
+| 5 | **Monitor regularly** | Catch issues early |
+
+### Essential principles
+
+- ⚠️ **No system is 100% secure** — aim for "good enough"
+- **Defense-in-depth** is more effective than any single control
+- **User awareness** is crucial — don't click suspicious links
+- **Backups** are essential disaster recovery — test restoration
+- **Test controls regularly** — verify they actually work
 
 ## Final thoughts
 
-This guide covers practical hardening for Windows 10 — applicable whether you're protecting personal data or managing systems for others. Security is a journey of continuous learning and improvement.
+This guide covers **practical hardening for Windows 10** — applicable whether you're protecting personal data or managing systems for others. 
 
-Stay informed, stay vigilant, and adapt your defenses as the threat landscape changes.
+**Security is a journey of continuous learning and improvement.**
+
+> Stay informed, stay vigilant, and adapt your defenses as the threat landscape changes.
 
 ---
 
-*Last updated: 2024*  
+*Last updated: May 2026*  
 *Windows 10 Hardening Guide v1.0*

@@ -22,11 +22,13 @@ To check your edition:
 4. Enter strong password (12+ characters with symbols)
 5. Confirm password
 6. Choose to **Print recovery key** or **Save to account**
-   - Recovery key is critical if password forgotten
-   - Store securely, separately from device
-7. Click **Next** → **Start encryption**
+   - **Recovery key is critical** if password forgotten
+   - **Store securely, separately** from device
+7. Click **Start encryption**
 
-**Encryption time:** Several hours for full drive — can use system meanwhile.
+> **Important:** Save your recovery key! Without it, a forgotten password means permanent data loss.
+
+**Encryption time:** Several hours for full drive — you can use the system meanwhile.
 
 ### Verify BitLocker status
 
@@ -115,7 +117,7 @@ Windows 10 supports:
 
 ## Backup & recovery
 
-Regular backups are essential disaster recovery:
+> **Critical:** Regular backups are **essential disaster recovery**. Follow the 3-2-1 rule below.
 
 ### File History (incremental backup)
 
@@ -145,12 +147,13 @@ Microsoft OneDrive automatic sync:
 
 **Also consider:** Third-party services (Backblaze, Carbonite) for continuous cloud backup.
 
-### Backup best practice
+### Backup best practice — The 3-2-1 Rule
 
-**3-2-1 Rule:**
-- **3 copies** of data (original + 2 backups)
-- **2 different media types** (local + cloud)
-- **1 off-site** (cloud or separate location)
+| Rule | Meaning | Example |
+|------|---------|---------|
+| **3 copies** | Original + 2 backups | Main drive + external + cloud |
+| **2 media types** | Different storage technologies | SSD + cloud service |
+| **1 off-site** | Separate physical location | Cloud provider in different region |
 
 ## Disk wiping for disposal
 
@@ -164,6 +167,6 @@ When selling/donating Windows 10 device:
 4. Select **Cloud download** or **Local reinstall**
 5. Confirm to remove files and reinstall Windows
 
-For additional security, use **DBAN** (Darik's Boot and Nuke) or manufacturer tool for multiple-pass secure erasure.
+> **For maximum security:** Use **DBAN** (Darik's Boot and Nuke) or manufacturer tool for multiple-pass secure erasure. Built-in reset leaves some recovery possible.
 
 **Next:** [System Monitoring & Maintenance](08-monitoring.md)

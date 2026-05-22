@@ -4,9 +4,11 @@ For users wanting deeper security hardening or managing enterprise deployments, 
 
 ## Group Policy hardening
 
-**Requires:** Windows 10 Pro, Enterprise, Education (not Home)
+⚠️ **Requires:** Windows 10 Pro, Enterprise, Education (not Home)
 
-Group Policy Editor allows granular security configuration:
+Group Policy Editor allows **granular security configuration**:
+
+> **Warning:** Incorrect Group Policy changes can break Windows. Always backup before making changes.
 
 ### Access Group Policy Editor
 
@@ -42,41 +44,43 @@ Navigate within **gpedit.msc:**
 
 ## Credential Guard (Pro/Enterprise)
 
-Isolates sensitive credentials in secure container:
+Isolates sensitive credentials in **secure container** to prevent credential theft even if malware gains admin access.
 
 ### Enable Credential Guard
 
 1. Press **Win+R**, type `gpedit.msc`
 2. Navigate: **Computer Configuration** → **Administrative Templates** → **System** → **Device Guard**
 3. Set **Turn on Virtualization Based Security:** **Enabled with UEFI lock**
-4. Reboot required
+4. **Reboot required**
 
-**Benefit:** Prevents credential theft even if malware gains admin access.
+> **Note:** Requires compatible CPU (Intel VT-d or AMD-V). Check processor documentation.
 
 ## Device Guard / Code Integrity
 
-Restricts what code can run on system:
+Restricts what code can run on system — **only signed drivers and code permitted**.
 
 ### Enable configurable code integrity
 
 1. **gpedit.msc**
 2. **Computer Configuration** → **Administrative Templates** → **System** → **Code Integrity**
-3. Set **Enforced:** Mode → **Enabled**
-4. Reboot
+3. Set **Enforced Mode:** → **Enabled**
+4. **Reboot required**
 
-**Effect:** Only signed drivers and code run; prevents many malware attacks.
+> **Effect:** Prevents many malware attacks but can break some unsigned drivers. Test before production deployment.
 
 ## DBAN (Darik's Boot and Nuke)
 
-For secure drive wiping:
+For **secure drive wiping** that prevents data recovery:
 
 1. Download DBAN from **dban.org**
-2. Create bootable USB
+2. Create **bootable USB**
 3. Boot from USB on computer to wipe
-4. Select drives, wipe method (DoD 3-pass recommended)
+4. Select drives, wipe method (**DoD 3-pass** recommended for maximum security)
 5. Complete wipe prevents data recovery
 
 **Use case:** Before selling/donating computer or removing sensitive data.
+
+> **Warning:** DBAN is **destructive** and irreversible. Triple-check selected drives before confirming.
 
 ## Full Disk Encryption + Pre-boot authentication
 
@@ -102,14 +106,16 @@ Combine BitLocker with UEFI password:
 
 ### Windows Sandbox
 
-Isolated virtual environment for testing untrusted programs:
+**Isolated virtual environment** for testing untrusted programs — automatically deleted after use.
 
 1. **Settings** → **Apps** → **Apps & features** → **Optional features**
 2. Click **Add an optional feature**
 3. Search & install **Windows Sandbox**
-4. Restart system
+4. **Restart system**
 5. Run **Windows Sandbox** from Start menu
 6. Run suspicious program inside sandbox (isolated from real system)
+
+> **Tip:** Perfect for testing downloaded utilities or suspicious email attachments safely.
 
 ### Hyper-V isolation
 
@@ -132,7 +138,9 @@ For advanced users comfortable with PowerShell:
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-This allows local scripts but blocks untrusted downloaded scripts.
+This **allows local scripts** but **blocks untrusted downloaded scripts** — good balance of security and usability.
+
+> **Warning:** Never set execution policy to `Unrestricted` — that disables all protections.
 
 ### Audit sensitive operations
 
