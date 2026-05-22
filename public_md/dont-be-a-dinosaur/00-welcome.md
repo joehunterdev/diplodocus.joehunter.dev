@@ -71,4 +71,89 @@ Pick a topic from the sidebar, or start with [React Component Lifecycle](react-l
 
 ---
 
+## Meet our dinosaur characters
+
+<div class="dino-gallery">
+  <div class="dino-card">
+    <div class="dino-sprite dino-diplo"></div>
+    <h3>Diplo</h3>
+    <p>The curious learner</p>
+  </div>
+  <div class="dino-card">
+    <div class="dino-sprite dino-rex"></div>
+    <h3>Rex</h3>
+    <p>Does things wrong</p>
+  </div>
+  <div class="dino-card">
+    <div class="dino-sprite dino-pterry"></div>
+    <h3>Pterry</h3>
+    <p>The messenger</p>
+  </div>
+  <div class="dino-card">
+    <div class="dino-sprite dino-veloci"></div>
+    <h3>Veloci</h3>
+    <p>Best practices</p>
+  </div>
+  <div class="dino-card">
+    <div class="dino-sprite dino-stego"></div>
+    <h3>Stego</h3>
+    <p>Asks questions</p>
+  </div>
+</div>
+
+<style>
+.dino-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 24px;
+  margin: 40px 0;
+  padding: 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+}
+
+.dino-card {
+  text-align: center;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dino-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dino-card h3 {
+  margin: 12px 0 4px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.dino-card p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.dino-sprite {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Emoji dinosaurs as fallback */
+.dino-diplo::before { content: "🦕"; font-size: 120px; }
+.dino-rex::before { content: "🦖"; font-size: 120px; }
+.dino-pterry::before { content: "🦅"; font-size: 120px; }
+.dino-veloci::before { content: "⚡"; font-size: 120px; }
+.dino-stego::before { content: "🦕"; font-size: 120px; }
+</style>
+
+---
+
 🦴 **Fossil fact:** This entire section was created because a bootcamp grad said *"I understand the syntax, but I don't understand when my component actually runs."* If you've ever felt that way, you're in the right place.
