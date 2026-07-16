@@ -17,7 +17,14 @@ return [
     ],
 
     // Canonical origin for SEO (sitemap.xml, robots.txt, canonical/og URLs)
-    'site_url' => 'https://diplodocus.joehunter.dev',
+    'site_url'         => 'https://diplodocus.joehunter.dev',
+    'site_description' => 'Markdown-first documentation spaces by Joe Hunter — Laravel, deployment, security hardening and dev tooling guides.',
+
+    // Spaces that must never be indexed: noindex meta + excluded from sitemap
+    // + Disallow in robots.txt
+    'private_projects' => [
+        'esa.clublacosta.com',
+    ],
 
     // Error handling
     // true  = show full exception + stack trace (never in production)

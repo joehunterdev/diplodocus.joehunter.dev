@@ -25,6 +25,7 @@ use Diplodocus\TemplateEngine as T;
     $metaDescription = $seo['description'] ?? 'Diplodocus — a markdown-first documentation site by Joe Hunter.';
     $metaCanonical   = $seo['canonical']   ?? '';
     $metaRobots      = $seo['robots']      ?? 'index,follow';
+    $metaOgImage     = $seo['ogImage']     ?? 'https://diplodocus.joehunter.dev/example.png';
     ?>
 
     <title><?= T::e($metaTitle) ?></title>
@@ -39,7 +40,7 @@ use Diplodocus\TemplateEngine as T;
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= T::e($metaTitle) ?>">
     <meta property="og:description" content="<?= T::e($metaDescription) ?>">
-    <meta property="og:image" content="https://diplodocus.joehunter.dev/example.png">
+    <meta property="og:image" content="<?= T::e($metaOgImage) ?>">
     <?php if ($metaCanonical): ?>
         <meta property="og:url" content="<?= T::e($metaCanonical) ?>">
     <?php endif; ?>
@@ -48,7 +49,7 @@ use Diplodocus\TemplateEngine as T;
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= T::e($metaTitle) ?>">
     <meta name="twitter:description" content="<?= T::e($metaDescription) ?>">
-    <meta name="twitter:image" content="https://diplodocus.joehunter.dev/example.png">
+    <meta name="twitter:image" content="<?= T::e($metaOgImage) ?>">
 
     <link rel="author" href="https://joehunter.es">
     <link rel="icon" href="/favicon.ico">

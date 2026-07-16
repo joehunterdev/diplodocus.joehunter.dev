@@ -35,9 +35,7 @@ $router         = new Router($projectsPath);
 header('Content-Type: application/xml; charset=utf-8');
 
 $urls = [];
-
-// Home
-$urls[] = ['loc' => $siteUrl . '/', 'changefreq' => 'weekly', 'priority' => '1.0'];
+$newestMtime = 0;
 
 $privateProjects = $config->get('private_projects', []);
 
@@ -47,19 +45,35 @@ foreach ($projectManager->getProjects() as $proj) {
         continue;
     }
     foreach ($projectManager->getPages($slug) as $p) {
+        $mtime = (isset($p['path']) && is_file($p['path'])) ? filemtime($p['path']) : 0;
+        if ($mtime > $newestMtime) {
+            $newestMtime = $mtime;
+        }
         $urls[] = [
             'loc'        => $siteUrl . $router->url(['project' => $slug, 'page' => $p['slug']]),
+            'lastmod'    => $mtime,
             'changefreq' => 'monthly',
             'priority'   => '0.8',
         ];
     }
 }
 
+// Home first — its lastmod is the newest page across the site
+array_unshift($urls, [
+    'loc'        => $siteUrl . '/',
+    'lastmod'    => $newestMtime,
+    'changefreq' => 'weekly',
+    'priority'   => '1.0',
+]);
+
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 foreach ($urls as $u) {
     echo "  <url>\n";
     echo "    <loc>" . htmlspecialchars($u['loc'], ENT_QUOTES, 'UTF-8') . "</loc>\n";
+    if (!empty($u['lastmod'])) {
+        echo "    <lastmod>" . gmdate('Y-m-d', $u['lastmod']) . "</lastmod>\n";
+    }
     echo "    <changefreq>{$u['changefreq']}</changefreq>\n";
     echo "    <priority>{$u['priority']}</priority>\n";
     echo "  </url>\n";
