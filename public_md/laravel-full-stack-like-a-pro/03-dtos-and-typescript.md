@@ -134,6 +134,36 @@ export type Post = App.Data.PostData;
 
 > **Danger** — Never hand-write a TypeScript interface that duplicates a DTO. The moment the PHP and TS drift, you have two contracts and no source of truth. Regenerate instead.
 
+## Enforce the contract — the type-drift gate
+
+`typescript:transform` is a manual command, which means `generated.d.ts` can silently go stale — the one hole in the coupling story. Close it twice:
+
+**Locally** — regenerate automatically before dev and build via npm pre-hooks:
+
+```json
+// package.json
+{
+  "scripts": {
+    "predev": "php artisan typescript:transform",
+    "prebuild": "php artisan typescript:transform",
+    "dev": "vite",
+    "build": "tsc && vite build"
+  }
+}
+```
+
+**In CI** — regenerate and fail the build if the committed file doesn't match:
+
+```yaml
+# in the workflow, after composer/npm install
+- name: Verify generated types are current
+  run: |
+    php artisan typescript:transform
+    git diff --exit-code resources/js/types/generated.d.ts
+```
+
+A DTO change without a regenerated-and-committed `generated.d.ts` now fails the pipeline. The contract is *enforced*, not just documented.
+
 ## The golden rule
 
 **If changing a DTO breaks the frontend → that's correct.** A type error after a DTO change is the compiler forcing the UI to handle the new shape. Run `php artisan typescript:transform`, let `tsc` list the breakages, fix them.

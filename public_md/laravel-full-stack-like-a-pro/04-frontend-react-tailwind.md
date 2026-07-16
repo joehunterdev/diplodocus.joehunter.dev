@@ -94,12 +94,14 @@ trait HasCamelCaseKeys
 }
 ```
 
-Two ways to apply it:
+**On a DTO-first project (the default here), do the conversion at the source:** name DTO constructor properties camelCase inside `fromModel()` (`publishedAt: $post->published_at`). The generated TS types are then camelCase *by construction* — no runtime reflection, and the type system sees exactly the keys that ship. This is the preferred approach: a runtime array transform is invisible to TypeScript and can produce keys the generated types don't know about.
 
-1. **Per-response (trait)** — `use HasCamelCaseKeys;` in a controller and wrap the payload: `'channelData' => $this->transformKeysToCamelCase($channelData)`. Explicit, easy to adopt incrementally.
-2. **Globally (middleware)** — a middleware after `HandleInertiaRequests` that runs the same transform over every Inertia props array, so no controller ever thinks about it. Prefer this on a fresh project; the trait remains for one-off JSON responses.
+The trait then covers the leftovers:
 
-On DTO-first projects, you can get the same result at the source instead: name DTO constructor properties in camelCase inside `fromModel()` (`publishedAt: $post->published_at`), and the generated TS types are camelCased for free. Either way the rule is the same — **snake never leaks into React, camel never leaks into Eloquent**.
+1. **Per-response (trait)** — `use HasCamelCaseKeys;` for legacy or non-DTO JSON responses: `'channelData' => $this->transformKeysToCamelCase($channelData)`.
+2. **Globally (middleware)** — a middleware after `HandleInertiaRequests` running the transform over every Inertia props array. Only worth it on a codebase that isn't DTO-first yet.
+
+Either way the rule is the same — **snake never leaks into React, camel never leaks into Eloquent**.
 
 > **Note** — Inbound is the mirror image: `useForm` field names must match the `FormRequest` rule keys. Keep form fields snake_case (they're the *contract*, not UI variables), or map them in the form hook before posting.
 

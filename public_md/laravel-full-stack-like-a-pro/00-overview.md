@@ -22,20 +22,33 @@ It documents the *skeleton and the conventions*, not a finished product: how the
 
 ## The core principle: one data-flow contract
 
-Every request follows the same path. Backend owns logic and validation; Inertia is a thin transport; React is UI only.
+Every request follows the same path. Backend owns logic, validation, and authorization; Inertia is a thin transport; React is UI only.
 
 ```mermaid
 flowchart LR
     Route --> Controller
-    Controller -->|validated| FormRequest
-    Controller -->|delegates| Service
-    Service -->|returns| DTO["DTO (#[TypeScript])"]
+    Controller -->|validates| FormRequest
+    Controller -->|authorizes| Policy
+    Controller -->|delegates| SA["Service / Action"]
+    SA -->|returns| DTO["DTO (#[TypeScript])"]
     DTO -->|Inertia::render| Page["React Page (typed props)"]
     DTO -.->|artisan typescript:transform| Types["generated.d.ts"]
     Types -.-> Page
 ```
 
 The DTO is the single source of truth: it is both the Inertia payload **and** the origin of the frontend's TypeScript types. Change a DTO, regenerate types, and the compiler tells you exactly what to fix on the frontend.
+
+Each hop has one job:
+
+| Layer | Owns | Never does |
+|---|---|---|
+| **FormRequest** | Validation — one per write action | Business logic |
+| **Policy** | Authorization — one per resource (`$this->authorize('update', $post)`) | Validation |
+| **Service** | Business logic shared across a feature | Rendering, request access |
+| **Action** | One reusable operation (`CreatePostAction`), callable from controller, command, or job alike | Growing a second method — that's a service |
+| **DTO** | The response shape | Exposing raw models |
+
+> **Tip** — Extract an Action when a service method gets reused across entry points (web + artisan + job). Don't convert everything — services remain the default home for feature logic.
 
 ## What's in this guide
 
@@ -52,6 +65,8 @@ The DTO is the single source of truth: it is both the Inertia payload **and** th
 | [.htaccess examples](09-htaccess-examples.md) | Root + `public/` hardened Apache configs for Hostinger |
 | [Workspace & gitignore](10-workspace-and-gitignore.md) | `.code-workspace` excludes and the base `.gitignore` |
 | [Feature flow & docs](11-feature-flow-and-docs.md) | The `.docs/feature/` brief → plan → implementation rhythm, tooling links |
+| [Resources](12-resources.md) | The reading list — docs, educators, repos, patterns & anti-patterns |
+| [SEO](13-seo.md) | `config/seo.php`, indexability switch, robots/sitemap, OG share image, JSON-LD |
 
 > **Note** — The Hostinger/hPanel mechanics (enabling SSH, generating deploy keys, adding GitHub secrets) live in the sibling **GitHub Actions → Hostinger** project. This guide links to it rather than repeating it.
 

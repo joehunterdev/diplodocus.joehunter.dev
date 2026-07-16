@@ -85,6 +85,16 @@ resources/js/
 
 > **Tip** — The **capitalized `Pages`/`Components`/`Layouts`** are Breeze scaffolding — leave them recognizable. **Lowercase `features/` and `shared/`** are where your application code goes. The casing itself signals "framework vs app" at a glance.
 
+**Mirror feature names across the boundary.** As the app grows, group *within* the standard `app/` dirs by the same feature nouns the frontend uses — one feature, one greppable name on both sides:
+
+```
+app/Data/Rooms/RoomStateData.php          resources/js/features/rooms/
+app/Services/Rooms/RoomService.php
+app/Http/Requests/Rooms/CreateRoomRequest.php
+```
+
+This is the proportional step for medium apps — deliberately **not** full DDD `app/Domain/` modules, which are overkill until a project genuinely demands them.
+
 ## 4. Local site & dev commands
 
 Every project runs at **`sitename.localhost`** (add it to the Apache/hosts config once) and PHP serves on port 80, so the local URL mirrors production's shape. My [dev-tools](https://github.com/joehunterdev/dev-tools) suite handles the XAMPP side of this — vhost/hosts wiring and local-site setup — so a new `sitename.localhost` is a one-command job:

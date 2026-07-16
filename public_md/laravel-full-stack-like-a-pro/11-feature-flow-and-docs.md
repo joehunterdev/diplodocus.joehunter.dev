@@ -56,4 +56,4 @@ When a project's feature docs are worth sharing, they drop straight into a Diplo
 
 ## Next
 
-- Back to [Overview](00-overview.md)
+- [Resources](12-resources.md)
