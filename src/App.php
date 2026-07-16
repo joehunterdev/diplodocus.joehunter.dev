@@ -76,6 +76,13 @@ class App
         $route   = $this->router->route();
         $project = $route['project'];
         $page    = $route['page'];
+        $action  = $route['action'] ?? null;
+
+        // Handle special actions before normal rendering
+        if ($action === 'download-project') {
+            $this->handleDownloadProject($project);
+            return;
+        }
 
         // Get projects and pages
         $projects = $this->projectManager->getProjects();
@@ -161,6 +168,89 @@ class App
         // All escaping goes through T::e() in templates/.
         $this->template->setLayout('layout');
         echo $this->template->render('content', $data);
+    }
+
+    // -------------------------------------------------------------------------
+    // SEO helpers
+    // -------------------------------------------------------------------------
+
+    // -------------------------------------------------------------------------
+    // Download handler
+    // -------------------------------------------------------------------------
+
+    /**
+     * Stream a project folder as a ZIP download.
+     */
+    private function handleDownloadProject(?string $project): void
+    {
+        if (!$project) {
+            http_response_code(400);
+            exit('Missing project.');
+        }
+
+        // Validate project exists — prevents path traversal
+        $projects   = $this->projectManager->getProjects();
+        $validSlugs = array_column($projects, 'slug');
+        if (!in_array($project, $validSlugs, true)) {
+            http_response_code(404);
+            exit('Project not found.');
+        }
+
+        // Block private projects
+        $privateProjects = $this->config->get('private_projects', []);
+        if (in_array($project, $privateProjects, true)) {
+            http_response_code(403);
+            exit('Access denied.');
+        }
+
+        if (!class_exists('ZipArchive')) {
+            http_response_code(500);
+            exit('ZipArchive extension is not available on this server.');
+        }
+
+        $projectPath = $this->projectManager->getProjectPath($project);
+        $tmpFile     = tempnam(sys_get_temp_dir(), 'diplodocus_');
+
+        $zip = new \ZipArchive();
+        if ($zip->open($tmpFile, \ZipArchive::OVERWRITE) !== true) {
+            http_response_code(500);
+            exit('Failed to create archive.');
+        }
+
+        $this->addDirToZip($zip, $projectPath, $project);
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $project . '.zip"');
+        header('Content-Length: ' . filesize($tmpFile));
+        header('Cache-Control: no-store');
+        readfile($tmpFile);
+        unlink($tmpFile);
+        exit;
+    }
+
+    /**
+     * Recursively add a directory to a ZipArchive.
+     */
+    private function addDirToZip(\ZipArchive $zip, string $dir, string $zipPrefix): void
+    {
+        $items = scandir($dir);
+        if (!$items) {
+            return;
+        }
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+            $fullPath = $dir . DIRECTORY_SEPARATOR . $item;
+            $zipPath  = $zipPrefix . '/' . $item;
+            if (is_dir($fullPath)) {
+                $zip->addEmptyDir($zipPath);
+                $this->addDirToZip($zip, $fullPath, $zipPath);
+            } else {
+                $zip->addFile($fullPath, $zipPath);
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
