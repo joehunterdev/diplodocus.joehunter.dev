@@ -1,0 +1,29 @@
+name: Test SSH Connection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+    environment: production.sitename
+    steps:
+      - name: Test SSH connection and environment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "=== SSH connection successful ==="
+            echo "User: $(whoami)"
+            echo "Home: $HOME"
+            echo "=== PHP versions ==="
+            /opt/alt/php85/usr/bin/php --version || echo "php85 not found"
+            /opt/alt/php84/usr/bin/php --version || echo "php84 not found"
+            echo "=== Composer ==="
+            /usr/local/bin/composer2 --version || echo "composer2 not found"
+            echo "=== Target directory ==="
+            ls -la ${{ secrets.FTP_SERVER_DIR }} || echo "FTP_SERVER_DIR not found or empty"
+            echo "=== Done ==="

@@ -18,8 +18,14 @@ Start by enabling SSH access in hPanel.
 
 - Hostinger account with SSH access enabled
 - GitHub repository with Actions enabled
-- A GitHub Environment for production
+- A GitHub Environment for production (e.g. `production.your-app`)
 - Local machine with `ssh-keygen`
+
+## Create the GitHub Environment
+
+1. Go to **GitHub → Repository → Settings → Environments**
+2. Click **New environment** and name it (e.g. `production.your-app`)
+3. Add secrets under that environment — not at the repo level
 
 ## Next
 

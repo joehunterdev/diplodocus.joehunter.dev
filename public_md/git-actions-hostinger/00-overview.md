@@ -1,6 +1,6 @@
 # GitHub Actions → Hostinger Deploy Guide
 
-This mini-guide explains a practical GitHub Actions deployment setup for Hostinger shared hosting.
+This mini-guide explains a practical GitHub Actions deployment setup for Hostinger shared hosting, tested with **Laravel 13** and **PHP 8.5** on a Hostinger shared plan.
 The recommended approach is a hybrid one:
 
 - **FTP** uploads changed files from the GitHub runner

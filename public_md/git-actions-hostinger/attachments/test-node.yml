@@ -1,0 +1,29 @@
+name: Test Node / Vite Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run Vite build
+        run: npm run build
+
+      - name: Show build output
+        run: |
+          echo "=== Build output ==="
+          ls -lh public/build/ || echo "public/build not found"
+          ls -lh public/build/assets/ | head -20 || echo "no assets"

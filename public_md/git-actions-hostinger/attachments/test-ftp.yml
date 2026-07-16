@@ -1,0 +1,25 @@
+name: Test FTP Connection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ftp:
+    runs-on: ubuntu-latest
+    environment: production.sitename
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Test FTP — dry run (no files uploaded)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftp
+          local-dir: ./
+          server-dir: /public_html/
+          state-name: .ftp-test-sync-state.json
+          dry-run: true
