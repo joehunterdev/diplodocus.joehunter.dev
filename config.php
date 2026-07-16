@@ -16,6 +16,9 @@ return [
         __DIR__ . '/private_md',
     ],
 
+    // Canonical origin for SEO (sitemap.xml, robots.txt, canonical/og URLs)
+    'site_url' => 'https://diplodocus.joehunter.dev',
+
     // Error handling
     // true  = show full exception + stack trace (never in production)
     'debug'     => false,

@@ -8,6 +8,9 @@
  */
 
 require_once __DIR__ . '/src/Config.php';
+require_once __DIR__ . '/src/Spec/SpecHandler.php';
+require_once __DIR__ . '/src/Spec/FlatNumberedSpec.php';
+require_once __DIR__ . '/src/Spec/FeatureDrivenSpec.php';
 require_once __DIR__ . '/src/ProjectManager.php';
 require_once __DIR__ . '/src/Router.php';
 
@@ -36,8 +39,13 @@ $urls = [];
 // Home
 $urls[] = ['loc' => $siteUrl . '/', 'changefreq' => 'weekly', 'priority' => '1.0'];
 
+$privateProjects = $config->get('private_projects', []);
+
 foreach ($projectManager->getProjects() as $proj) {
     $slug = $proj['slug'];
+    if (in_array($slug, $privateProjects, true)) {
+        continue;
+    }
     foreach ($projectManager->getPages($slug) as $p) {
         $urls[] = [
             'loc'        => $siteUrl . $router->url(['project' => $slug, 'page' => $p['slug']]),
